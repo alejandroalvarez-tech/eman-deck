@@ -1132,10 +1132,10 @@
     <div id="gate-logo"></div>
     <div id="gate-title"><span>AI</span> at Work</div>
     <div id="gate-sub">Enter your work email to access this session.</div>
-    <input id="gate-input" type="email" placeholder="you@emanschools.net" autocomplete="email" />
+    <input id="gate-input" type="email" placeholder="your work email" autocomplete="email" />
     <div id="gate-err"></div>
     <button id="gate-btn">Get Access</button>
-    <div id="gate-note">Available to EMAN &amp; Harbor Street Capital team members.</div>
+    <div id="gate-note">Access is limited to authorized team members.</div>
   </div>
 </div>
 <div id="hint">← → to navigate</div>
@@ -1260,20 +1260,20 @@
       <div class="body"><div class="ex-grid">
         <div class="ex-box ex-lazy">
           <div class="ex-label">Lazy Prompt</div>
-          <div class="quote">"Write an email about postponing the board meeting."</div>
-          <div class="verdict">Generic. Claude has to guess the rest.</div>
+          <div class="quote">"Here is our updated expense policy. Write an email to our principals about it."</div>
+          <div class="verdict">Claude writes a long, formal letter nobody will read — and guesses at everything else.</div>
         </div>
         <div class="ex-box ex-rctf">
           <div class="ex-label">RCTF Prompt</div>
           <div class="rctf-lines">
-            <div class="rctf-line"><span class="k">Role</span><span class="v">You are part of the team at EMAN writing to our charter school boards.</span></div>
-            <div class="rctf-line"><span class="k">Context</span><span class="v">We need to postpone the November board meeting by one week due to a scheduling conflict.</span></div>
-            <div class="rctf-line"><span class="k">Task</span><span class="v">Draft a brief email notifying boards of the new date.</span></div>
-            <div class="rctf-line"><span class="k">Format</span><span class="v">Three short paragraphs. Warm but professional. Sign off "Best, [Your Name]."</span></div>
+            <div class="rctf-line"><span class="k">Role</span><span class="v">You are part of the EMAN central office writing to our school principals.</span></div>
+            <div class="rctf-line"><span class="k">Context</span><span class="v">📎 [expense-policy-update.pdf attached] — We are replacing email-based approvals with the emanApprove Portal. Threshold changes from $150 to $300. Effective July 1.</span></div>
+            <div class="rctf-line"><span class="k">Task</span><span class="v">Announce this change. They need to know what's different, when it starts, and what to do on day one.</span></div>
+            <div class="rctf-line"><span class="k">Format</span><span class="v">5 sentences max. Two bullet points for the key changes. One clear action item at the end. Warm but direct. No corporate language.</span></div>
           </div>
         </div>
       </div></div>
-      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">Specifics beat vibes. The more you <b>spell out</b>, the less Claude has to guess.</span></div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text"><b>Format</b> is the most skipped line — and it's what most controls whether the output is actually usable.</span></div>
       <div class="s-foot"><span class="sect">RCTF · Example</span><span>06 / 15</span></div>
     </div>
   </section>
@@ -1413,7 +1413,7 @@
             <div><span class="lbl">Subject:</span> Exploring management partners</div>
           </div>
           <div class="mailcard-body">
-            <p>Hi [Your Name],</p>
+            <p>Hi,</p>
             <p>I hope this finds you well. I'm David Chen, Board Chair at Riverside Charter Academy in Ann Arbor. Marcus Reed (we serve on a foundation board together) suggested I reach out.</p>
             <p>Our board has been having early conversations about whether our current management structure is still serving us well. We are not in any rush, but we want to start learning about partners who might be a fit if we eventually decide to make a change.</p>
             <p>Would you have 30 minutes for a call in the next couple of weeks? Happy to work around your schedule.</p>
@@ -1528,8 +1528,8 @@
       <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Colophon · <b>One Last Thing</b></span><span class="partmeter pm4"><i></i><i></i><i></i><i></i></span></div></div>
       <div class="col-mid">
         <div class="col-eyebrow">One last thing</div>
-        <h2 class="col-statement">This entire presentation was built by <span class="em">Claude.</span></h2>
-        <p class="col-sub">Every slide, every layout, every line of code, and this sentence. <b>I did not build a single slide myself.</b> I described what I wanted — Claude designed and wrote all of it.</p>
+        <h2 class="col-statement">This deck was built <span class="em">with</span> Claude — not by clicking a button.</h2>
+        <p class="col-sub">Every slide, layout, and line of code came from a real back-and-forth. I wrote the direction, pushed back when it wasn't right, and shaped every detail. What would have taken days took a few hours. <b>Claude also built the talking points and the demo guide I used to run this session.</b> That's the version of AI worth learning.</p>
         <div class="col-foot" style="margin-top:32px">
           <span class="eman-lockup" style="color:rgba(255,255,255,.92)">
             <span class="eman-mark eman-logo-img" role="img" aria-label="EMAN" style="height:26px"></span>
@@ -1581,7 +1581,7 @@
 `From: David Chen <dchen@riversidecharter.org>
 Subject: Exploring management partners
 
-Hi [Your Name],
+Hi,
 
 I hope this finds you well. I'm David Chen, Board Chair at Riverside Charter Academy in Ann Arbor. Marcus Reed (we serve on a foundation board together) suggested I reach out.
 
@@ -1765,7 +1765,7 @@ When drafting replies:
       if(!email){ showError('Please enter your email address.'); return; }
       if(!email.includes('@')){ showError('Please enter a valid email address.'); return; }
       if(!isAllowed(email)){
-        showError('This deck is only available to EMAN and Harbor Street Capital team members.');
+        showError('Please enter a valid work email address.');
         return;
       }
       btn.disabled = true; btn.textContent = 'Granting access…';
