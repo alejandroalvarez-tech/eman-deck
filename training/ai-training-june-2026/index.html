@@ -118,17 +118,15 @@
   .body { flex: 1; display: flex; flex-direction: column; }
 
   /* ════════════════════════════════════════════════
-     SLIDE 1 — TITLE
+     SLIDE 1 — TITLE · ANIMATED CANVAS BACKGROUND
   ════════════════════════════════════════════════ */
   #s1 { background: var(--navy-deep); }
-  #s1 .arc {
-    position: absolute; border: 1px solid rgba(226,188,75,.10); border-radius: 50%;
-    pointer-events: none;
+  #s1 .arc { display: none; }   /* replaced by canvas */
+  #s1 .spark { display: none; } /* replaced by canvas particles */
+  #s1-canvas {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0;
   }
-  #s1 .a1 { width: 720px; height: 720px; right: -200px; top: -120px; }
-  #s1 .a2 { width: 520px; height: 520px; right: -100px; top: -20px; border-color: rgba(226,188,75,.07); }
-  #s1 .a3 { width: 320px; height: 320px; right:    0px; top:  80px; border-color: rgba(226,188,75,.05); }
-  #s1 .spark { position: absolute; width: 7px; height: 7px; border-radius: 50%; background: var(--gold); right: 360px; top: 150px; box-shadow: 0 0 18px 3px rgba(226,188,75,.5); }
   #s1 .t-top {
     display: flex; justify-content: space-between; align-items: center;
     border-bottom: 1px solid var(--line-dark); padding-bottom: 16px;
@@ -907,10 +905,8 @@
     #s15.active .col-sub      { animation: fadeUp .6s .46s both; }
     #s15.active .col-foot     { animation: fadeUp .6s .62s both; }
 
-    /* ambient life on the cover + closing sparks and arcs */
-    #s1 .spark, #s15 .spark { animation: sparkPulse 2.6s ease-in-out infinite; }
-    #s1 .a1 { animation: arcDrift 90s linear infinite; transform-origin: center; }
-    #s1 .a2 { animation: arcDrift 70s linear infinite reverse; transform-origin: center; }
+    /* ambient life on closing slide */
+    #s15 .spark { animation: sparkPulse 2.6s ease-in-out infinite; }
     #s15 .c1 { animation: arcDrift 100s linear infinite; transform-origin: center; }
 
     /* demo badge keeps its pulse; give cards a gentle hover lift */
@@ -1076,7 +1072,7 @@
 
   <!-- ═══ SLIDE 1 · TITLE ═══ -->
   <section class="slide active dark" id="s1">
-    <div class="arc a1"></div><div class="arc a2"></div><div class="arc a3"></div><div class="spark"></div>
+    <canvas id="s1-canvas"></canvas>
     <div class="pad">
       <div class="t-top">
         <span class="eman-mark eman-logo-img" role="img" aria-label="EMAN"></span>
@@ -1641,6 +1637,126 @@ When drafting replies:
   let tx=0;
   document.addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
   document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx; if(Math.abs(dx)>50 && !modalOpen()) nav(dx<0?1:-1);});
+
+  /* ═══════════════════════════════════════
+     COVER CANVAS ANIMATION
+     Aurora blobs + floating particles + pulsing ring
+  ═══════════════════════════════════════ */
+  (function(){
+    const canvas = document.getElementById('s1-canvas');
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const W = 1280, H = 720;
+    canvas.width = W; canvas.height = H;
+
+    const GOLD  = [226,188,75];
+    const TEAL  = [33,164,147];
+    const NAVY  = [128,160,230];
+
+    /* ── Aurora blobs ── */
+    const blobs = [
+      { x:960, y:120, r:340, color:GOLD,  vx:.18, vy:.10, t:0, ts:.008 },
+      { x:200, y:580, r:280, color:TEAL,  vx:-.12, vy:-.08, t:2, ts:.006 },
+      { x:1100,y:500, r:220, color:NAVY,  vx:-.15, vy:.12,  t:4, ts:.007 },
+      { x:400, y:160, r:190, color:GOLD,  vx:.10, vy:.14,   t:1, ts:.009 },
+    ];
+
+    /* ── Floating particles ── */
+    const NPART = 55;
+    const parts = Array.from({length:NPART}, (_,i) => ({
+      x: Math.random()*W,
+      y: Math.random()*H,
+      r: .8 + Math.random()*2.2,
+      vy: -.12 - Math.random()*.22,
+      vx: (Math.random()-.5)*.14,
+      alpha: .18 + Math.random()*.45,
+      flicker: Math.random()*Math.PI*2,
+      flickerSpeed: .018 + Math.random()*.025,
+      gold: Math.random() > .35,
+    }));
+
+    /* ── Pulsing ring ── */
+    let ringScale = 1, ringDir = 1;
+
+    /* ── Diagonal shimmer beam ── */
+    let beamX = -200, beamSpeed = .55;
+
+    let raf;
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+
+      /* Aurora blobs */
+      blobs.forEach(b => {
+        b.t += b.ts;
+        b.x += b.vx + Math.sin(b.t*.7)*0.6;
+        b.y += b.vy + Math.cos(b.t*.5)*0.5;
+        if(b.x < -b.r)  b.x = W+b.r;
+        if(b.x > W+b.r) b.x = -b.r;
+        if(b.y < -b.r)  b.y = H+b.r;
+        if(b.y > H+b.r) b.y = -b.r;
+        const g = ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.r);
+        g.addColorStop(0, `rgba(${b.color},0.22)`);
+        g.addColorStop(.5,`rgba(${b.color},0.10)`);
+        g.addColorStop(1, `rgba(${b.color},0)`);
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,Math.PI*2); ctx.fill();
+      });
+
+      /* Diagonal shimmer beam */
+      beamX += beamSpeed;
+      if(beamX > W+300) beamX = -300;
+      ctx.save();
+      ctx.translate(beamX, 0);
+      ctx.rotate(Math.PI/5);
+      const bg = ctx.createLinearGradient(-80,0,80,0);
+      bg.addColorStop(0,'rgba(226,188,75,0)');
+      bg.addColorStop(.5,'rgba(226,188,75,0.06)');
+      bg.addColorStop(1,'rgba(226,188,75,0)');
+      ctx.fillStyle = bg;
+      ctx.fillRect(-80,-200,160,H+400);
+      ctx.restore();
+
+      /* Pulsing ring */
+      ringScale += ringDir * .0012;
+      if(ringScale > 1.06 || ringScale < .94) ringDir *= -1;
+      const cx=980, cy=110, rr=320;
+      ctx.save();
+      ctx.translate(cx,cy);
+      ctx.scale(ringScale, ringScale);
+      ctx.strokeStyle = `rgba(226,188,75,0.13)`;
+      ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.arc(0,0,rr,0,Math.PI*2); ctx.stroke();
+      ctx.strokeStyle = `rgba(226,188,75,0.07)`;
+      ctx.beginPath(); ctx.arc(0,0,rr*1.22,0,Math.PI*2); ctx.stroke();
+      ctx.strokeStyle = `rgba(226,188,75,0.04)`;
+      ctx.beginPath(); ctx.arc(0,0,rr*1.48,0,Math.PI*2); ctx.stroke();
+      ctx.restore();
+
+      /* Floating particles */
+      parts.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        p.flicker += p.flickerSpeed;
+        if(p.y < -6) { p.y = H+6; p.x = Math.random()*W; }
+        const a = p.alpha * (.7 + .3*Math.sin(p.flicker));
+        const c = p.gold ? `226,188,75` : `200,220,255`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        ctx.fillStyle = `rgba(${c},${a.toFixed(2)})`;
+        ctx.fill();
+      });
+
+      raf = requestAnimationFrame(draw);
+    }
+
+    /* Only animate when the cover slide is active */
+    const s1 = document.getElementById('s1');
+    const obs = new MutationObserver(() => {
+      if(s1.classList.contains('active')){ if(!raf) draw(); }
+      else { cancelAnimationFrame(raf); raf=null; }
+    });
+    obs.observe(s1, {attributes:true, attributeFilter:['class']});
+    draw(); // start immediately (slide 1 is active on load)
+  })();
 </script>
 </body>
 </html>
