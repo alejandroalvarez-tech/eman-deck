@@ -1062,6 +1062,117 @@
     font-family: 'Poppins', sans-serif; font-size: 16.5px; line-height: 1.5; color: rgba(255,255,255,.86);
   }
   #s14 .invest-body b { color: var(--gold); font-weight: 600; }
+
+  /* ═══════════════════════════════════════════════════
+     NEW PART-1 SLIDES · intro, demos, exercises
+  ═══════════════════════════════════════════════════ */
+  /* per-slide accents */
+  #s16, #s17, #s18 { --accent: #21A493; --accent-deep: #178C7D; }
+  #s19, #s20, #s21 { --accent: #D4A52E; --accent-deep: #B0892A; }
+  #s22, #s23, #s24 { --accent: #21A493; --accent-deep: #178C7D; }
+  #s25 { --accent: #8071E6; --accent-deep: #6354C8; }
+  #s26, #s27 { --accent: #E8773F; --accent-deep: #CC6230; }
+
+  /* shared scenario text */
+  .scn { font-family:'Newsreader',serif; font-size:22px; line-height:1.5; color:var(--ink-body); }
+  .scn b { color:var(--navy); font-style:italic; }
+  .dark .scn { color:rgba(255,255,255,.9); }
+  .dark .scn b { color:var(--gold); font-style:italic; }
+
+  /* hands-on badge (exercises) */
+  .hands-badge { display:inline-flex; align-items:center; gap:10px; align-self:flex-start;
+    background:#21A493; color:#fff; font-family:'Manrope',sans-serif; font-weight:800; font-size:13px;
+    letter-spacing:.18em; text-transform:uppercase; padding:9px 18px; border-radius:5px; margin-top:4px; }
+  .hands-badge .hb { width:9px;height:9px;border-radius:50%;background:#fff; animation:pulse 1.4s infinite; }
+
+  /* reusable copyable prompt card */
+  .promptbox { background:linear-gradient(135deg,#1B2C4E 0%,#14213D 100%); border-radius:12px;
+    padding:19px 24px; box-shadow:0 10px 26px rgba(20,33,61,.18); }
+  .promptbox .pb-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:11px; }
+  .promptbox .pb-label { font-family:'Manrope',sans-serif; font-weight:800; font-size:10.5px; letter-spacing:.2em;
+    text-transform:uppercase; color:var(--gold); }
+  .promptbox .pb-text { font-family:'Newsreader',serif; font-style:italic; font-size:18.5px; line-height:1.5; color:#fff; }
+  .promptbox .pb-text b { color:var(--gold); font-style:normal; font-weight:500; }
+  .promptbox .pb-attach { display:inline-flex; align-items:center; gap:8px; margin-bottom:10px;
+    font-family:'Manrope',sans-serif; font-weight:700; font-size:12px; letter-spacing:.03em; color:rgba(255,255,255,.62); }
+  .promptbox .pb-attach svg { width:14px; height:14px; }
+
+  /* what to look for */
+  .xlook { display:flex; gap:13px; align-items:flex-start; margin-top:15px; padding:13px 18px; border-radius:9px;
+    background:rgba(33,164,147,.08); border:1px solid rgba(33,164,147,.28); }
+  .xlook .xl-k { font-family:'Manrope',sans-serif; font-weight:800; font-size:10.5px; letter-spacing:.14em;
+    text-transform:uppercase; color:#178C7D; flex-shrink:0; padding-top:3px; }
+  .xlook .xl-t { font-family:'Poppins',sans-serif; font-size:15px; line-height:1.5; color:var(--ink-body); }
+  .xlook .xl-t b { color:var(--navy); font-weight:600; }
+
+  /* download button */
+  .dl-btn { display:inline-flex; align-items:center; gap:9px; text-decoration:none; cursor:pointer;
+    background:var(--gold); color:var(--navy); font-family:'Manrope',sans-serif; font-weight:800; font-size:13px;
+    letter-spacing:.04em; padding:11px 18px; border-radius:7px; border:none; transition:filter .18s, transform .12s; }
+  .dl-btn:hover { filter:brightness(1.08); transform:translateY(-1px); }
+  .dl-btn svg { width:15px; height:15px; }
+
+  /* scenario-left / prompt-right grid */
+  .xgrid { display:grid; grid-template-columns:0.92fr 1.08fr; gap:34px; flex:1; margin-top:16px; align-items:center; }
+  .xgrid .xleft { display:flex; flex-direction:column; gap:16px; }
+  .xgrid .xright { display:flex; flex-direction:column; gap:13px; }
+
+  /* s16 What is AI */
+  #s16 .ai-lead { font-family:'Newsreader',serif; font-size:26px; line-height:1.5; color:var(--ink-body); max-width:1090px; margin-top:6px; }
+  #s16 .ai-lead b { color:var(--navy); font-style:italic; font-weight:500; }
+  #s16 .ai-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:24px; }
+  #s16 .ai-card { background:#fff; border:1px solid var(--line); border-radius:11px; padding:22px 24px; }
+  #s16 .ai-ico { width:44px;height:44px;border-radius:10px; background:rgba(33,164,147,.1);
+    display:flex;align-items:center;justify-content:center; margin-bottom:14px; }
+  #s16 .ai-h { font-family:'Manrope',sans-serif; font-weight:800; font-size:16.5px; color:var(--navy); margin-bottom:6px; }
+  #s16 .ai-b { font-family:'Poppins',sans-serif; font-size:14.5px; line-height:1.5; color:var(--ink-soft); }
+
+  /* s17 comparison table */
+  #s17 .cmp { width:100%; border-collapse:collapse; margin-top:16px; }
+  #s17 .cmp th, #s17 .cmp td { text-align:left; padding:12px 16px; border-bottom:1px solid var(--line); vertical-align:middle; }
+  #s17 .cmp thead th { font-family:'Manrope',sans-serif; font-weight:800; font-size:13px; letter-spacing:.04em; color:var(--ink-soft); }
+  #s17 .cmp .rowlabel { font-family:'Manrope',sans-serif; font-weight:700; font-size:14px; color:var(--ink-soft); width:150px; }
+  #s17 .cmp td { font-family:'Poppins',sans-serif; font-size:14.5px; color:var(--ink-body); }
+  #s17 .cmp .claude-col { background:rgba(226,188,75,.10); }
+  #s17 .cmp thead th.claude-col { color:var(--gold-deep); border-bottom:2px solid var(--gold); }
+  #s17 .cmp td.claude-col { color:var(--navy); font-weight:500; }
+  #s17 .cmp .toolname { font-family:'Manrope',sans-serif; font-weight:800; font-size:15px; }
+  #s17 .cmp-note { margin-top:18px; font-family:'Newsreader',serif; font-style:italic; font-size:20px; color:var(--navy); }
+  #s17 .cmp-note b { color:var(--gold-deep); font-style:normal; font-weight:600; }
+
+  /* s18 install */
+  #s18 .inst-grid { display:grid; grid-template-columns:1.12fr .88fr; gap:40px; flex:1; margin-top:14px; align-items:center; }
+  #s18 .inst-cta { background:var(--navy); border-radius:12px; padding:30px 30px; text-align:center; }
+  #s18 .inst-cta .ic-l { font-family:'Manrope',sans-serif; font-weight:800; font-size:11px; letter-spacing:.2em;
+    text-transform:uppercase; color:var(--gold); margin-bottom:14px; }
+  #s18 .inst-cta .ic-url { font-family:'Newsreader',serif; font-size:31px; color:#fff; margin-bottom:8px; letter-spacing:-.01em; }
+  #s18 .inst-cta .ic-url b { color:var(--gold); }
+  #s18 .inst-cta .ic-sub { font-family:'Poppins',sans-serif; font-size:14px; color:rgba(255,255,255,.62); line-height:1.5; }
+
+  /* s19 hook */
+  #s19 .hook-mid { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:26px; }
+  #s19 .hook-badge { display:inline-flex; align-items:center; gap:11px; background:var(--gold); color:var(--navy);
+    font-family:'Manrope',sans-serif; font-weight:800; font-size:14px; letter-spacing:.2em; text-transform:uppercase;
+    padding:11px 22px; border-radius:6px; }
+  #s19 .hook-badge .hb { width:10px;height:10px;border-radius:50%;background:var(--navy); animation:pulse 1.4s infinite; }
+  #s19 .hook-title { font-family:'Newsreader',serif; font-weight:500; font-size:62px; line-height:1.06;
+    letter-spacing:-.02em; color:#fff; max-width:1000px; }
+  #s19 .hook-title .em { font-style:italic; color:var(--gold); }
+  #s19 .hook-sub { font-family:'Poppins',sans-serif; font-weight:300; font-size:20px; color:rgba(255,255,255,.6); }
+
+  /* s25 part-1 action items reuse .act-* (already styled), accent violet via --accent */
+
+  /* s26 Part 2 divider */
+  #s26 .pd-mid { flex:1; display:flex; flex-direction:column; justify-content:center; }
+  #s26 .pd-kick { font-family:'Manrope',sans-serif; font-weight:800; font-size:14px; letter-spacing:.32em;
+    text-transform:uppercase; color:var(--gold); margin-bottom:22px; }
+  #s26 .pd-title { font-family:'Newsreader',serif; font-weight:500; font-size:90px; line-height:1; letter-spacing:-.02em; color:#fff; }
+  #s26 .pd-title .em { font-style:italic; color:var(--gold); }
+  #s26 .pd-sub { font-family:'Poppins',sans-serif; font-weight:300; font-size:22px; color:rgba(255,255,255,.7); margin-top:24px; max-width:860px; }
+  #s26 .pd-foot { display:flex; align-items:center; gap:14px; border-top:1px solid var(--line-dark); padding-top:20px; }
+  #s26 .pd-foot .dot { width:5px;height:5px;border-radius:50%;background:var(--gold); }
+  #s26 .pd-foot .ft { font-family:'Manrope',sans-serif; font-weight:600; font-size:13px; letter-spacing:.1em; color:rgba(255,255,255,.75); }
+
   .eman-logo-img{display:inline-block;aspect-ratio:464 / 200;background-image:url('data:image/png;base64,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');background-size:contain;background-position:left center;background-repeat:no-repeat;}
 </style>
 </head>
@@ -1167,26 +1278,26 @@
   <!-- ═══ SLIDE 2 · AGENDA ═══ -->
   <section class="slide light" id="s2">
     <div class="pad">
-      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">The <b>Roadmap</b></span><span class="partmeter"><i></i><i></i><i></i><i></i></span></div></div>
-      <div class="eyebrow" style="margin-top:24px">Session Overview</div>
-      <h2 class="title">What we'll cover</h2>
-      <div class="body"><div class="agenda" style="margin-top:22px">
-        <div class="ag-row"><span class="ag-num">01</span><span class="ag-title">What Claude is, and the rules of the road</span></div>
-        <div class="ag-row"><span class="ag-num">02</span><span class="ag-title">The RCTF framework for prompts</span></div>
-        <div class="ag-row"><span class="ag-num">03</span><span class="ag-title">Reverse prompting</span></div>
-        <div class="ag-row"><span class="ag-num">04</span><span class="ag-title">Projects &amp; persistent context</span></div>
-        <div class="ag-row"><span class="ag-num">05</span><span class="ag-title">Resume screening <span class="ag-tag">Demo</span></span></div>
-        <div class="ag-row"><span class="ag-num">06</span><span class="ag-title">Build your email project <span class="ag-tag">Demo</span></span></div>
-        <div class="ag-row"><span class="ag-num">07</span><span class="ag-title">Using judgment &amp; your action items</span></div>
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>The Roadmap</b></span><span class="partmeter pm1"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="eyebrow" style="margin-top:24px">Part 1 of 2 · Getting Started</div>
+      <h2 class="title">What we'll cover today</h2>
+      <div class="body"><div class="agenda" style="margin-top:20px">
+        <div class="ag-row"><span class="ag-num">01</span><span class="ag-title">What AI is — and the tools out there</span></div>
+        <div class="ag-row"><span class="ag-num">02</span><span class="ag-title">Getting Claude onto your computer</span></div>
+        <div class="ag-row"><span class="ag-num">03</span><span class="ag-title">See what it can do <span class="ag-tag">Watch</span></span></div>
+        <div class="ag-row"><span class="ag-num">04</span><span class="ag-title">What Claude is great at — and what to watch for</span></div>
+        <div class="ag-row"><span class="ag-num">05</span><span class="ag-title">RCTF: the recipe for prompts that work</span></div>
+        <div class="ag-row"><span class="ag-num">06</span><span class="ag-title">Try it yourself, together <span class="ag-tag">Hands-on</span></span></div>
+        <div class="ag-row"><span class="ag-num">07</span><span class="ag-title">Your action items before Part 2</span></div>
       </div></div>
-      <div class="s-foot"><span class="sect">Session Overview</span><span>02 / 15</span></div>
+      <div class="s-foot"><span class="sect">Part 1 · Roadmap</span><span>02 / 17</span></div>
     </div>
   </section>
 
   <!-- ═══ SLIDE 3 · IS / ISN'T ═══ -->
   <section class="slide light" id="s3">
     <div class="pad">
-      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part I · <b>Foundations</b></span><span class="partmeter pm1"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>Foundations</b></span><span class="partmeter pm1"><i></i><i></i><i></i><i></i></span></div></div>
       <div class="eyebrow" style="margin-top:24px">Framing</div>
       <h2 class="title">What Claude <span class="em">is</span>, and what it isn't</h2>
       <div class="body"><div class="isnot-wrap">
@@ -1210,14 +1321,14 @@
         </div>
       </div></div>
       <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">Treat Claude as a sharp <b>drafting partner</b> — never a private or infallible oracle.</span></div>
-      <div class="s-foot"><span class="sect">Framing</span><span>03 / 15</span></div>
+      <div class="s-foot"><span class="sect">Framing</span><span>09 / 17</span></div>
     </div>
   </section>
 
   <!-- ═══ SLIDE 4 · CAUTION ═══ -->
   <section class="slide light" id="s4">
     <div class="pad">
-      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part I · <b>Foundations</b></span><span class="partmeter pm1"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>Foundations</b></span><span class="partmeter pm1"><i></i><i></i><i></i><i></i></span></div></div>
       <div class="eyebrow" style="margin-top:24px">Caution</div>
       <h2 class="title">What to watch for</h2>
       <div class="body"><div class="caution-grid">
@@ -1227,14 +1338,14 @@
         <div class="caut-card"><div class="caut-num">4</div><div><div class="caut-head">Use judgment</div><div class="caut-body">Claude is a co-pilot, not autopilot. You are still responsible for what goes out the door. Treat every output as a draft, not a final answer.</div></div></div>
       </div></div>
       <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">Every output is a <b>draft</b>. You stay responsible for what goes out the door.</span></div>
-      <div class="s-foot"><span class="sect">Caution</span><span>04 / 15</span></div>
+      <div class="s-foot"><span class="sect">Caution</span><span>10 / 17</span></div>
     </div>
   </section>
 
   <!-- ═══ SLIDE 5 · RCTF ═══ -->
   <section class="slide light" id="s5">
     <div class="pad">
-      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part II · <b>Prompting</b></span><span class="partmeter pm2"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>Prompting</b></span><span class="partmeter pm2"><i></i><i></i><i></i><i></i></span></div></div>
       <div class="eyebrow" style="margin-top:24px">Framework · Remember This One</div>
       <h2 class="title">RCTF: the recipe for prompts that <span class="em">work</span></h2>
       <div class="body"><div class="rctf-wrap">
@@ -1247,14 +1358,14 @@
         <div class="rctf-tag">Hit all four and your output quality jumps immediately.<br><b>Skip one and Claude has to guess.</b></div>
       </div></div>
       <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text"><b>Role, Context, Task, Format.</b> Hit all four and output quality jumps immediately.</span></div>
-      <div class="s-foot"><span class="sect">Framework</span><span>05 / 15</span></div>
+      <div class="s-foot"><span class="sect">Framework</span><span>11 / 17</span></div>
     </div>
   </section>
 
   <!-- ═══ SLIDE 6 · RCTF EXAMPLE ═══ -->
   <section class="slide light" id="s6">
     <div class="pad">
-      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part II · <b>Prompting</b></span><span class="partmeter pm2"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>Prompting</b></span><span class="partmeter pm2"><i></i><i></i><i></i><i></i></span></div></div>
       <div class="eyebrow" style="margin-top:24px">RCTF · Example</div>
       <h2 class="title">Lazy prompt <span class="em">vs.</span> RCTF prompt</h2>
       <div class="body"><div class="ex-grid">
@@ -1274,14 +1385,14 @@
         </div>
       </div></div>
       <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text"><b>Format</b> is the most skipped line — and it's what most controls whether the output is actually usable.</span></div>
-      <div class="s-foot"><span class="sect">RCTF · Example</span><span>06 / 15</span></div>
+      <div class="s-foot"><span class="sect">RCTF · Example</span><span>12 / 17</span></div>
     </div>
   </section>
 
   <!-- ═══ SLIDE 7 · REVERSE PROMPTING ═══ -->
   <section class="slide light" id="s7">
     <div class="pad">
-      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part II · <b>Prompting</b></span><span class="partmeter pm2"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>Prompting</b></span><span class="partmeter pm2"><i></i><i></i><i></i><i></i></span></div></div>
       <div class="eyebrow" style="margin-top:24px">Technique · High Leverage</div>
       <h2 class="title">Reverse prompting</h2>
       <div class="body"><div class="rev-wrap">
@@ -1295,14 +1406,14 @@
         </div>
       </div></div>
       <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">Let Claude <b>interview you first</b>. It writes better prompts to itself than you do.</span></div>
-      <div class="s-foot"><span class="sect">Technique</span><span>07 / 15</span></div>
+      <div class="s-foot"><span class="sect">Technique</span><span>03 / 10</span></div>
     </div>
   </section>
 
   <!-- ═══ SLIDE 9 · DEMO · RESUME SCREENING ═══ -->
   <section class="slide dark" id="s9">
     <div class="pad">
-      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part III · <b>In Practice</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>In Practice</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
       <div style="margin-top:22px"><span class="demo-badge"><span class="pulse"></span>Live Demo</span></div>
       <h2 class="demo-title">Screening resumes for our compliance hire</h2>
       <div class="body"><div class="d8-grid">
@@ -1319,14 +1430,14 @@
         </div>
       </div></div>
       <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">One Project plus one prompt can screen <b>30+ resumes</b> and surface your top 8 in minutes.</span></div>
-      <div class="s-foot"><span class="sect">Demo · Resume Screening</span><span>09 / 15</span></div>
+      <div class="s-foot"><span class="sect">Demo · Resume Screening</span><span>05 / 10</span></div>
     </div>
   </section>
 
   <!-- ═══ SLIDE 8 · PROJECTS ═══ -->
   <section class="slide light" id="s8">
     <div class="pad">
-      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part III · <b>In Practice</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>In Practice</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
       <div class="eyebrow" style="margin-top:24px">Projects</div>
       <h2 class="title">Persistent context for recurring work</h2>
       <div class="body"><div class="proj-grid">
@@ -1355,14 +1466,14 @@
         </div>
       </div></div>
       <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">Set up a Project <b>once</b> — then reuse its context, files, and voice forever.</span></div>
-      <div class="s-foot"><span class="sect">Projects</span><span>08 / 15</span></div>
+      <div class="s-foot"><span class="sect">Projects</span><span>04 / 10</span></div>
     </div>
   </section>
 
   <!-- ═══ SLIDE 10 · VOICE PROFILE ═══ -->
   <section class="slide light" id="s10">
     <div class="pad">
-      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part III · <b>In Practice</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>In Practice</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
       <div style="margin-top:18px"><span class="demo-badge"><span class="pulse"></span>Live Demo · Step 1 of 2</span></div>
       <h2 class="title" style="margin-top:14px">Build your <span class="em">Email Project</span></h2>
       <p class="voice-intro">We'll create one Project where Claude already knows your voice and how you write. Set it up once, and <b>every reply you draft inside it sounds like you.</b></p>
@@ -1389,14 +1500,14 @@
         </div>
       </div></div>
       <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">Build the project <b>once</b> with your voice profile — every draft inside it already sounds like you.</span></div>
-      <div class="s-foot"><span class="sect">Demo · Build the Project</span><span>10 / 15</span></div>
+      <div class="s-foot"><span class="sect">Demo · Build the Project</span><span>06 / 10</span></div>
     </div>
   </section>
 
   <!-- ═══ SLIDE 11 · DEMO · EMAIL PROJECT ═══ -->
   <section class="slide dark" id="s11">
     <div class="pad">
-      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part III · <b>In Practice</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>In Practice</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
       <div style="margin-top:18px"><span class="demo-badge"><span class="pulse"></span>Live Demo · Step 2 of 2 · Follow Along</span></div>
       <h2 class="demo-title">Now let's run it — <span class="em">together</span></h2>
       <p class="d11-sub">Same email, two ways: once in a <b>blank chat</b>, once <b>inside the project we just built</b>. Copy the email and both prompts and follow along.</p>
@@ -1441,14 +1552,14 @@
         </div>
       </div></div>
       <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">Same email, same person — only the <b>context</b> changed. That is the whole game.</span></div>
-      <div class="s-foot"><span class="sect">Demo · Email Project</span><span>11 / 15</span></div>
+      <div class="s-foot"><span class="sect">Demo · Email Project</span><span>07 / 10</span></div>
     </div>
   </section>
 
   <!-- ═══ SLIDE 12 · BOARD SAFETY NET ═══ -->
   <section class="slide light" id="s12">
     <div class="pad">
-      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part III · <b>In Practice</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>In Practice</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
       <div class="eyebrow" style="margin-top:24px">One New Habit</div>
       <h2 class="title" style="font-size:40px">The safety-check habit</h2>
       <div class="body"><div class="net-wrap">
@@ -1468,7 +1579,7 @@
         <div class="net-payoff"><b>Two minutes of effort.</b>&nbsp;&nbsp;Catches the mistakes before anyone else does.</div>
       </div></div>
       <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">A <b>two-minute safety check</b> catches mistakes before they ever leave the building.</span></div>
-      <div class="s-foot"><span class="sect">One New Habit</span><span>12 / 15</span></div>
+      <div class="s-foot"><span class="sect">One New Habit</span><span>08 / 10</span></div>
     </div>
   </section>
 
@@ -1495,14 +1606,14 @@
         </div>
       </div></div>
       <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">You own every word that leaves your desk. <b>Review it, verify it, and make it yours.</b></span></div>
-      <div class="s-foot"><span class="sect">The Golden Rule</span><span>13 / 15</span></div>
+      <div class="s-foot"><span class="sect">The Golden Rule</span><span>09 / 10</span></div>
     </div>
   </section>
 
   <!-- ═══ SLIDE 14 · ACTION ITEMS ═══ -->
   <section class="slide dark" id="s14">
     <div class="pad">
-      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part IV · <b>Take Action</b></span><span class="partmeter pm4"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>Take Action</b></span><span class="partmeter pm4"><i></i><i></i><i></i><i></i></span></div></div>
       <h2 class="title" style="margin-top:18px">Your action items</h2>
       <div class="body"><div class="actions">
         <div class="act-row done"><span class="act-n">01</span><span class="act-t">Get the <b>voice profile template</b></span><span class="act-done">✓ done today</span></div>
@@ -1517,7 +1628,7 @@
         <div class="invest-body">We're a small team, so this is a real investment — and we're glad to make it. If it helps you learn something new, write a little sharper, or get some time back in your day, that's a win for all of us. <b>Want a seat? It's yours. Just say the word.</b></div>
       </div>
       </div>
-      <div class="s-foot"><span class="sect">Action Items</span><span>14 / 15</span></div>
+      <div class="s-foot"><span class="sect">Action Items</span><span>10 / 10</span></div>
     </div>
   </section>
 
@@ -1537,7 +1648,271 @@
           <span class="ft">Made with <b>Claude</b> &nbsp;·&nbsp; EMAN Professional Development &nbsp;·&nbsp; June 2026</span>
         </div>
       </div>
-      <div class="s-foot"><span class="sect">Colophon</span><span>15 / 15</span></div>
+      <div class="s-foot"><span class="sect">Colophon</span><span>17 / 17</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 16 · WHAT IS GENERATIVE AI ═══ -->
+  <section class="slide light" id="s16">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>The Basics</b></span><span class="partmeter pm1"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="eyebrow" style="margin-top:24px">Start Here</div>
+      <h2 class="title">So… what <span class="em">is</span> this thing?</h2>
+      <div class="body">
+        <p class="ai-lead">Tools like Claude are <b>generative AI</b> — you type a request in plain English, and it writes back. Think of it as an exceptionally well-read assistant that can draft, explain, summarize, and think through problems with you. <b>No coding, no special skills. You just talk to it.</b></p>
+        <div class="ai-cards">
+          <div class="ai-card">
+            <div class="ai-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#178C7D" stroke-width="1.8"><path d="M4 5h16v11H9l-5 4z" stroke-linejoin="round"/></svg></div>
+            <div class="ai-h">You ask in plain words</div>
+            <div class="ai-b">Type a question or request the same way you'd message a colleague.</div>
+          </div>
+          <div class="ai-card">
+            <div class="ai-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#178C7D" stroke-width="1.8"><path d="M12 2l2.4 6.8L21 11l-6.6 2.2L12 20l-2.4-6.8L3 11l6.6-2.2z" stroke-linejoin="round"/></svg></div>
+            <div class="ai-h">It writes back in seconds</div>
+            <div class="ai-b">A draft, a summary, an answer — ready for you to react to and refine.</div>
+          </div>
+          <div class="ai-card">
+            <div class="ai-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#178C7D" stroke-width="1.8"><path d="M4 9a8 8 0 0114-5l2 2M20 15a8 8 0 01-14 5l-2-2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="ai-h">You go back and forth</div>
+            <div class="ai-b">Tell it what to change. It adjusts. You stay in control the whole time.</div>
+          </div>
+        </div>
+      </div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">If you can <b>write an email, you can use Claude</b>. That's the whole skill.</span></div>
+      <div class="s-foot"><span class="sect">Part 1 · The Basics</span><span>03 / 17</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 17 · THE LANDSCAPE ═══ -->
+  <section class="slide light" id="s17">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>The Basics</b></span><span class="partmeter pm1"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="eyebrow" style="margin-top:24px">The Landscape</div>
+      <h2 class="title">The big names — and why we chose <span class="em">Claude</span></h2>
+      <div class="body">
+        <table class="cmp">
+          <thead>
+            <tr><th class="rowlabel"></th><th>ChatGPT</th><th class="claude-col">Claude</th><th>Gemini</th><th>Copilot</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="rowlabel">Made by</td><td>OpenAI</td><td class="claude-col toolname">Anthropic</td><td>Google</td><td>Microsoft</td></tr>
+            <tr><td class="rowlabel">Best known for</td><td>The most recognized name</td><td class="claude-col">Writing, long documents, careful reasoning</td><td>Built into Google Workspace</td><td>Built into Microsoft Office</td></tr>
+            <tr><td class="rowlabel">Free to start</td><td>Yes</td><td class="claude-col">Yes</td><td>Yes</td><td>With Microsoft 365</td></tr>
+          </tbody>
+        </table>
+        <p class="cmp-note">They're all capable. <b>We use Claude because we find it the most effective across the widest range of tasks — and the most user-friendly,</b> which matters most when you're just getting started.</p>
+      </div>
+      <div class="s-foot"><span class="sect">Part 1 · The Basics</span><span>04 / 17</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 18 · INSTALL CLAUDE ═══ -->
+  <section class="slide light" id="s18">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>Setup</b></span><span class="partmeter pm1"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="eyebrow" style="margin-top:24px">Let's All Get Set Up</div>
+      <h2 class="title">Getting Claude on your computer</h2>
+      <div class="body"><div class="inst-grid">
+        <div>
+          <div class="vs-sub" style="color:var(--accent-deep)">Four steps · about two minutes</div>
+          <div class="v-step"><span class="vn">1</span><div><div class="vh">Open your web browser</div><div class="vb">Go to the address on the right.</div></div></div>
+          <div class="v-step"><span class="vn">2</span><div><div class="vh">Download the app</div><div class="vb">Choose Mac or Windows — it picks the right one for you.</div></div></div>
+          <div class="v-step"><span class="vn">3</span><div><div class="vh">Open it and sign in</div><div class="vb">Create a free account with your work email if you don't have one.</div></div></div>
+          <div class="v-step"><span class="vn">4</span><div><div class="vh">That's it — you're in</div><div class="vb">No setup, no settings. You're ready to go.</div></div></div>
+        </div>
+        <div class="inst-cta">
+          <div class="ic-l">Go to this address</div>
+          <div class="ic-url"><b>claude.ai</b>/download</div>
+          <div class="ic-sub">Works on Mac and Windows.<br>The desktop app is the easiest way to use it day to day.</div>
+        </div>
+      </div></div>
+      <div class="s-foot"><span class="sect">Part 1 · Setup</span><span>05 / 17</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 19 · HOOK (live resume demo) ═══ -->
+  <section class="slide dark" id="s19">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>See It Live</b></span><span class="partmeter pm1"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="hook-mid">
+        <span class="hook-badge"><span class="hb"></span>Live</span>
+        <h1 class="hook-title">Finding our next <span class="em">great hire</span></h1>
+        <p class="hook-sub">30+ resumes &nbsp;→&nbsp; the strongest 8 &nbsp;→&nbsp; in a few minutes</p>
+      </div>
+      <div class="s-foot"><span class="sect">Part 1 · See It Live</span><span>06 / 17</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 20 · DEMO A · IT WRITES ═══ -->
+  <section class="slide dark" id="s20">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>Watch</b></span><span class="partmeter pm2"><i></i><i></i><i></i><i></i></span></div></div>
+      <div style="margin-top:22px"><span class="demo-badge"><span class="pulse"></span>Watch · Demo 1 of 2</span></div>
+      <h2 class="demo-title">Rough notes <span class="em">→</span> a real email</h2>
+      <div class="body"><div class="xgrid">
+        <div class="xleft">
+          <p class="scn">A few messy bullet points about an upcoming staff training. Watch Claude turn them into something you could actually send to your principals.</p>
+        </div>
+        <div class="xright">
+          <div class="promptbox">
+            <div class="pb-head"><span class="pb-label">The Prompt</span>
+              <button class="copy-btn gold mini" onclick="copyKey('pDemoA', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Copy</button>
+            </div>
+            <div class="pb-text">"Turn these rough notes into a warm, clear email to our principals. Keep it under 5 sentences: outside firm <b>Brightpath Learning Partners</b> running a PD day on using AI at work · Friday, Sept 19, 9am–12pm · EMAN central office · lunch provided · RSVP by Sept 5."</div>
+          </div>
+        </div>
+      </div></div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">A blank page becomes a <b>finished first draft</b> in seconds.</span></div>
+      <div class="s-foot"><span class="sect">Demo · It Writes</span><span>07 / 17</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 21 · DEMO B · IT THINKS WITH YOU ═══ -->
+  <section class="slide dark" id="s21">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>Watch</b></span><span class="partmeter pm2"><i></i><i></i><i></i><i></i></span></div></div>
+      <div style="margin-top:22px"><span class="demo-badge"><span class="pulse"></span>Watch · Demo 2 of 2</span></div>
+      <h2 class="demo-title">Think through a <span class="em">tough conversation</span></h2>
+      <div class="body"><div class="xgrid">
+        <div class="xleft">
+          <p class="scn">It's not just a writing tool — it's a thinking partner. Watch it help work through a conversation every school leader dreads <b>before</b> writing a single word.</p>
+        </div>
+        <div class="xright">
+          <div class="promptbox">
+            <div class="pb-head"><span class="pb-label">The Prompt</span>
+              <button class="copy-btn gold mini" onclick="copyKey('pDemoB', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Copy</button>
+            </div>
+            <div class="pb-text">"I need to tell a parent their child is moving to a different classroom mid-year. They'll likely be upset. Before drafting anything, help me think it through: what's the parent probably worried about, what tone should I take, and what should I avoid? Then give me a short way to open the conversation."</div>
+          </div>
+        </div>
+      </div></div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">Claude is a <b>thinking partner</b>, not just a writer — use it before the hard stuff.</span></div>
+      <div class="s-foot"><span class="sect">Demo · It Thinks</span><span>08 / 17</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 22 · EXERCISE C · KNOWS YOUR WORLD ═══ -->
+  <section class="slide light" id="s22">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>Try It Together</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div style="margin-top:22px"><span class="hands-badge"><span class="hb"></span>Hands-on · Exercise 1</span></div>
+      <h2 class="title" style="margin-top:14px">Ask it about <span class="em">our world</span></h2>
+      <div class="body"><div class="xgrid">
+        <div class="xleft">
+          <p class="scn">Let's all run the same prompt and compare. This shows Claude isn't a toy — it engages with our actual field.</p>
+          <div class="xlook"><span class="xl-k">What to notice</span><span class="xl-t">It answers fluently about charter management. <b>It can also be confidently wrong</b> — so we'll sanity-check what it says. More on that later.</span></div>
+        </div>
+        <div class="xright">
+          <div class="promptbox">
+            <div class="pb-head"><span class="pb-label">Copy &amp; paste this</span>
+              <button class="copy-btn gold mini" onclick="copyKey('pExC', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Copy</button>
+            </div>
+            <div class="pb-text">"Who are the largest charter school management organizations operating in <b>Michigan</b>? Give me a short list with one sentence on each, and note which focus on K–8 versus high school."</div>
+          </div>
+        </div>
+      </div></div>
+      <div class="s-foot"><span class="sect">Exercise · Knows Your World</span><span>13 / 17</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 23 · EXERCISE D · SAVES YOU HOURS ═══ -->
+  <section class="slide light" id="s23">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>Try It Together</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div style="margin-top:22px"><span class="hands-badge"><span class="hb"></span>Hands-on · Exercise 2</span></div>
+      <h2 class="title" style="margin-top:14px">Make a long report <span class="em">short</span></h2>
+      <div class="body"><div class="xgrid">
+        <div class="xleft">
+          <p class="scn">Download the sample report, drop it into Claude, and watch three dense pages become five things you can act on.</p>
+          <a class="dl-btn" href="EMAN-Authorizer-Review-RPA-2026.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke-linecap="round" stroke-linejoin="round"/></svg>Download the sample report</a>
+          <div class="xlook"><span class="xl-k">What to notice</span><span class="xl-t">Nobody wants to read three pages of compliance findings. <b>You get the gist in seconds</b> — then decide what matters.</span></div>
+        </div>
+        <div class="xright">
+          <div class="promptbox">
+            <div class="pb-attach"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.5l-9 9a4 4 0 01-6-6l9-9a3 3 0 014 4l-9 9" stroke-linecap="round" stroke-linejoin="round"/></svg>Attach the report, then paste:</div>
+            <div class="pb-head"><span class="pb-label">Copy &amp; paste this</span>
+              <button class="copy-btn gold mini" onclick="copyKey('pExD', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Copy</button>
+            </div>
+            <div class="pb-text">"Summarize this report in <b>5 bullet points</b> a principal needs to act on. Then list every deadline mentioned, with its date."</div>
+          </div>
+        </div>
+      </div></div>
+      <div class="s-foot"><span class="sect">Exercise · Saves You Hours</span><span>14 / 17</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 24 · EXERCISE E · CATCHES MISTAKES ═══ -->
+  <section class="slide light" id="s24">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>Try It Together</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div style="margin-top:22px"><span class="hands-badge"><span class="hb"></span>Hands-on · Exercise 3</span></div>
+      <h2 class="title" style="margin-top:14px">Catch mistakes <span class="em">before</span> they go out</h2>
+      <div class="body"><div class="xgrid">
+        <div class="xleft">
+          <p class="scn">A principal dashed off a memo for the board — and it has a few problems. Let's have Claude find them before it ever gets sent.</p>
+          <a class="dl-btn" href="Oakview-Science-Fair-Summary-April2026.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke-linecap="round" stroke-linejoin="round"/></svg>Download the sample memo</a>
+          <div class="xlook"><span class="xl-k">What to notice</span><span class="xl-t">It catches the typo, the date that doesn't add up, and the vague line — <b>and explains why</b>, then hands you a clean version.</span></div>
+        </div>
+        <div class="xright">
+          <div class="promptbox">
+            <div class="pb-attach"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.5l-9 9a4 4 0 01-6-6l9-9a3 3 0 014 4l-9 9" stroke-linecap="round" stroke-linejoin="round"/></svg>Attach the memo, then paste:</div>
+            <div class="pb-head"><span class="pb-label">Copy &amp; paste this</span>
+              <button class="copy-btn gold mini" onclick="copyKey('pExE', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Copy</button>
+            </div>
+            <div class="pb-text">"This memo is going to our board. Find any typos, grammar mistakes, unclear sentences, or anything that contradicts itself. List what you'd fix and why, then give me a <b>clean rewritten version</b>."</div>
+          </div>
+        </div>
+      </div></div>
+      <div class="s-foot"><span class="sect">Exercise · Catches Mistakes</span><span>15 / 17</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 25 · PART 1 ACTION ITEMS ═══ -->
+  <section class="slide dark" id="s25">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>Take Action</b></span><span class="partmeter pm4"><i></i><i></i><i></i><i></i></span></div></div>
+      <h2 class="title" style="margin-top:18px">Before Part 2</h2>
+      <div class="body"><div class="actions">
+        <div class="act-row done"><span class="act-n">01</span><span class="act-t">Install Claude and <b>sign in</b></span><span class="act-done">✓ done today</span></div>
+        <div class="act-row"><span class="act-n">02</span><span class="act-t">Re-run <b>one of today's exercises</b> on your own</span></div>
+        <div class="act-row"><span class="act-n">03</span><span class="act-t">Use it once this week for something real — an email, a summary, anything</span></div>
+        <div class="act-row"><span class="act-n">04</span><span class="act-t">Bring a <b>real task or question</b> to Part 2</span></div>
+      </div>
+      <div class="closer">No homework, no pressure. Just open it once and get a feel for it. <b>In Part 2 we go deeper</b> — projects, your writing voice, and tools you'll reuse every week.</div>
+      </div>
+      <div class="s-foot"><span class="sect">Part 1 · Take Action</span><span>16 / 17</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 26 · PART 2 DIVIDER ═══ -->
+  <section class="slide dark" id="s26">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><span class="head-right" style="color:rgba(255,255,255,.55)">Professional Development</span></div>
+      <div class="pd-mid">
+        <div class="pd-kick">Part 2 of 2 · Going Deeper</div>
+        <h1 class="pd-title">Make it <span class="em">yours</span></h1>
+        <p class="pd-sub">Now that you've seen what it can do, let's set Claude up to work the way you do — in your voice, on your recurring work, with tools you build once and reuse.</p>
+        <div class="pd-foot" style="margin-top:30px"><span class="dot"></span><span class="ft">Welcome back · Part 2</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 27 · AGENDA · PART 2 ═══ -->
+  <section class="slide light" id="s27">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>The Roadmap</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="eyebrow" style="margin-top:24px">Part 2 of 2 · Going Deeper</div>
+      <h2 class="title">What we'll cover today</h2>
+      <div class="body"><div class="agenda" style="margin-top:20px">
+        <div class="ag-row"><span class="ag-num">01</span><span class="ag-title">Reverse prompting — let Claude interview you</span></div>
+        <div class="ag-row"><span class="ag-num">02</span><span class="ag-title">Projects — set Claude up once, reuse forever</span></div>
+        <div class="ag-row"><span class="ag-num">03</span><span class="ag-title">Screening resumes, start to finish <span class="ag-tag">Demo</span></span></div>
+        <div class="ag-row"><span class="ag-num">04</span><span class="ag-title">Build your email project <span class="ag-tag">Hands-on</span></span></div>
+        <div class="ag-row"><span class="ag-num">05</span><span class="ag-title">The safety-check habit</span></div>
+        <div class="ag-row"><span class="ag-num">06</span><span class="ag-title">Using judgment — you own the output</span></div>
+        <div class="ag-row"><span class="ag-num">07</span><span class="ag-title">Your action items</span></div>
+      </div></div>
+      <div class="s-foot"><span class="sect">Part 2 · Roadmap</span><span>02 / 10</span></div>
     </div>
   </section>
 
@@ -1573,7 +1948,12 @@
 </div>
 
 <script>
-  const TOTAL = 15; let cur = 1;
+  /* Presentation order — decouples sequence from element IDs so existing slides
+     keep their IDs (and CSS) while new slides slot in anywhere. */
+  const ORDER = ['s1','s2','s16','s17','s18','s19','s20','s21','s3','s4','s5','s6','s22','s23','s24','s25','s15',
+                 's26','s27','s7','s8','s9','s10','s11','s12','s13','s14'];
+  const sid = n => ORDER[n-1];
+  const TOTAL = ORDER.length; let cur = 1;
   const stage = document.getElementById('stage');
 
   /* ─── Template store ─── */
@@ -1623,7 +2003,17 @@ When drafting replies:
     email:  { text: EMAIL,  title: 'The inbound email', eyebrow: 'Template · Paste into Claude' },
     round1: { text: 'Here is an email I just received. Write a reply.\n\n' + EMAIL, title: 'Round 1 · No context', eyebrow: 'Template · Fresh chat' },
     round2: { text: 'Draft a reply to this email.\n\n' + EMAIL, title: 'Round 2 · Inside your project', eyebrow: 'Template · Use with voice profile' },
-    voice:  { text: VOICE,  title: 'Your voice profile', eyebrow: 'Template · Project custom instructions' }
+    voice:  { text: VOICE,  title: 'Your voice profile', eyebrow: 'Template · Project custom instructions' },
+    pDemoA: { title: 'Demo 1 · It Writes', eyebrow: 'Demo · Paste into Claude',
+      text: 'Turn these rough notes into a warm, clear email to our principals. Keep it under 5 sentences:\n\n- Outside firm Brightpath Learning Partners running a professional development day\n- Topic: using AI tools at work (a follow-up to our earlier session)\n- Date: Friday, September 19, 9am to 12pm\n- Location: the EMAN central office\n- Lunch provided\n- Please RSVP by September 5' },
+    pDemoB: { title: 'Demo 2 · It Thinks With You', eyebrow: 'Demo · Paste into Claude',
+      text: 'I need to tell a parent that their child is being moved to a different classroom mid-year. They are likely to be upset and push back. Before drafting anything, help me think it through: what is the parent probably worried about, what tone should I take, and what should I avoid saying? Then give me a short, warm way to open the conversation.' },
+    pExC: { title: 'Exercise 1 · Knows Your World', eyebrow: 'Exercise · Paste into Claude',
+      text: 'Who are the largest charter school management organizations (EMOs and CMOs) operating in Michigan? Give me a short list with one sentence on each, and note which ones focus on K-8 versus high school.' },
+    pExD: { title: 'Exercise 2 · Saves You Hours', eyebrow: 'Exercise · Attach the report first',
+      text: 'Summarize this report in 5 bullet points a principal needs to act on. Then list every deadline mentioned, with its date.' },
+    pExE: { title: 'Exercise 3 · Catches Mistakes', eyebrow: 'Exercise · Attach the memo first',
+      text: 'This memo is going to our board. Review it for typos, grammar mistakes, unclear sentences, and anything that contradicts itself. List what you would fix and why, then give me a clean rewritten version.' }
   };
 
   /* ─── Clipboard ─── */
@@ -1685,7 +2075,7 @@ When drafting replies:
   function go(n){
     if(n<1||n>TOTAL||n===cur) return;
     const dir = n>cur?1:-1;
-    const a=document.getElementById('s'+cur), b=document.getElementById('s'+n);
+    const a=document.getElementById(sid(cur)), b=document.getElementById(sid(n));
     a.classList.remove('active'); a.classList.add(dir>0?'exit-left':'exit-right');
     b.style.transform = dir>0?'translateX(40px)':'translateX(-40px)'; b.style.opacity='0';
     requestAnimationFrame(()=>{ b.classList.add('active'); b.style.transform=''; b.style.opacity=''; });
