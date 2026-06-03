@@ -1010,8 +1010,8 @@
   .isnt .isnot-label::after { content: 'Don\2019 t rely on it as'; }
 
   /* ── slide 2 · agenda (no times, roomier rows) ── */
-  #s2 .ag-row { grid-template-columns: 60px 1fr; padding: 17px 6px; }
-  #s2 .ag-title { font-size: 21px; }
+  #s2 .ag-row { grid-template-columns: 60px 1fr; padding: 11px 6px; }
+  #s2 .ag-title { font-size: 20px; }
 
   /* ── slide 4 · bigger card text, tighter whitespace ── */
   #s4 .caution-grid { gap: 16px; }
@@ -1036,14 +1036,19 @@
   #s12 .net-statement { font-size: 42px; }
 
   /* ── slide 14 · done rows + investment callout ── */
-  #s14 .act-row { grid-template-columns: 50px 1fr auto; padding: 9px 4px; }
-  #s14 .act-row.done .act-t { text-decoration: line-through; color: rgba(255,255,255,.4); }
-  #s14 .act-row.done .act-n { color: rgba(255,255,255,.3); }
-  #s14 .act-row.done .act-t b { color: rgba(255,255,255,.4); }
-  #s14 .act-done {
+  #s14 .act-row, #s25 .act-row { grid-template-columns: 50px 1fr auto; padding: 9px 4px; }
+  #s14 .act-row.done .act-t, #s25 .act-row.done .act-t { text-decoration: line-through; color: rgba(255,255,255,.4); }
+  #s14 .act-row.done .act-n, #s25 .act-row.done .act-n { color: rgba(255,255,255,.3); }
+  #s14 .act-row.done .act-t b, #s25 .act-row.done .act-t b { color: rgba(255,255,255,.4); }
+  #s14 .act-done, #s25 .act-done {
     font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 11px;
     letter-spacing: .1em; text-transform: uppercase; color: #46C57E;
   }
+  #s25 .act-n { font-size: 34px; }
+  #s25 .act-t { font-size: 20px; }
+  #s25 .closer { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line-dark);
+    font-family: 'Newsreader', serif; font-style: italic; font-size: 19px; line-height: 1.5; color: rgba(255,255,255,.82); max-width: 1040px; }
+  #s25 .closer b { color: var(--accent); font-weight: 600; font-style: normal; }
   #s14 .invest-box {
     margin-top: 18px; border-radius: 13px; padding: 22px 28px;
     background: linear-gradient(135deg, rgba(226,188,75,.18) 0%, rgba(226,188,75,.06) 100%);
@@ -1137,8 +1142,27 @@
   #s17 .cmp thead th.claude-col { color:var(--gold-deep); border-bottom:2px solid var(--gold); }
   #s17 .cmp td.claude-col { color:var(--navy); font-weight:500; }
   #s17 .cmp .toolname { font-family:'Manrope',sans-serif; font-weight:800; font-size:15px; }
-  #s17 .cmp-note { margin-top:18px; font-family:'Newsreader',serif; font-style:italic; font-size:20px; color:var(--navy); }
+  #s17 .cmp-note { margin-top:22px; font-family:'Newsreader',serif; font-style:italic; font-size:21px; color:var(--navy); }
   #s17 .cmp-note b { color:var(--gold-deep); font-style:normal; font-weight:600; }
+  /* fill the slide vertically, taller rows, centered columns, brand logos */
+  #s17 .body { justify-content:center; }
+  #s17 .cmp th, #s17 .cmp td { padding:15px 14px; text-align:center; }
+  #s17 .cmp .rowlabel { text-align:left; }
+  #s17 .tool-h { display:flex; flex-direction:column; align-items:center; gap:9px; }
+  #s17 .tool-h .tn { font-family:'Manrope',sans-serif; font-weight:800; font-size:14px; color:var(--ink-soft); }
+  #s17 .cmp thead th.claude-col .tn { color:var(--gold-deep); }
+  .brand-ico { width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow:0 2px 6px rgba(20,33,61,.14); }
+  .brand-ico svg { width:19px; height:19px; }
+  .bi-chatgpt { background:#0F9D78; }
+  .bi-claude  { background:#D97757; }
+  .bi-gemini  { background:linear-gradient(135deg,#4796E3 0%,#9168C0 55%,#D96570 100%); }
+  .bi-copilot { background:#0A6CFF; }
+
+  /* s16 — fill vertically so the takeaway isn't stranded */
+  #s16 .body { justify-content:center; }
+  #s16 .ai-lead { margin-top:0; margin-bottom:30px; }
+  #s16 .ai-cards { margin-top:0; }
+  #s16 .ai-card { padding:26px 26px; }
 
   /* s18 install */
   #s18 .inst-grid { display:grid; grid-template-columns:1.12fr .88fr; gap:40px; flex:1; margin-top:14px; align-items:center; }
@@ -1288,7 +1312,8 @@
         <div class="ag-row"><span class="ag-num">04</span><span class="ag-title">What Claude is great at — and what to watch for</span></div>
         <div class="ag-row"><span class="ag-num">05</span><span class="ag-title">RCTF: the recipe for prompts that work</span></div>
         <div class="ag-row"><span class="ag-num">06</span><span class="ag-title">Try it yourself, together <span class="ag-tag">Hands-on</span></span></div>
-        <div class="ag-row"><span class="ag-num">07</span><span class="ag-title">Your action items before Part 2</span></div>
+        <div class="ag-row"><span class="ag-num">07</span><span class="ag-title">Using good judgment — you own the output</span></div>
+        <div class="ag-row"><span class="ag-num">08</span><span class="ag-title">Your action items before Part 2</span></div>
       </div></div>
       <div class="s-foot"><span class="sect">Part 1 · Roadmap</span><span>02 / 17</span></div>
     </div>
@@ -1559,7 +1584,7 @@
   <!-- ═══ SLIDE 12 · BOARD SAFETY NET ═══ -->
   <section class="slide light" id="s12">
     <div class="pad">
-      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>In Practice</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>One New Habit</b></span><span class="partmeter pm4"><i></i><i></i><i></i><i></i></span></div></div>
       <div class="eyebrow" style="margin-top:24px">One New Habit</div>
       <h2 class="title" style="font-size:40px">The safety-check habit</h2>
       <div class="body"><div class="net-wrap">
@@ -1586,7 +1611,7 @@
   <!-- ═══ SLIDE 13 · JUDGMENT · THE GOLDEN RULE ═══ -->
   <section class="slide dark" id="s13">
     <div class="pad">
-      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">The <b>Golden Rule</b></span><span class="partmeter pm4"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>The Golden Rule</b></span><span class="partmeter pm4"><i></i><i></i><i></i><i></i></span></div></div>
       <div class="eyebrow" style="margin-top:24px">Use Your Judgment</div>
       <h2 class="title">Claude drafts. <span class="em">You decide.</span></h2>
       <div class="body"><div class="jdg-grid">
@@ -1678,8 +1703,7 @@
           </div>
         </div>
       </div>
-      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">If you can <b>write an email, you can use Claude</b>. That's the whole skill.</span></div>
-      <div class="s-foot"><span class="sect">Part 1 · The Basics</span><span>03 / 17</span></div>
+      <div class="s-foot"><span class="sect">Part 1 · The Basics</span><span>03 / 19</span></div>
     </div>
   </section>
 
@@ -1692,7 +1716,13 @@
       <div class="body">
         <table class="cmp">
           <thead>
-            <tr><th class="rowlabel"></th><th>ChatGPT</th><th class="claude-col">Claude</th><th>Gemini</th><th>Copilot</th></tr>
+            <tr>
+              <th class="rowlabel"></th>
+              <th><div class="tool-h"><span class="brand-ico bi-chatgpt"><svg viewBox="0 0 24 24"><path d="M12 3l7.8 4.5v9L12 21l-7.8-4.5v-9z" fill="none" stroke="#fff" stroke-width="1.7" stroke-linejoin="round"/><circle cx="12" cy="12" r="2.2" fill="#fff"/></svg></span><span class="tn">ChatGPT</span></div></th>
+              <th class="claude-col"><div class="tool-h"><span class="brand-ico bi-claude"><svg viewBox="0 0 24 24"><g stroke="#fff" stroke-width="1.7" stroke-linecap="round"><line x1="12" y1="3.2" x2="12" y2="20.8"/><line x1="3.2" y1="12" x2="20.8" y2="12"/><line x1="5.8" y1="5.8" x2="18.2" y2="18.2"/><line x1="18.2" y1="5.8" x2="5.8" y2="18.2"/></g></svg></span><span class="tn">Claude</span></div></th>
+              <th><div class="tool-h"><span class="brand-ico bi-gemini"><svg viewBox="0 0 24 24"><path d="M12 2C12 7.5 16.5 12 22 12C16.5 12 12 16.5 12 22C12 16.5 7.5 12 2 12C7.5 12 12 7.5 12 2Z" fill="#fff"/></svg></span><span class="tn">Gemini</span></div></th>
+              <th><div class="tool-h"><span class="brand-ico bi-copilot"><svg viewBox="0 0 24 24"><path d="M5 13a6 6 0 016-6 5 5 0 015 5" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><path d="M19 11a6 6 0 01-6 6 5 5 0 01-5-5" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></span><span class="tn">Copilot</span></div></th>
+            </tr>
           </thead>
           <tbody>
             <tr><td class="rowlabel">Made by</td><td>OpenAI</td><td class="claude-col toolname">Anthropic</td><td>Google</td><td>Microsoft</td></tr>
@@ -1908,9 +1938,7 @@
         <div class="ag-row"><span class="ag-num">02</span><span class="ag-title">Projects — set Claude up once, reuse forever</span></div>
         <div class="ag-row"><span class="ag-num">03</span><span class="ag-title">Screening resumes, start to finish <span class="ag-tag">Demo</span></span></div>
         <div class="ag-row"><span class="ag-num">04</span><span class="ag-title">Build your email project <span class="ag-tag">Hands-on</span></span></div>
-        <div class="ag-row"><span class="ag-num">05</span><span class="ag-title">The safety-check habit</span></div>
-        <div class="ag-row"><span class="ag-num">06</span><span class="ag-title">Using judgment — you own the output</span></div>
-        <div class="ag-row"><span class="ag-num">07</span><span class="ag-title">Your action items</span></div>
+        <div class="ag-row"><span class="ag-num">05</span><span class="ag-title">Your action items</span></div>
       </div></div>
       <div class="s-foot"><span class="sect">Part 2 · Roadmap</span><span>02 / 10</span></div>
     </div>
@@ -1950,8 +1978,9 @@
 <script>
   /* Presentation order — decouples sequence from element IDs so existing slides
      keep their IDs (and CSS) while new slides slot in anywhere. */
-  const ORDER = ['s1','s2','s16','s17','s18','s19','s20','s21','s3','s4','s5','s6','s22','s23','s24','s25','s15',
-                 's26','s27','s7','s8','s9','s10','s11','s12','s13','s14'];
+  const ORDER = ['s1','s2','s16','s17','s18','s19','s20','s21','s3','s4','s5','s6','s22','s23','s24','s13','s12','s25','s15',
+                 's26','s27','s7','s8','s9','s10','s11','s14'];
+  const PART2_START = ORDER.indexOf('s26');   // index where Part 2 begins (the divider)
   const sid = n => ORDER[n-1];
   const TOTAL = ORDER.length; let cur = 1;
   const stage = document.getElementById('stage');
@@ -2072,6 +2101,19 @@ When drafting replies:
     const d=document.createElement('div'); d.className='dot'+(i===1?' active':'');
     d.onclick=()=>go(i); dotsEl.appendChild(d);
   }
+  /* Auto-number on-slide footers, part-relative, from ORDER. Reordering slides
+     never breaks page numbers again. Cover + Part-2 divider have no footer → skipped. */
+  (function(){
+    const p1total = PART2_START, p2total = ORDER.length - PART2_START;
+    ORDER.forEach((id, i) => {
+      const sl = document.getElementById(id); if(!sl) return;
+      const numSpan = sl.querySelector('.s-foot span:last-child'); if(!numSpan) return;
+      const inP1 = i < PART2_START;
+      const page = inP1 ? (i+1) : (i - PART2_START + 1);
+      const total = inP1 ? p1total : p2total;
+      numSpan.textContent = String(page).padStart(2,'0') + ' / ' + total;
+    });
+  })();
   function go(n){
     if(n<1||n>TOTAL||n===cur) return;
     const dir = n>cur?1:-1;
