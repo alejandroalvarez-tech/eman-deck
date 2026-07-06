@@ -1201,6 +1201,7 @@
   #s28 { --accent:#E8773F; --accent-deep:#CC6230; }
   #s29 { --accent:#21A493; --accent-deep:#178C7D; }
   #s30 { --accent:#D4A52E; --accent-deep:#B0892A; }
+  #s31 { --accent:#8071E6; --accent-deep:#6354C8; }
 
   /* s28 recap + open floor */
   #s28 .recap-grid { display:grid; grid-template-columns:0.95fr 1.05fr; gap:38px; flex:1; margin-top:12px; align-items:center; }
@@ -1968,9 +1969,10 @@
       <div class="body"><div class="agenda" style="margin-top:20px">
         <div class="ag-row"><span class="ag-num">01</span><span class="ag-title">Reverse prompting — let Claude interview you</span></div>
         <div class="ag-row"><span class="ag-num">02</span><span class="ag-title">Make Claude audit its own work</span></div>
-        <div class="ag-row"><span class="ag-num">03</span><span class="ag-title">Projects — set Claude up once, reuse forever</span></div>
-        <div class="ag-row"><span class="ag-num">04</span><span class="ag-title">The school Announcement Drafter <span class="ag-tag">Demo</span></span></div>
-        <div class="ag-row"><span class="ag-num">05</span><span class="ag-title">Your action items</span></div>
+        <div class="ag-row"><span class="ag-num">03</span><span class="ag-title">Scheduling 400 students in minutes <span class="ag-tag">Demo</span></span></div>
+        <div class="ag-row"><span class="ag-num">04</span><span class="ag-title">Projects — set Claude up once, reuse forever</span></div>
+        <div class="ag-row"><span class="ag-num">05</span><span class="ag-title">The school Announcement Drafter <span class="ag-tag">Demo</span></span></div>
+        <div class="ag-row"><span class="ag-num">06</span><span class="ag-title">Your action items</span></div>
       </div></div>
       <div class="s-foot"><span class="sect">Part 2 · Roadmap</span><span>02 / 10</span></div>
     </div>
@@ -2019,6 +2021,33 @@
       </div></div>
       <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">Give Claude a <b>role</b> and a <b>second pass</b>. It catches its own mistakes before you have to.</span></div>
       <div class="s-foot"><span class="sect">Part 2 · Technique</span><span>04 / 08</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 31 · DEMO · TESTING SCHEDULE ═══ -->
+  <section class="slide dark" id="s31">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>In Practice</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div style="margin-top:22px"><span class="demo-badge"><span class="pulse"></span>Live Demo · From Survey to Schedule</span></div>
+      <h2 class="demo-title">400 students. 100 seats. <span class="em">One week.</span></h2>
+      <div class="body"><div class="xgrid">
+        <div class="xleft">
+          <p class="scn">Our testing center seats <b>50</b>, with two 3-hour sessions a day, Monday to Friday. We need to test <b>~400 students</b> — and they travel from across the state, so many can only come on certain days. So we sent a survey.</p>
+          <a class="dl-btn" href="EMAN-Testing-Availability-Survey.xlsx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke-linecap="round" stroke-linejoin="round"/></svg>Download the survey · 400 responses</a>
+        </div>
+        <div class="xright">
+          <div class="promptbox">
+            <div class="pb-attach"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.5l-9 9a4 4 0 01-6-6l9-9a3 3 0 014 4l-9 9" stroke-linecap="round" stroke-linejoin="round"/></svg>Attach the survey, then paste:</div>
+            <div class="pb-head"><span class="pb-label">The Prompt</span>
+              <button class="copy-btn gold mini" onclick="copyKey('pDemoSchedule', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Copy</button>
+            </div>
+            <div class="pb-text">"Build a testing schedule from this survey. The center seats <b>50 per session</b>, two 3-hour sessions a day, Mon–Fri. Seat all ~400 students on days they're available, never more than 50 a session, and <b>flag anyone who can't be placed</b>."</div>
+          </div>
+          <div class="d11-note">It reads all 400 rows, respects every constraint at once, and hands back a full day-by-day schedule — plus a short list of anyone who needs a manual fix.</div>
+        </div>
+      </div></div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">A week of scheduling Tetris, <b>solved in the time it takes to read the prompt</b>.</span></div>
+      <div class="s-foot"><span class="sect">Demo · Testing Schedule</span><span>06 / 09</span></div>
     </div>
   </section>
 
@@ -2089,7 +2118,7 @@
   /* Presentation order — decouples sequence from element IDs so existing slides
      keep their IDs (and CSS) while new slides slot in anywhere. */
   const ORDER = ['s1','s2','s16','s17','s18','s19','s20','s21','s3','s4','s5','s6','s22','s23','s24','s13','s12','s25','s15',
-                 's26','s28','s27','s7','s29','s8','s30','s14'];
+                 's26','s28','s27','s7','s29','s31','s8','s30','s14'];
   const PART2_START = ORDER.indexOf('s26');   // index where Part 2 begins (the divider)
   const sid = n => ORDER[n-1];
   const TOTAL = ORDER.length; let cur = 1;
@@ -2156,7 +2185,9 @@ When drafting replies:
     pAudit: { title: 'Make Claude audit itself', eyebrow: 'Technique · Paste after a draft',
       text: 'You are an expert-level detail catcher. Before you finalize, review your own draft for errors, weak or unclear spots, missing information, and anything you cannot back up. Fix what you find, then tell me what you changed and why.' },
     pDemoAnnounce: { title: 'Announcement Drafter · Try it', eyebrow: 'Demo · Use inside the project',
-      text: 'Draft a parent announcement for Oakland International Academy about a 2-hour delayed start this Thursday due to expected snow. Sign it from the principal.' }
+      text: 'Draft a parent announcement for Oakland International Academy about a 2-hour delayed start this Thursday due to expected snow. Sign it from the principal.' },
+    pDemoSchedule: { title: 'Testing Schedule · Try it', eyebrow: 'Demo · Attach the survey first',
+      text: 'Attached is our testing availability survey — about 400 students, each with the region they travel from and the days that week they can come. Our center seats 50 per session, with two 3-hour sessions per day (morning and afternoon), Monday to Friday. Build a schedule that gives every student a seat, without exceeding 50 per session and only on days they are available. Balance the sessions, and flag anyone who cannot be placed.' }
   };
 
   /* ─── Clipboard ─── */
