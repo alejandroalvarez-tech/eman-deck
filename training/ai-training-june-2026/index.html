@@ -1202,6 +1202,33 @@
   #s29 { --accent:#21A493; --accent-deep:#178C7D; }
   #s30 { --accent:#D4A52E; --accent-deep:#B0892A; }
   #s31 { --accent:#8071E6; --accent-deep:#6354C8; }
+  #s32 { --accent:#21A493; --accent-deep:#178C7D; }
+  #s33 { --accent:#D4A52E; --accent-deep:#B0892A; }
+  #s34 { --accent:#E8773F; --accent-deep:#CC6230; }
+
+  /* s32 · bring your stuff — input grid */
+  #s32 .io-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; flex:1; margin-top:16px; align-content:center; }
+  #s32 .io-tile { background:#fff; border:1px solid var(--line); border-radius:11px; padding:18px 20px; display:flex; gap:14px; align-items:flex-start; }
+  #s32 .io-ico { width:42px;height:42px;border-radius:10px; background:rgba(33,164,147,.1); display:flex;align-items:center;justify-content:center; flex-shrink:0; }
+  #s32 .io-h { font-family:'Manrope',sans-serif; font-weight:800; font-size:15.5px; color:var(--navy); margin-bottom:3px; }
+  #s32 .io-b { font-family:'Poppins',sans-serif; font-size:13px; line-height:1.4; color:var(--ink-soft); }
+
+  /* s33 · don't stop at the first answer — steering phrases */
+  #s33 .steer-grid { display:grid; grid-template-columns:0.82fr 1.18fr; gap:38px; flex:1; margin-top:14px; align-items:center; }
+  #s33 .steer-lead { font-family:'Newsreader',serif; font-size:24px; line-height:1.5; color:var(--ink-body); }
+  #s33 .steer-lead b { color:var(--navy); font-style:italic; }
+  #s33 .steer-card { background:linear-gradient(135deg,#1B2C4E 0%,#14213D 100%); border-radius:14px; padding:26px 30px; box-shadow:0 14px 40px rgba(20,33,61,.2); }
+  #s33 .steer-label { font-family:'Manrope',sans-serif; font-weight:800; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); margin-bottom:16px; }
+  #s33 .steer-item { display:flex; gap:12px; align-items:center; padding:9px 0; }
+  #s33 .steer-item + .steer-item { border-top:1px solid rgba(255,255,255,.09); }
+  #s33 .steer-item .sq { color:var(--gold); font-family:'Newsreader',serif; font-size:20px; line-height:1; flex-shrink:0; }
+  #s33 .steer-item .st { font-family:'Newsreader',serif; font-style:italic; font-size:19px; color:#fff; line-height:1.3; }
+
+  /* s34 · show it what good looks like — reuses .xgrid/.scn/.promptbox */
+  #s34 .good-box { display:flex; gap:14px; align-items:flex-start; margin-top:16px; padding:15px 20px; border-radius:10px; background:rgba(232,119,63,.08); border:1px solid rgba(232,119,63,.28); }
+  #s34 .good-box .gk { font-family:'Manrope',sans-serif; font-weight:800; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent-deep); flex-shrink:0; padding-top:3px; }
+  #s34 .good-box .gt { font-family:'Poppins',sans-serif; font-size:15px; line-height:1.5; color:var(--ink-body); }
+  #s34 .good-box .gt b { color:var(--navy); font-weight:600; }
 
   /* s28 recap + open floor */
   #s28 .recap-grid { display:grid; grid-template-columns:0.95fr 1.05fr; gap:38px; flex:1; margin-top:12px; align-items:center; }
@@ -1967,8 +1994,8 @@
       <div class="eyebrow" style="margin-top:24px">Part 2 of 2 · Going Deeper</div>
       <h2 class="title">What we'll cover today</h2>
       <div class="body"><div class="agenda" style="margin-top:20px">
-        <div class="ag-row"><span class="ag-num">01</span><span class="ag-title">Reverse prompting — let Claude interview you</span></div>
-        <div class="ag-row"><span class="ag-num">02</span><span class="ag-title">Make Claude audit its own work</span></div>
+        <div class="ag-row"><span class="ag-num">01</span><span class="ag-title">Everything you can feed Claude</span></div>
+        <div class="ag-row"><span class="ag-num">02</span><span class="ag-title">Getting better answers — a few key techniques</span></div>
         <div class="ag-row"><span class="ag-num">03</span><span class="ag-title">Scheduling 400 students in minutes <span class="ag-tag">Demo</span></span></div>
         <div class="ag-row"><span class="ag-num">04</span><span class="ag-title">Projects — set Claude up once, reuse forever</span></div>
         <div class="ag-row"><span class="ag-num">05</span><span class="ag-title">The school Announcement Drafter <span class="ag-tag">Demo</span></span></div>
@@ -2021,6 +2048,74 @@
       </div></div>
       <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">Give Claude a <b>role</b> and a <b>second pass</b>. It catches its own mistakes before you have to.</span></div>
       <div class="s-foot"><span class="sect">Part 2 · Technique</span><span>04 / 08</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 32 · BRING YOUR STUFF ═══ -->
+  <section class="slide light" id="s32">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>Capability</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="eyebrow" style="margin-top:24px">It's Not Just a Chat Box</div>
+      <h2 class="title">Bring it your <span class="em">actual</span> work</h2>
+      <div class="body"><div class="io-grid">
+        <div class="io-tile"><div class="io-ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#178C7D" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg></div><div><div class="io-h">Type or paste text</div><div class="io-b">Notes, a rough draft, a question</div></div></div>
+        <div class="io-tile"><div class="io-ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#178C7D" stroke-width="1.8" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg></div><div><div class="io-h">Word documents</div><div class="io-b">Letters, reports, memos</div></div></div>
+        <div class="io-tile"><div class="io-ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#178C7D" stroke-width="1.8" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6z"/><path d="M9 13h6M9 17h4"/></svg></div><div><div class="io-h">PDFs</div><div class="io-b">Contracts, reports, forms</div></div></div>
+        <div class="io-tile"><div class="io-ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#178C7D" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></div><div><div class="io-h">Spreadsheets</div><div class="io-b">Data, lists, survey results</div></div></div>
+        <div class="io-tile"><div class="io-ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#178C7D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div><div><div class="io-h">Screenshots</div><div class="io-b">An error, a webpage, a chart</div></div></div>
+        <div class="io-tile"><div class="io-ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#178C7D" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div><div><div class="io-h">Photos</div><div class="io-b">A flyer, a whiteboard, a handwritten note</div></div></div>
+      </div></div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">If it's on your <b>screen</b> or your <b>desk</b>, you can hand it to Claude.</span></div>
+      <div class="s-foot"><span class="sect">Part 2 · Capability</span><span>04 / 12</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 33 · DON'T STOP AT THE FIRST ANSWER ═══ -->
+  <section class="slide light" id="s33">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>Technique</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="eyebrow" style="margin-top:24px">Technique · Keep Going</div>
+      <h2 class="title">Don't stop at the <span class="em">first answer</span></h2>
+      <div class="body"><div class="steer-grid">
+        <div class="steer-lead">Claude's first answer is a <b>starting point</b>, not the final word. It remembers the whole conversation — so just keep steering until it's right.</div>
+        <div class="steer-card">
+          <div class="steer-label">◆ &nbsp;Just say things like…</div>
+          <div class="steer-item"><span class="sq">›</span><span class="st">"Make it shorter."</span></div>
+          <div class="steer-item"><span class="sq">›</span><span class="st">"More formal — it's going to the board."</span></div>
+          <div class="steer-item"><span class="sq">›</span><span class="st">"Give me three versions."</span></div>
+          <div class="steer-item"><span class="sq">›</span><span class="st">"You missed the deadline — add it."</span></div>
+          <div class="steer-item"><span class="sq">›</span><span class="st">"Explain it like I'm not a finance person."</span></div>
+          <div class="steer-item"><span class="sq">›</span><span class="st">"Now turn it into an email."</span></div>
+        </div>
+      </div></div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">The magic isn't the first answer — it's the <b>back-and-forth</b>.</span></div>
+      <div class="s-foot"><span class="sect">Part 2 · Technique</span><span>06 / 12</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 34 · SHOW IT WHAT GOOD LOOKS LIKE ═══ -->
+  <section class="slide light" id="s34">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>Technique</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="eyebrow" style="margin-top:24px">Technique · Show, Don't Tell</div>
+      <h2 class="title">Show it what <span class="em">"good"</span> looks like</h2>
+      <div class="body"><div class="xgrid">
+        <div class="xleft">
+          <p class="scn">Instead of <b>describing</b> what you want, <b>show it</b>. Paste a few examples and Claude matches the pattern — your format, your tone, your length.</p>
+          <div class="good-box"><span class="gk">Great for</span><span class="gt">Anything you write in a <b>consistent style</b> — board updates, parent emails, meeting recaps, one-pagers.</span></div>
+        </div>
+        <div class="xright">
+          <div class="promptbox">
+            <div class="pb-attach"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.5l-9 9a4 4 0 01-6-6l9-9a3 3 0 014 4l-9 9" stroke-linecap="round" stroke-linejoin="round"/></svg>Paste or attach your examples, then:</div>
+            <div class="pb-head"><span class="pb-label">The Prompt</span>
+              <button class="copy-btn gold mini" onclick="copyKey('pExamples', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Copy</button>
+            </div>
+            <div class="pb-text">"Here are <b>three board updates</b> I was happy with. Write this month's the same way — same structure, same tone, same length."</div>
+          </div>
+        </div>
+      </div></div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text"><b>Examples beat instructions.</b> Show, don't tell.</span></div>
+      <div class="s-foot"><span class="sect">Part 2 · Technique</span><span>08 / 12</span></div>
     </div>
   </section>
 
@@ -2118,7 +2213,7 @@
   /* Presentation order — decouples sequence from element IDs so existing slides
      keep their IDs (and CSS) while new slides slot in anywhere. */
   const ORDER = ['s1','s2','s16','s17','s18','s19','s20','s21','s3','s4','s5','s6','s22','s23','s24','s13','s12','s25','s15',
-                 's26','s28','s27','s7','s29','s31','s8','s30','s14'];
+                 's26','s28','s27','s32','s7','s33','s29','s34','s31','s8','s30','s14'];
   const PART2_START = ORDER.indexOf('s26');   // index where Part 2 begins (the divider)
   const sid = n => ORDER[n-1];
   const TOTAL = ORDER.length; let cur = 1;
@@ -2186,6 +2281,8 @@ When drafting replies:
       text: 'You are an expert-level detail catcher. Before you finalize, review your own draft for errors, weak or unclear spots, missing information, and anything you cannot back up. Fix what you find, then tell me what you changed and why.' },
     pDemoAnnounce: { title: 'Announcement Drafter · Try it', eyebrow: 'Demo · Use inside the project',
       text: 'Draft a parent announcement for Oakland International Academy about a 2-hour delayed start this Thursday due to expected snow. Sign it from the principal.' },
+    pExamples: { title: 'Show it what good looks like', eyebrow: 'Technique · Paste your examples first',
+      text: 'Here are three board updates I was happy with. Write this month’s update the same way — same structure, same tone, same length.' },
     pDemoSchedule: { title: 'Testing Schedule · Try it', eyebrow: 'Demo · Attach the survey first',
       text: 'Attached is our testing availability survey — about 400 students, each with the region they travel from and the days that week they can come. Our center seats 50 per session, with two 3-hour sessions per day (morning and afternoon), Monday to Friday. Build a schedule that gives every student a seat, without exceeding 50 per session and only on days they are available. Balance the sessions, and flag anyone who cannot be placed.' }
   };
