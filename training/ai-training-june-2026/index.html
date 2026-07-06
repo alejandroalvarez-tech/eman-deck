@@ -1197,6 +1197,37 @@
   #s26 .pd-foot .dot { width:5px;height:5px;border-radius:50%;background:var(--gold); }
   #s26 .pd-foot .ft { font-family:'Manrope',sans-serif; font-weight:600; font-size:13px; letter-spacing:.1em; color:rgba(255,255,255,.75); }
 
+  /* ── Part 2 new slides: recap+floor, self-audit, project demo ── */
+  #s28 { --accent:#E8773F; --accent-deep:#CC6230; }
+  #s29 { --accent:#21A493; --accent-deep:#178C7D; }
+  #s30 { --accent:#D4A52E; --accent-deep:#B0892A; }
+
+  /* s28 recap + open floor */
+  #s28 .recap-grid { display:grid; grid-template-columns:0.95fr 1.05fr; gap:38px; flex:1; margin-top:12px; align-items:center; }
+  #s28 .recap-sub { font-family:'Manrope',sans-serif; font-weight:800; font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--accent-deep); margin-bottom:10px; }
+  #s28 .recap-item { display:flex; gap:13px; align-items:flex-start; padding:11px 0; }
+  #s28 .recap-item + .recap-item { border-top:1px solid var(--line); }
+  #s28 .recap-item .rk { flex-shrink:0; margin-top:3px; }
+  #s28 .recap-item .rt { font-family:'Poppins',sans-serif; font-size:16px; line-height:1.4; color:var(--ink-body); }
+  #s28 .recap-item .rt b { color:var(--navy); font-weight:600; }
+  #s28 .floor-card { background:linear-gradient(135deg,#1B2C4E 0%,#14213D 100%); border-radius:14px; padding:30px 34px; box-shadow:0 14px 40px rgba(20,33,61,.22); }
+  #s28 .floor-label { font-family:'Manrope',sans-serif; font-weight:800; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); margin-bottom:16px; }
+  #s28 .floor-q { font-family:'Newsreader',serif; font-weight:500; font-size:32px; line-height:1.18; color:#fff; margin-bottom:16px; letter-spacing:-.01em; }
+  #s28 .floor-q .em { font-style:italic; color:var(--gold); }
+  #s28 .floor-sub { font-family:'Poppins',sans-serif; font-size:16px; line-height:1.55; color:rgba(255,255,255,.72); }
+  #s28 .floor-sub b { color:#fff; font-weight:500; }
+
+  /* s29 self-audit reuses .rev-* ; shrink long quote + copy button spacing */
+  #s29 .rev-quote .qtext { font-size:34px; line-height:1.34; max-width:1080px; }
+  #s29 .rev-quote { padding-bottom:22px; }
+  #s29 .rev-quote .copy-btn { align-self:flex-start; margin-top:16px; }
+
+  /* s30 demo — reuses .xgrid/.d8-step/.promptbox/.dl-btn */
+  #s30 .proj-files-sub { font-family:'Manrope',sans-serif; font-weight:800; font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
+  #s30 .dl-row { display:flex; gap:12px; flex-wrap:wrap; margin-top:18px; }
+  #s30 .dl-btn { background:var(--gold); }
+  #s30 .dl-btn.outline { background:transparent; color:var(--gold); border:1px solid rgba(226,188,75,.5); }
+
   .eman-logo-img{display:inline-block;aspect-ratio:464 / 200;background-image:url('data:image/png;base64,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');background-size:contain;background-position:left center;background-repeat:no-repeat;}
 </style>
 </head>
@@ -1641,11 +1672,10 @@
       <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>Take Action</b></span><span class="partmeter pm4"><i></i><i></i><i></i><i></i></span></div></div>
       <h2 class="title" style="margin-top:18px">Your action items</h2>
       <div class="body"><div class="actions">
-        <div class="act-row done"><span class="act-n">01</span><span class="act-t">Get the <b>voice profile template</b></span><span class="act-done">✓ done today</span></div>
-        <div class="act-row done"><span class="act-n">02</span><span class="act-t">Create your <b>Email Project</b> in Claude</span><span class="act-done">✓ done today</span></div>
-        <div class="act-row"><span class="act-n">03</span><span class="act-t">Customize the instructions to match <b>your own voice</b></span></div>
-        <div class="act-row"><span class="act-n">04</span><span class="act-t"><b>Practice this week</b> — use the project to draft your real emails</span></div>
-        <div class="act-row"><span class="act-n">05</span><span class="act-t"><b>Get in the habit</b> of safety-checking your work, and keep <b>sensitive data</b> out of Claude</span></div>
+        <div class="act-row done"><span class="act-n">01</span><span class="act-t">Built a <b>project</b> together today</span><span class="act-done">✓ done today</span></div>
+        <div class="act-row"><span class="act-n">02</span><span class="act-t">Set up <b>one project</b> for something you do on repeat</span></div>
+        <div class="act-row"><span class="act-n">03</span><span class="act-t">Use the <b>"audit yourself"</b> prompt on your next important draft</span></div>
+        <div class="act-row"><span class="act-n">04</span><span class="act-t">Keep a running list of the <b>prompts that work</b> for you</span></div>
       </div>
       <div class="invest-box">
         <div class="invest-label">◆ &nbsp;Our investment in you</div>
@@ -1937,12 +1967,90 @@
       <h2 class="title">What we'll cover today</h2>
       <div class="body"><div class="agenda" style="margin-top:20px">
         <div class="ag-row"><span class="ag-num">01</span><span class="ag-title">Reverse prompting — let Claude interview you</span></div>
-        <div class="ag-row"><span class="ag-num">02</span><span class="ag-title">Projects — set Claude up once, reuse forever</span></div>
-        <div class="ag-row"><span class="ag-num">03</span><span class="ag-title">Screening resumes, start to finish <span class="ag-tag">Demo</span></span></div>
-        <div class="ag-row"><span class="ag-num">04</span><span class="ag-title">Build your email project <span class="ag-tag">Hands-on</span></span></div>
+        <div class="ag-row"><span class="ag-num">02</span><span class="ag-title">Make Claude audit its own work</span></div>
+        <div class="ag-row"><span class="ag-num">03</span><span class="ag-title">Projects — set Claude up once, reuse forever</span></div>
+        <div class="ag-row"><span class="ag-num">04</span><span class="ag-title">The school Announcement Drafter <span class="ag-tag">Demo</span></span></div>
         <div class="ag-row"><span class="ag-num">05</span><span class="ag-title">Your action items</span></div>
       </div></div>
       <div class="s-foot"><span class="sect">Part 2 · Roadmap</span><span>02 / 10</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 28 · RECAP + OPEN FLOOR ═══ -->
+  <section class="slide light" id="s28">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>Welcome Back</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="eyebrow" style="margin-top:24px">Before We Dive In</div>
+      <h2 class="title">Welcome back — <span class="em">how'd it go?</span></h2>
+      <div class="body"><div class="recap-grid">
+        <div>
+          <div class="recap-sub">Last time, in Part 1</div>
+          <div class="recap-item"><span class="rk"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="#CC6230" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="rt">What Claude is — and the tools out there</span></div>
+          <div class="recap-item"><span class="rk"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="#CC6230" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="rt"><b>RCTF</b> — the recipe for prompts that work</span></div>
+          <div class="recap-item"><span class="rk"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="#CC6230" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="rt">Writing, summarizing, and catching mistakes</span></div>
+          <div class="recap-item"><span class="rk"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="#CC6230" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="rt">Using <b>judgment</b> — you own the output</span></div>
+        </div>
+        <div class="floor-card">
+          <div class="floor-label">◆ &nbsp;Open Floor</div>
+          <div class="floor-q">Who's used Claude <span class="em">since last time?</span></div>
+          <div class="floor-sub"><b>Share a win — or a flop.</b> What did you try? What surprised you? Where did it fall short? No wrong answers.</div>
+        </div>
+      </div></div>
+      <div class="s-foot"><span class="sect">Part 2 · Welcome Back</span><span>01 / 08</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 29 · SELF-AUDIT / ROLE PROMPTING ═══ -->
+  <section class="slide light" id="s29">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>Technique</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="eyebrow" style="margin-top:24px">Technique · Catch Your Own Mistakes</div>
+      <h2 class="title">Make Claude <span class="em">audit itself</span></h2>
+      <div class="body"><div class="rev-wrap">
+        <div class="rev-quote">
+          <div class="qlabel">Give it a role, then tell it to check its own work</div>
+          <div class="qtext"><span class="qmark">"</span>You are an expert-level detail catcher. Before you finalize, review your own draft for errors, weak spots, and anything unclear or unsupported — then fix them and tell me what you changed.<span class="qmark">"</span></div>
+          <button class="copy-btn navy" onclick="copyKey('pAudit', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Copy the prompt</button>
+        </div>
+        <div class="rev-cols">
+          <div class="rev-c"><div class="rc-h">Why it works</div><div class="rc-b">A role sharpens the lens, and a second pass catches what the first draft missed. You get a cleaner draft before you even start reading.</div></div>
+          <div class="rev-c"><div class="rc-h">When to use it</div><div class="rc-b">Anything that matters — board docs, parent letters, anything going out the door. Stack it with the safety check from Part 1.</div></div>
+        </div>
+      </div></div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">Give Claude a <b>role</b> and a <b>second pass</b>. It catches its own mistakes before you have to.</span></div>
+      <div class="s-foot"><span class="sect">Part 2 · Technique</span><span>04 / 08</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 30 · DEMO · ANNOUNCEMENT DRAFTER PROJECT ═══ -->
+  <section class="slide dark" id="s30">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>In Practice</b></span><span class="partmeter pm4"><i></i><i></i><i></i><i></i></span></div></div>
+      <div style="margin-top:22px"><span class="demo-badge"><span class="pulse"></span>Live Demo · Build Once, Reuse Forever</span></div>
+      <h2 class="demo-title">The school <span class="em">Announcement Drafter</span></h2>
+      <div class="body"><div class="xgrid">
+        <div class="xleft">
+          <div class="proj-files-sub">What lives in this project</div>
+          <div class="d8-step"><span class="n">01</span><span class="t">The <b style="color:#fff">EMAN letterhead template</b></span></div>
+          <div class="d8-step"><span class="n">02</span><span class="t">All three school logos — Oakland, Caniff, New Dawn</span></div>
+          <div class="d8-step"><span class="n">03</span><span class="t">Instructions: confirm the <b style="color:#fff">school, audience &amp; signer</b> → use that school's logo → sign it</span></div>
+          <div class="dl-row">
+            <a class="dl-btn" href="EMAN-Letterhead-Template.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke-linecap="round" stroke-linejoin="round"/></svg>Template</a>
+            <a class="dl-btn outline" href="EMAN-Announcement-Project-Instructions.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke-linecap="round" stroke-linejoin="round"/></svg>Instructions</a>
+          </div>
+        </div>
+        <div class="xright">
+          <div class="promptbox">
+            <div class="pb-head"><span class="pb-label">Try it</span>
+              <button class="copy-btn gold mini" onclick="copyKey('pDemoAnnounce', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Copy</button>
+            </div>
+            <div class="pb-text">"Draft a <b>parent announcement for Oakland</b> about a 2-hour delayed start this Thursday for snow. Sign it from the principal."</div>
+          </div>
+          <div class="d11-note">It confirms the school, audience, and signer — then hands back a finished <b>PDF on that school's letterhead</b>, logo and signature included.</div>
+        </div>
+      </div></div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">Set the project up <b>once</b>. Every announcement after is one sentence away from a branded PDF.</span></div>
+      <div class="s-foot"><span class="sect">Demo · Announcement Drafter</span><span>06 / 08</span></div>
     </div>
   </section>
 
@@ -1981,7 +2089,7 @@
   /* Presentation order — decouples sequence from element IDs so existing slides
      keep their IDs (and CSS) while new slides slot in anywhere. */
   const ORDER = ['s1','s2','s16','s17','s18','s19','s20','s21','s3','s4','s5','s6','s22','s23','s24','s13','s12','s25','s15',
-                 's26','s27','s7','s8','s9','s10','s11','s14'];
+                 's26','s28','s27','s7','s29','s8','s30','s14'];
   const PART2_START = ORDER.indexOf('s26');   // index where Part 2 begins (the divider)
   const sid = n => ORDER[n-1];
   const TOTAL = ORDER.length; let cur = 1;
@@ -2044,7 +2152,11 @@ When drafting replies:
     pExD: { title: 'Exercise 2 · Saves You Hours', eyebrow: 'Exercise · Attach the report first',
       text: 'Summarize this report in 5 bullet points a principal needs to act on. Then list every deadline mentioned, with its date.' },
     pExE: { title: 'Exercise 3 · Catches Mistakes', eyebrow: 'Exercise · Attach the memo first',
-      text: 'This memo is going to our board. Review it for typos, grammar mistakes, unclear sentences, and anything that contradicts itself. List what you would fix and why, then give me a clean rewritten version.' }
+      text: 'This memo is going to our board. Review it for typos, grammar mistakes, unclear sentences, and anything that contradicts itself. List what you would fix and why, then give me a clean rewritten version.' },
+    pAudit: { title: 'Make Claude audit itself', eyebrow: 'Technique · Paste after a draft',
+      text: 'You are an expert-level detail catcher. Before you finalize, review your own draft for errors, weak or unclear spots, missing information, and anything you cannot back up. Fix what you find, then tell me what you changed and why.' },
+    pDemoAnnounce: { title: 'Announcement Drafter · Try it', eyebrow: 'Demo · Use inside the project',
+      text: 'Draft a parent announcement for Oakland International Academy about a 2-hour delayed start this Thursday due to expected snow. Sign it from the principal.' }
   };
 
   /* ─── Clipboard ─── */
@@ -2113,7 +2225,7 @@ When drafting replies:
       const inP1 = i < PART2_START;
       const page = inP1 ? (i+1) : (i - PART2_START + 1);
       const total = inP1 ? p1total : p2total;
-      numSpan.textContent = String(page).padStart(2,'0') + ' / ' + total;
+      numSpan.textContent = String(page).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
     });
   })();
   function go(n){
