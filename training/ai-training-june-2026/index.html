@@ -2136,9 +2136,9 @@
             <div class="pb-head"><span class="pb-label">The Prompt</span>
               <button class="copy-btn gold mini" onclick="copyKey('pDemoSchedule', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Copy</button>
             </div>
-            <div class="pb-text">"Build a testing schedule from this survey. The center seats <b>50 per session</b>, two 3-hour sessions a day, Mon–Fri. Seat all ~400 students on days they're available, never more than 50 a session, and <b>flag anyone who can't be placed</b>."</div>
+            <div class="pb-text">"Build a testing schedule from this survey. Center seats <b>50 per session</b>, two 3-hour sessions a day, Mon–Fri. <b>First, ask me any clarifying questions.</b> Then seat all ~400 students on days they're available, never over 50 a session, flag anyone who can't be placed, and give me a <b>clean schedule I can use to prep the rooms</b>."</div>
           </div>
-          <div class="d11-note">It reads all 400 rows, respects every constraint at once, and hands back a full day-by-day schedule — plus a short list of anyone who needs a manual fix.</div>
+          <div class="d11-note">It asks a couple of questions first, then reads all 400 rows, respects every constraint at once, and hands back a clean day-by-day schedule — with the headcount for each block.</div>
         </div>
       </div></div>
       <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">A week of scheduling Tetris, <b>solved in the time it takes to read the prompt</b>.</span></div>
@@ -2284,7 +2284,7 @@ When drafting replies:
     pExamples: { title: 'Show it what good looks like', eyebrow: 'Technique · Paste your examples first',
       text: 'Here are three board updates I was happy with. Write this month’s update the same way — same structure, same tone, same length.' },
     pDemoSchedule: { title: 'Testing Schedule · Try it', eyebrow: 'Demo · Attach the survey first',
-      text: 'Attached is our testing availability survey — about 400 students, each with the region they travel from and the days that week they can come. Our center seats 50 per session, with two 3-hour sessions per day (morning and afternoon), Monday to Friday. Build a schedule that gives every student a seat, without exceeding 50 per session and only on days they are available. Balance the sessions, and flag anyone who cannot be placed.' }
+      text: 'Attached is our testing availability survey — about 400 students, each with the region they travel from and the days that week they can come. Our center seats 50 per session, with two 3-hour sessions per day (morning and afternoon), Monday to Friday.\n\nBefore you build anything, ask me any clarifying questions you need.\n\nThen build a schedule that gives every student a seat, without exceeding 50 per session and only on days they are available. Balance the sessions and flag anyone who cannot be placed. Finish with a clean, easy-to-read schedule I can use to prep the rooms — showing how many students are in each testing block.' }
   };
 
   /* ─── Clipboard ─── */
