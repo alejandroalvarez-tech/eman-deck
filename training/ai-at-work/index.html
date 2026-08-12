@@ -1,0 +1,2606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI at Work · Getting Started with Claude · EMAN Professional Development · June 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opt_sz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Manrope:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:      #14213D;
+    --navy-deep: #0E1729;
+    --navy-soft: #233258;
+    --gold:      #E2BC4B;
+    --gold-deep: #C9A43A;
+    --paper:     #F6F7F9;
+    --paper-2:   #EEF0F4;
+    --ink:       #14213D;
+    --ink-body:  #46506A;
+    --ink-soft:  #6B7488;
+    --line:      #DDE1E8;
+    --line-dark: rgba(255,255,255,0.12);
+    --white:     #FFFFFF;
+  }
+
+  * , *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: #05070D;
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden;
+    user-select: none;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─────────── STAGE (scale-to-fit) ─────────── */
+  #viewport {
+    position: fixed; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  #stage {
+    position: relative;
+    width: 1280px; height: 720px;
+    transform-origin: center center;
+  }
+
+  /* ─────────── SLIDE BASE ─────────── */
+  .slide {
+    position: absolute; inset: 0;
+    opacity: 0;
+    transform: translateX(40px);
+    transition: opacity .5s cubic-bezier(.4,0,.2,1), transform .5s cubic-bezier(.4,0,.2,1);
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .slide.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
+  .slide.exit-left { opacity: 0; transform: translateX(-40px); }
+
+  .light { background: var(--paper); color: var(--ink); }
+  .dark  { background: var(--navy);  color: var(--white); }
+
+  .pad { position: absolute; inset: 0; padding: 56px 72px 60px; display: flex; flex-direction: column; }
+
+  /* ─────────── HEADER SYSTEM ─────────── */
+  .s-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 14px;
+  }
+  .light .s-head { border-bottom: 1px solid var(--line); }
+  .dark  .s-head { border-bottom: 1px solid var(--line-dark); }
+  .wordmark {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 800; font-size: 15px; letter-spacing: .42em;
+  }
+  .light .wordmark { color: var(--navy); }
+  .dark  .wordmark { color: var(--gold); }
+  .head-right {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 600; font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+  }
+  .light .head-right { color: var(--ink-soft); }
+  .dark  .head-right { color: rgba(255,255,255,.5); }
+
+  /* ─────────── FOOTER SYSTEM ─────────── */
+  .s-foot {
+    position: absolute; left: 72px; right: 72px; bottom: 26px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 12px;
+    font-family: 'Manrope', sans-serif; font-size: 11px; letter-spacing: .12em;
+  }
+  .light .s-foot { border-top: 1px solid var(--line); color: var(--ink-soft); }
+  .dark  .s-foot { border-top: 1px solid var(--line-dark); color: rgba(255,255,255,.45); }
+  .s-foot .sect { font-weight: 700; text-transform: uppercase; }
+
+  /* ─────────── EYEBROW + TITLE ─────────── */
+  .eyebrow {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700; font-size: 12px; letter-spacing: .26em; text-transform: uppercase;
+    color: var(--gold-deep);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .dark .eyebrow { color: var(--gold); }
+  .eyebrow::before {
+    content: ''; width: 22px; height: 2px; background: var(--gold); display: inline-block;
+  }
+  .title {
+    font-family: 'Newsreader', serif;
+    font-weight: 500; font-size: 46px; line-height: 1.08; letter-spacing: -0.015em;
+    margin-top: 16px;
+  }
+  .light .title { color: var(--navy); }
+  .dark  .title { color: var(--white); }
+  .title .em { font-style: italic; color: var(--gold-deep); }
+  .dark .title .em { color: var(--gold); }
+
+  .body { flex: 1; display: flex; flex-direction: column; }
+
+  /* ════════════════════════════════════════════════
+     SLIDE 1 — TITLE · ANIMATED CANVAS BACKGROUND
+  ════════════════════════════════════════════════ */
+  #s1 { background: var(--navy-deep); }
+  #s1 .arc { display: none; }   /* replaced by canvas */
+  #s1 .spark { display: none; } /* replaced by canvas particles */
+  #s1-canvas {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0;
+  }
+  #s1 .t-top {
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid var(--line-dark); padding-bottom: 16px;
+  }
+  #s1 .t-mid { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  #s1 .t-kicker {
+    font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 13px;
+    letter-spacing: .3em; text-transform: uppercase; color: var(--gold); margin-bottom: 22px;
+  }
+  #s1 .t-headline {
+    font-family: 'Newsreader', serif; font-weight: 500; font-size: 104px; line-height: .98;
+    letter-spacing: -0.02em; color: var(--white);
+  }
+  #s1 .t-headline .em { font-style: italic; color: var(--gold); }
+  #s1 .t-sub {
+    font-family: 'Poppins', sans-serif; font-weight: 300; font-size: 21px;
+    color: rgba(255,255,255,.72); margin-top: 24px;
+  }
+  #s1 .t-bot {
+    display: flex; align-items: center; gap: 16px;
+    border-top: 1px solid var(--line-dark); padding-top: 20px;
+  }
+  #s1 .t-bot .pres {
+    font-family: 'Manrope', sans-serif; font-weight: 600; font-size: 14px;
+    letter-spacing: .08em; color: rgba(255,255,255,.85);
+  }
+  #s1 .t-bot .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); }
+
+  /* ════════════════════════════════════════════════
+     SLIDE 2 — AGENDA (table of contents)
+  ════════════════════════════════════════════════ */
+  .agenda { display: flex; flex-direction: column; margin-top: 8px; }
+  .ag-row {
+    display: grid; grid-template-columns: 64px 1fr auto; align-items: center; gap: 26px;
+    padding: 13px 6px; border-bottom: 1px solid var(--line);
+  }
+  .ag-row:last-child { border-bottom: none; }
+  .ag-num {
+    font-family: 'Newsreader', serif; font-weight: 400; font-size: 30px; color: var(--gold-deep);
+    font-feature-settings: "lnum"; line-height: 1;
+  }
+  .ag-title {
+    font-family: 'Manrope', sans-serif; font-weight: 600; font-size: 19px; color: var(--navy);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .ag-tag {
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 9.5px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--navy); background: var(--gold);
+    padding: 3px 9px; border-radius: 3px;
+  }
+  .ag-time {
+    font-family: 'Manrope', sans-serif; font-weight: 600; font-size: 13px; color: var(--ink-soft);
+    letter-spacing: .04em;
+  }
+
+  /* ════════════════════════════════════════════════
+     SLIDE 3 — IS / ISN'T
+  ════════════════════════════════════════════════ */
+  .isnot-wrap { flex: 1; display: flex; flex-direction: column; gap: 18px; margin-top: 6px; }
+  .isnot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; flex: 1; }
+  .isnot-col { display: flex; flex-direction: column; }
+  .isnot-col .isnot-item:first-of-type { padding-top: 4px; }
+  .isnot-grid { align-items: stretch; }
+  .isnot-col { justify-content: space-between; }
+  .isnot-item { padding: 22px 0; }
+  .isnot-txt { font-size: 17px; }
+  .isnot-label {
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 13px; letter-spacing: .2em;
+    padding-bottom: 12px; margin-bottom: 14px; display: flex; align-items: baseline; gap: 12px;
+  }
+  .isnot-label .big { font-family: 'Newsreader', serif; font-style: italic; font-size: 30px; font-weight: 500; letter-spacing: 0; }
+  .is .isnot-label  { color: var(--navy);    border-bottom: 2px solid var(--gold); }
+  .isnt .isnot-label{ color: var(--ink-soft); border-bottom: 2px solid var(--line); }
+  .isnot-item { display: flex; gap: 14px; align-items: flex-start; padding: 11px 0; }
+  .isnot-item + .isnot-item { border-top: 1px solid var(--line); }
+  .mk { flex-shrink: 0; margin-top: 3px; }
+  .isnot-txt { font-family: 'Poppins', sans-serif; font-size: 16px; line-height: 1.45; color: var(--ink-body); }
+  .isnot-txt b { color: var(--navy); font-weight: 600; }
+  .reassure {
+    background: var(--navy); border-radius: 8px; padding: 18px 26px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .reassure .ico { flex-shrink: 0; }
+  .reassure p {
+    font-family: 'Poppins', sans-serif; font-size: 16px; color: rgba(255,255,255,.9); line-height: 1.4;
+  }
+  .reassure b { color: var(--gold); font-weight: 600; }
+
+  /* ════════════════════════════════════════════════
+     SLIDE 4 — CAUTION (2x2)
+  ════════════════════════════════════════════════ */
+  .caution-grid {
+    display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+    gap: 18px; flex: 1; margin-top: 8px;
+  }
+  .caut-card {
+    background: var(--white); border: 1px solid var(--line); border-radius: 10px;
+    padding: 22px 26px; display: flex; gap: 20px; align-items: flex-start;
+    box-shadow: 0 1px 2px rgba(20,33,61,.04);
+  }
+  .caut-num {
+    font-family: 'Newsreader', serif; font-weight: 400; font-size: 44px; line-height: .8;
+    color: var(--gold-deep); flex-shrink: 0;
+  }
+  .caut-head {
+    font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 19px; color: var(--navy);
+    margin-bottom: 7px;
+  }
+  .caut-body { font-family: 'Poppins', sans-serif; font-size: 14px; line-height: 1.5; color: var(--ink-body); }
+
+  /* ════════════════════════════════════════════════
+     SLIDE 5 — RCTF
+  ════════════════════════════════════════════════ */
+  .rctf-wrap { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 28px; }
+  .rctf-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
+  .rctf-cell {
+    border-left: 2px solid var(--line); padding: 6px 0 6px 22px;
+  }
+  .rctf-cell.act { border-left-color: var(--gold); }
+  .rctf-L {
+    font-family: 'Newsreader', serif; font-weight: 500; font-size: 88px; line-height: .9;
+    color: var(--navy); letter-spacing: -0.02em;
+  }
+  .rctf-cell:nth-child(1) .rctf-L { color: var(--gold-deep); }
+  .rctf-W {
+    font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 21px; color: var(--navy);
+    margin-top: 6px; margin-bottom: 6px;
+  }
+  .rctf-D { font-family: 'Poppins', sans-serif; font-size: 14px; color: var(--ink-soft); line-height: 1.4; }
+  .rctf-tag {
+    font-family: 'Newsreader', serif; font-style: italic; font-size: 23px; color: var(--navy);
+    text-align: center; line-height: 1.4;
+  }
+  .rctf-tag b { font-style: normal; font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 18px; color: var(--gold-deep); }
+
+  /* ════════════════════════════════════════════════
+     SLIDE 6 — RCTF EXAMPLE
+  ════════════════════════════════════════════════ */
+  .ex-grid { display: grid; grid-template-columns: 0.78fr 1.22fr; gap: 24px; flex: 1; margin-top: 8px; }
+  .ex-box { border-radius: 10px; padding: 26px 28px; display: flex; flex-direction: column; }
+  .ex-lazy { background: var(--paper-2); border: 1px solid var(--line); }
+  .ex-rctf { background: var(--navy); }
+  .ex-label {
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 11px; letter-spacing: .2em;
+    text-transform: uppercase; margin-bottom: 18px;
+  }
+  .ex-lazy .ex-label { color: var(--ink-soft); }
+  .ex-rctf .ex-label { color: var(--gold); }
+  .ex-lazy .quote {
+    font-family: 'Newsreader', serif; font-style: italic; font-size: 24px; line-height: 1.45;
+    color: var(--ink-body); flex: 1; display: flex; align-items: center;
+  }
+  .ex-lazy .verdict {
+    font-family: 'Manrope', sans-serif; font-weight: 600; font-size: 13px; color: var(--ink-soft);
+    padding-top: 16px; border-top: 1px solid var(--line);
+  }
+  .rctf-lines { display: flex; flex-direction: column; gap: 13px; }
+  .rctf-line { display: grid; grid-template-columns: 74px 1fr; gap: 14px; align-items: baseline; }
+  .rctf-line .k {
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 12px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--gold);
+  }
+  .rctf-line .v { font-family: 'Poppins', sans-serif; font-size: 15px; line-height: 1.5; color: rgba(255,255,255,.9); }
+
+  /* ════════════════════════════════════════════════
+     SLIDE 7 — REVERSE PROMPTING
+  ════════════════════════════════════════════════ */
+  .rev-wrap { flex: 1; display: flex; flex-direction: column; margin-top: 8px; }
+  .rev-quote {
+    flex: 1; display: flex; flex-direction: column; justify-content: center;
+    border-bottom: 1px solid var(--line); padding-bottom: 30px;
+  }
+  .rev-quote .qlabel {
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 11px; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--gold-deep); margin-bottom: 16px;
+  }
+  .rev-quote .qtext {
+    font-family: 'Newsreader', serif; font-style: italic; font-weight: 400; font-size: 44px;
+    line-height: 1.3; color: var(--navy); letter-spacing: -0.01em; max-width: 1060px;
+  }
+  .rev-quote .qmark { color: var(--gold); font-style: normal; }
+  .rev-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; padding-top: 26px; }
+  .rev-c .rc-h {
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 12px; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--gold-deep); margin-bottom: 10px;
+  }
+  .rev-c .rc-b { font-family: 'Poppins', sans-serif; font-size: 16px; line-height: 1.55; color: var(--ink-body); }
+
+  /* ════════════════════════════════════════════════
+     DEMO SLIDES (8 & 11) shared
+  ════════════════════════════════════════════════ */
+  .demo-badge {
+    display: inline-flex; align-items: center; gap: 10px; align-self: flex-start;
+    background: var(--gold); color: var(--navy);
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 13px; letter-spacing: .2em;
+    text-transform: uppercase; padding: 9px 18px; border-radius: 5px; margin-top: 4px;
+  }
+  .demo-badge .pulse {
+    width: 9px; height: 9px; border-radius: 50%; background: var(--navy);
+    animation: pulse 1.4s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.35;transform:scale(.78);} }
+  .demo-title {
+    font-family: 'Newsreader', serif; font-weight: 500; font-size: 44px; line-height: 1.1;
+    color: var(--white); margin-top: 22px; letter-spacing: -0.015em;
+  }
+
+  /* SLIDE 8 layout */
+  .d8-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; flex: 1; margin-top: 28px; align-items: stretch; }
+  .d8-scenario { display: flex; flex-direction: column; justify-content: center; }
+  .d8-scenario .sl {
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 11px; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 14px;
+  }
+  .d8-scenario .stext {
+    font-family: 'Newsreader', serif; font-size: 23px; line-height: 1.5; color: rgba(255,255,255,.92);
+  }
+  .d8-scenario .stext b { color: var(--gold); font-weight: 500; font-style: italic; }
+  .d8-build {
+    border-left: 1px solid var(--line-dark); padding-left: 40px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .d8-build .bl {
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 11px; letter-spacing: .2em;
+    text-transform: uppercase; color: rgba(255,255,255,.5); margin-bottom: 16px;
+  }
+  .d8-step { display: flex; gap: 14px; align-items: flex-start; padding: 9px 0; }
+  .d8-step + .d8-step { border-top: 1px solid rgba(255,255,255,.07); }
+  .d8-step .n {
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 13px; color: var(--gold);
+    flex-shrink: 0; width: 18px; margin-top: 2px;
+  }
+  .d8-step .t { font-family: 'Poppins', sans-serif; font-size: 15px; line-height: 1.4; color: rgba(255,255,255,.85); }
+
+  /* SLIDE 11 layout */
+  .d11-follow {
+    font-family: 'Poppins', sans-serif; font-size: 17px; color: rgba(255,255,255,.7);
+    margin-top: 16px; line-height: 1.5;
+  }
+  .d11-follow b { color: var(--gold); font-weight: 500; }
+  .d11-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 26px; }
+  .round {
+    background: rgba(255,255,255,.04); border: 1px solid var(--line-dark); border-radius: 10px;
+    padding: 26px 28px;
+  }
+  .round.r2 { background: rgba(226,188,75,.08); border-color: rgba(226,188,75,.3); }
+  .round .rnum {
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 11px; letter-spacing: .2em;
+    text-transform: uppercase; color: rgba(255,255,255,.55); margin-bottom: 10px;
+  }
+  .round.r2 .rnum { color: var(--gold); }
+  .round .rh {
+    font-family: 'Newsreader', serif; font-weight: 500; font-size: 27px; color: var(--white);
+    margin-bottom: 12px;
+  }
+  .round .rb { font-family: 'Poppins', sans-serif; font-size: 15px; line-height: 1.55; color: rgba(255,255,255,.8); }
+  .d11-punch {
+    text-align: center; margin-top: 26px;
+    font-family: 'Newsreader', serif; font-style: italic; font-size: 24px; color: var(--gold);
+  }
+
+  /* ════════════════════════════════════════════════
+     SLIDE 9 — PROJECTS
+  ════════════════════════════════════════════════ */
+  .proj-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 36px; flex: 1; margin-top: 8px; }
+  .proj-left { display: flex; flex-direction: column; }
+  .proj-intro {
+    font-family: 'Newsreader', serif; font-size: 21px; line-height: 1.5; color: var(--ink-body);
+    margin-bottom: 22px;
+  }
+  .proj-intro b { color: var(--navy); font-style: italic; }
+  .proj-sub {
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 11px; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--gold-deep); margin-bottom: 14px;
+  }
+  .proj-item { display: flex; gap: 16px; align-items: flex-start; padding: 13px 0; }
+  .proj-item + .proj-item { border-top: 1px solid var(--line); }
+  .proj-ico {
+    width: 42px; height: 42px; border-radius: 9px; background: var(--white); border: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .proj-it-h { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 16px; color: var(--navy); margin-bottom: 3px; }
+  .proj-it-b { font-family: 'Poppins', sans-serif; font-size: 13.5px; color: var(--ink-soft); line-height: 1.45; }
+  .proj-right {
+    background: var(--navy); border-radius: 10px; padding: 28px 28px;
+    display: flex; flex-direction: column; gap: 12px; justify-content: center;
+  }
+  .proj-right .pr-l {
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 11px; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 6px; line-height: 1.5;
+  }
+  .ex-pill {
+    display: flex; align-items: center; gap: 12px;
+    font-family: 'Manrope', sans-serif; font-weight: 600; font-size: 16px; color: rgba(255,255,255,.92);
+    padding: 11px 0;
+  }
+  .ex-pill + .ex-pill { border-top: 1px solid rgba(255,255,255,.1); }
+  .ex-pill .pdot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+
+  /* ════════════════════════════════════════════════
+     SLIDE 10 — VOICE PROFILE
+  ════════════════════════════════════════════════ */
+  .voice-intro {
+    font-family: 'Newsreader', serif; font-size: 21px; line-height: 1.5; color: var(--ink-body);
+    margin: 6px 0 20px; max-width: 980px;
+  }
+  .voice-intro b { color: var(--navy); font-style: italic; }
+  .voice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; flex: 1; }
+  .vs-sub {
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 11px; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--gold-deep); margin-bottom: 14px;
+  }
+  .v-step { display: flex; gap: 18px; align-items: flex-start; padding: 13px 0; }
+  .v-step + .v-step { border-top: 1px solid var(--line); }
+  .v-step .vn {
+    font-family: 'Newsreader', serif; font-weight: 400; font-size: 34px; line-height: .85;
+    color: var(--gold-deep); flex-shrink: 0; width: 38px;
+  }
+  .v-step .vh { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 16px; color: var(--navy); margin-bottom: 3px; }
+  .v-step .vb { font-family: 'Poppins', sans-serif; font-size: 13.5px; color: var(--ink-soft); line-height: 1.45; }
+  .rules-box { background: var(--navy); border-radius: 10px; padding: 24px 28px; display: flex; flex-direction: column; }
+  .rules-box .vs-sub { color: var(--gold); }
+  .rule { display: flex; align-items: center; gap: 13px; padding: 8.5px 0; }
+  .rule + .rule { border-top: 1px solid rgba(255,255,255,.09); }
+  .rule .rdot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+  .rule .rt { font-family: 'Poppins', sans-serif; font-size: 14.5px; color: rgba(255,255,255,.88); }
+
+  /* ════════════════════════════════════════════════
+     SLIDE 12 — BOARD SAFETY NET (statement)
+  ════════════════════════════════════════════════ */
+  .net-wrap { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 30px; }
+  .net-statement {
+    font-family: 'Newsreader', serif; font-weight: 500; font-size: 52px; line-height: 1.12;
+    color: var(--navy); letter-spacing: -0.02em; max-width: 1050px;
+  }
+  .net-statement .em { font-style: italic; color: var(--gold-deep); }
+  .net-prompt {
+    background: var(--navy); border-radius: 10px; padding: 26px 32px; max-width: 880px;
+    position: relative;
+  }
+  .net-prompt .npl {
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 11px; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 12px;
+  }
+  .net-prompt .npt {
+    font-family: 'Newsreader', serif; font-style: italic; font-size: 24px; line-height: 1.45;
+    color: rgba(255,255,255,.95);
+  }
+  .net-payoff {
+    font-family: 'Manrope', sans-serif; font-weight: 600; font-size: 17px; color: var(--ink-soft);
+  }
+  .net-payoff b { color: var(--gold-deep); font-weight: 800; }
+
+  /* ════════════════════════════════════════════════
+     SLIDE 13 — ACTION ITEMS (closing)
+  ════════════════════════════════════════════════ */
+  #s14 .actions { flex: 1; display: flex; flex-direction: column; justify-content: center; margin-top: 4px; }
+  .act-row {
+    display: grid; grid-template-columns: 56px 1fr; align-items: center; gap: 24px;
+    padding: 14px 4px; border-bottom: 1px solid var(--line-dark);
+  }
+  .act-row:last-child { border-bottom: none; }
+  .act-n {
+    font-family: 'Newsreader', serif; font-weight: 400; font-size: 32px; color: var(--gold);
+  }
+  .act-t { font-family: 'Manrope', sans-serif; font-weight: 600; font-size: 19px; color: rgba(255,255,255,.92); }
+  .act-t b { color: var(--gold); font-weight: 700; }
+  #s14 .closer {
+    margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line-dark);
+    font-family: 'Newsreader', serif; font-style: italic; font-size: 19px; line-height: 1.5; color: rgba(255,255,255,.82);
+    max-width: 1040px;
+  }
+  #s14 .closer b { color: var(--accent); font-weight: 600; font-style: normal; }
+
+  /* ─────────── COPY BUTTONS ─────────── */
+  .copy-btn {
+    display: inline-flex; align-items: center; gap: 7px; cursor: pointer;
+    font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: .09em;
+    text-transform: uppercase; border-radius: 6px; padding: 8px 14px; border: 1px solid;
+    transition: all .18s; white-space: nowrap;
+  }
+  .copy-btn svg { width: 13px; height: 13px; flex-shrink: 0; }
+  .copy-btn.navy   { color: #fff; background: var(--navy); border-color: var(--navy); }
+  .copy-btn.navy:hover  { background: var(--navy-soft); }
+  .copy-btn.gold   { color: var(--navy); background: var(--gold); border-color: var(--gold); }
+  .copy-btn.gold:hover  { filter: brightness(1.07); }
+  .copy-btn.outline-d { color: var(--gold); background: transparent; border-color: rgba(226,188,75,.5); }
+  .copy-btn.outline-d:hover { background: rgba(226,188,75,.12); }
+  .copy-btn.mini { padding: 5px 11px; font-size: 10px; }
+
+  /* ─────────── SLIDE 11 · EMAIL CARD ─────────── */
+  .d11-sub { font-family:'Poppins',sans-serif; font-size: 15px; color: rgba(255,255,255,.7); margin-top: 14px; line-height: 1.5; }
+  .d11-sub b { color: var(--gold); font-weight: 500; }
+  .d11-mailgrid { display: grid; grid-template-columns: 1.18fr .82fr; gap: 26px; flex: 1; margin-top: 22px; min-height: 0; align-items: start; }
+  .mailcard { background: #fff; border-radius: 11px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 12px 40px rgba(0,0,0,.25); }
+  .mailcard-bar { display: flex; align-items: center; justify-content: space-between; padding: 11px 16px; background: var(--paper-2); border-bottom: 1px solid var(--line); }
+  .mc-tag { font-family:'Manrope',sans-serif; font-weight: 800; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-soft); }
+  .mailcard-meta { padding: 12px 18px; border-bottom: 1px solid var(--line); }
+  .mailcard-meta div { font-family:'Manrope',sans-serif; font-size: 12px; color: var(--navy); line-height: 1.7; }
+  .mailcard-meta .lbl { color: var(--ink-soft); font-weight: 600; }
+  .mailcard-body { padding: 13px 18px; overflow: hidden; }
+  .mailcard-body p { font-family:'Poppins',sans-serif; font-size: 11.5px; line-height: 1.5; color: var(--ink-body); margin-bottom: 7px; }
+  .mailcard-body p:last-child { margin-bottom: 0; }
+  .prompts-col { display: flex; flex-direction: column; gap: 13px; min-height: 0; }
+  .pcard { border-radius: 10px; padding: 15px 18px; }
+  .pcard.p1 { background: rgba(255,255,255,.05); border: 1px solid var(--line-dark); }
+  .pcard.p2 { background: rgba(226,188,75,.09); border: 1px solid rgba(226,188,75,.32); }
+  .pc-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 9px; }
+  .pc-num { font-family:'Manrope',sans-serif; font-weight: 800; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.5); }
+  .pcard.p2 .pc-num { color: var(--gold); }
+  .pc-prompt { font-family:'Newsreader',serif; font-style: italic; font-size: 15.5px; line-height: 1.4; color: rgba(255,255,255,.94); }
+  .d11-note { font-family:'Poppins',sans-serif; font-size: 11.5px; color: rgba(255,255,255,.52); line-height: 1.5; margin-top: 2px; }
+  .d11-note b { color: var(--gold); font-weight: 500; }
+
+  /* ─────────── SLIDE 10 · CTA ─────────── */
+  .voice-cta { margin-top: 20px; }
+
+  /* ─────────── TOAST ─────────── */
+  #toast {
+    position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(16px);
+    background: var(--navy); color: #fff; font-family:'Manrope',sans-serif; font-weight: 600; font-size: 13px;
+    padding: 12px 22px; border-radius: 9px; border: 1px solid rgba(226,188,75,.45);
+    display: flex; align-items: center; gap: 10px; opacity: 0; pointer-events: none; transition: all .3s; z-index: 300;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  #toast .tc { color: var(--gold); display: flex; }
+
+  /* ─────────── MODAL ─────────── */
+  #modal { position: fixed; inset: 0; background: rgba(8,12,22,.8); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; padding: 44px; z-index: 400; }
+  #modal.show { display: flex; }
+  .modal-card { background: var(--paper); border-radius: 14px; width: min(740px, 92vw); max-height: 84vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 34px 90px rgba(0,0,0,.55); }
+  .modal-head { display: flex; align-items: center; justify-content: space-between; padding: 20px 28px; border-bottom: 1px solid var(--line); }
+  .modal-eyebrow { font-family:'Manrope',sans-serif; font-weight: 800; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold-deep); margin-bottom: 5px; }
+  .modal-title { font-family:'Newsreader',serif; font-size: 24px; color: var(--navy); line-height: 1.1; }
+  .modal-x { cursor: pointer; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); background: #fff; display: flex; align-items: center; justify-content: center; color: var(--ink-soft); font-size: 17px; flex-shrink: 0; }
+  .modal-x:hover { background: var(--paper-2); }
+  .modal-body { padding: 24px 28px; overflow-y: auto; }
+  .modal-pre { font-family:'Poppins',sans-serif; font-size: 13.5px; line-height: 1.62; color: var(--ink-body); white-space: pre-wrap; margin: 0; }
+  .modal-foot { padding: 16px 28px; border-top: 1px solid var(--line); display: flex; justify-content: flex-end; gap: 12px; }
+
+  /* ─────────── NAV ─────────── */
+  #nav {
+    position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 14px;
+    background: rgba(14,23,41,.9); backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,.12); border-radius: 50px; padding: 9px 16px; z-index: 100;
+  }
+  .nb {
+    width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.12); color: #fff; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; font-size: 14px;
+    transition: background .2s, transform .15s, border-color .2s;
+  }
+  .nb:hover { background: rgba(226,188,75,.18); border-color: rgba(226,188,75,.4); transform: scale(1.08); }
+  .nb:disabled { opacity: .25; cursor: not-allowed; transform: none; }
+  #counter { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 11px; color: rgba(255,255,255,.6); min-width: 46px; text-align: center; letter-spacing: .06em; }
+  #dots { display: flex; gap: 5px; padding: 0 6px; }
+  .dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,.22); cursor: pointer; transition: background .2s, transform .2s; }
+  .dot.active { background: var(--gold); transform: scale(1.35); }
+  .dot:hover { background: rgba(226,188,75,.55); }
+  #hint { position: fixed; top: 18px; right: 22px; font-family:'Manrope',sans-serif; font-size: 9px; font-weight:600; letter-spacing:.12em; color: rgba(255,255,255,.18); text-transform: uppercase; }
+
+  /* ═══════════════════════════════════════════════════
+     ENHANCEMENT LAYER · clarity, wayfinding, takeaways
+  ═══════════════════════════════════════════════════ */
+
+  /* tighter global rhythm → more breathing room + room for takeaway */
+  .pad { padding: 44px 72px 64px; }
+  .title { font-size: 41px; margin-top: 11px; }
+  .eyebrow { font-size: 11px; }
+
+  /* ── PART INDICATOR (header, right side) ── */
+  .part { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+  .part-name {
+    font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 11px;
+    letter-spacing: .17em; text-transform: uppercase;
+  }
+  .light .part-name { color: var(--ink-soft); }
+  .dark  .part-name { color: rgba(255,255,255,.5); }
+  .part-name b { font-weight: 800; color: var(--gold-deep); }
+  .dark .part-name b { color: var(--gold); }
+  .partmeter { display: flex; gap: 5px; }
+  .partmeter i { width: 19px; height: 3px; border-radius: 2px; display: block; transition: background .3s; }
+  .light .partmeter i { background: var(--line); }
+  .dark  .partmeter i { background: rgba(255,255,255,.16); }
+  .pm1 i:nth-child(-n+1), .pm2 i:nth-child(-n+2),
+  .pm3 i:nth-child(-n+3), .pm4 i:nth-child(-n+4) { background: var(--gold); }
+
+  /* ── TAKEAWAY STRIP (one per content slide) ── */
+  .takeaway {
+    display: flex; align-items: center; gap: 15px;
+    margin-top: 16px; padding: 12px 20px; border-radius: 9px;
+  }
+  .light .takeaway { background: rgba(20,33,61,.035); border: 1px solid var(--line); }
+  .dark  .takeaway { background: rgba(226,188,75,.07); border: 1px solid rgba(226,188,75,.22); }
+  .tk-key { flex-shrink: 0; font-size: 12px; line-height: 1; color: var(--gold-deep); }
+  .dark .tk-key { color: var(--gold); }
+  .tk-label {
+    flex-shrink: 0; font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 10px;
+    letter-spacing: .2em; text-transform: uppercase; color: var(--gold-deep);
+    padding-right: 15px; border-right: 1px solid var(--line);
+  }
+  .dark .tk-label { color: var(--gold); border-right-color: rgba(226,188,75,.25); }
+  .tk-text {
+    font-family: 'Newsreader', serif; font-size: 17.5px; line-height: 1.35; letter-spacing: -.005em;
+  }
+  .light .tk-text { color: var(--navy); }
+  .dark  .tk-text { color: rgba(255,255,255,.92); }
+  .tk-text b { font-style: italic; font-weight: 500; color: var(--gold-deep); }
+  .dark .tk-text b { color: var(--gold); }
+
+  /* ── density trims on the busiest slides ── */
+  #s4 .caut-card { padding: 17px 22px; }
+  #s4 .caut-num { font-size: 38px; }
+  #s4 .caut-head { font-size: 18px; margin-bottom: 5px; }
+  #s4 .caut-body { font-size: 13px; line-height: 1.45; }
+  #s6 .ex-box { padding: 22px 26px; }
+  #s8 .proj-item { padding: 11px 0; }
+  #s8 .proj-intro { font-size: 19px; margin-bottom: 18px; }
+  #s10 .voice-intro { font-size: 19px; margin: 4px 0 16px; }
+  #s10 .v-step { padding: 11px 0; }
+  #s10 .rule { padding: 7.5px 0; }
+  #s11 .d11-mailgrid { margin-top: 14px; }
+  #s11 .d11-sub { margin-top: 10px; }
+  #s11 .mailcard-body { padding: 10px 18px; }
+  #s11 .mailcard-body p { font-size: 11px; margin-bottom: 5px; }
+  #s11 .pcard { padding: 13px 18px; }
+  #s11 .prompts-col { gap: 11px; }
+  #s11 .takeaway { margin-top: 11px; }
+
+  /* ═══════════════════════════════════════════════════
+     VIBRANCY LAYER · per-part color, filled takeaways
+  ═══════════════════════════════════════════════════ */
+
+  /* per-Part accent palette (jewel tones over navy + gold) */
+  #s2  { --accent: #D4A52E; --accent-deep: #B0892A; }  /* Roadmap  · gold   */
+  #s3, #s4 { --accent: #21A493; --accent-deep: #178C7D; }  /* Foundations · teal  */
+  #s5, #s6, #s7 { --accent: #D4A52E; --accent-deep: #B0892A; }  /* Prompting · gold  */
+  #s8, #s9, #s10, #s11, #s12 { --accent: #E8773F; --accent-deep: #CC6230; }  /* In Practice · coral */
+  #s14 { --accent: #8071E6; --accent-deep: #6354C8; }  /* Take Action · violet */
+  #s15 { --accent: #E2BC4B; --accent-deep: #C9A43A; }  /* Colophon · gold (brand close) */
+
+  /* warmer, friendlier light slides */
+  .light { background: linear-gradient(165deg, #FAFAF6 0%, #F1F0EA 100%); }
+
+  /* eyebrow, title emphasis, part label, meter → take the Part accent */
+  .light .eyebrow { color: var(--accent-deep, var(--gold-deep)); }
+  .dark  .eyebrow { color: var(--accent, var(--gold)); }
+  .eyebrow::before { background: var(--accent, var(--gold)); }
+  .light .title .em { color: var(--accent-deep, var(--gold-deep)); }
+  .dark  .title .em { color: var(--accent, var(--gold)); }
+  .light .part-name b { color: var(--accent-deep, var(--gold-deep)); }
+  .dark  .part-name b { color: var(--accent, var(--gold)); }
+  .pm1 i:nth-child(-n+1), .pm2 i:nth-child(-n+2),
+  .pm3 i:nth-child(-n+3), .pm4 i:nth-child(-n+4) { background: var(--accent, var(--gold)); }
+
+  /* demo badge picks up the section accent */
+  .demo-badge { background: var(--accent, var(--gold)); }
+
+  /* ── FILLED TAKEAWAYS (pop) ── */
+  /* light slides: deep navy bar with a bright accent edge */
+  .light .takeaway {
+    position: relative; overflow: hidden;
+    background: linear-gradient(135deg, #1B2C4E 0%, #14213D 100%);
+    border: none; padding-left: 24px;
+    box-shadow: 0 8px 22px rgba(20,33,61,.20);
+  }
+  .light .takeaway::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px;
+    background: var(--accent, var(--gold));
+  }
+  .light .takeaway .tk-key   { color: var(--accent, var(--gold)); }
+  .light .takeaway .tk-label { color: var(--accent, var(--gold)); border-right-color: rgba(255,255,255,.18); }
+  .light .takeaway .tk-text  { color: #fff; }
+  .light .takeaway .tk-text b{ color: var(--accent, var(--gold)); font-style: italic; }
+
+  /* dark slides: glowing accent-tinted bar */
+  .dark .takeaway {
+    position: relative; overflow: hidden; padding-left: 24px;
+    background: color-mix(in srgb, var(--accent) 16%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 55%, #0E1729);
+    box-shadow: none;
+  }
+  .dark .takeaway::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px;
+    background: var(--accent, var(--gold));
+  }
+  .dark .takeaway .tk-key   { color: var(--accent, var(--gold)); }
+  .dark .takeaway .tk-label { color: var(--accent, var(--gold)); border-right-color: rgba(255,255,255,.2); }
+  .dark .takeaway .tk-text  { color: #fff; }
+  .dark .takeaway .tk-text b{ color: var(--accent, var(--gold)); font-style: italic; }
+
+  /* footer section label warms up too */
+  .light .s-foot .sect { color: var(--accent-deep, var(--ink-soft)); }
+  .dark  .s-foot .sect { color: var(--accent, rgba(255,255,255,.6)); }
+
+  /* ════════════════════════════════════════════════
+     SLIDE 14 — COLOPHON · MADE WITH CLAUDE
+  ════════════════════════════════════════════════ */
+  #s15 { background: var(--navy-deep); }
+  #s15 .arc {
+    position: absolute; border: 1px solid rgba(226,188,75,.10); border-radius: 50%;
+    pointer-events: none;
+  }
+  #s15 .c1 { width: 760px; height: 760px; left: -260px; bottom: -260px; }
+  #s15 .c2 { width: 540px; height: 540px; left: -150px; bottom: -150px; border-color: rgba(226,188,75,.07); }
+  #s15 .c3 { width: 330px; height: 330px; left: -40px; bottom: -40px; border-color: rgba(226,188,75,.05); }
+  #s15 .spark { position: absolute; width: 7px; height: 7px; border-radius: 50%; background: var(--gold); left: 300px; bottom: 250px; box-shadow: 0 0 18px 3px rgba(226,188,75,.5); }
+  #s15 .col-mid { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  #s15 .col-eyebrow {
+    font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 12px;
+    letter-spacing: .3em; text-transform: uppercase; color: var(--gold); margin-bottom: 26px;
+    display: flex; align-items: center; gap: 11px;
+  }
+  #s15 .col-eyebrow::before { content: ''; width: 24px; height: 2px; background: var(--gold); }
+  #s15 .col-statement {
+    font-family: 'Newsreader', serif; font-weight: 500; font-size: 60px; line-height: 1.08;
+    letter-spacing: -0.02em; color: var(--white); max-width: 1010px;
+  }
+  #s15 .col-statement .em { font-style: italic; color: var(--gold); }
+  #s15 .col-sub {
+    font-family: 'Poppins', sans-serif; font-weight: 300; font-size: 21px; line-height: 1.5;
+    color: rgba(255,255,255,.72); margin-top: 26px; max-width: 720px;
+  }
+  #s15 .col-sub b { color: rgba(255,255,255,.95); font-weight: 500; }
+  #s15 .col-foot {
+    display: flex; align-items: center; gap: 14px;
+    border-top: 1px solid var(--line-dark); padding-top: 20px;
+  }
+  #s15 .col-foot .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); }
+  #s15 .col-foot .ft {
+    font-family: 'Manrope', sans-serif; font-weight: 600; font-size: 13px;
+    letter-spacing: .1em; color: rgba(255,255,255,.8);
+  }
+  #s15 .col-foot .ft b { color: var(--gold); font-weight: 700; }
+
+  /* ═══════════════════════════════════════════════════
+     TYPE SCALE · bigger, more legible text everywhere
+  ═══════════════════════════════════════════════════ */
+  .title   { font-size: 44px; }
+  .eyebrow { font-size: 12px; }
+
+  /* takeaways — much larger, this was the worst offender */
+  .takeaway   { padding: 12px 22px; gap: 16px; }
+  .tk-label   { font-size: 11.5px; padding-right: 16px; }
+  .tk-key     { font-size: 15px; }
+  .tk-text    { font-size: 20.5px; line-height: 1.32; }
+
+  /* slide 2 · agenda */
+  #s2 .ag-num   { font-size: 33px; }
+  #s2 .ag-title { font-size: 20.5px; }
+  #s2 .ag-time  { font-size: 14px; }
+  #s2 .ag-tag   { font-size: 10px; }
+
+  /* slide 3 · is / isn't */
+  #s3 .isnot-txt        { font-size: 18px; line-height: 1.5; }
+  #s3 .isnot-label .big { font-size: 33px; }
+  #s3 .reassure p       { font-size: 17.5px; }
+
+  /* slide 4 · caution */
+  #s4 .caut-num  { font-size: 42px; }
+  #s4 .caut-head { font-size: 19.5px; }
+  #s4 .caut-body { font-size: 14.5px; line-height: 1.5; }
+
+  /* slide 5 · rctf */
+  #s5 .rctf-W   { font-size: 22.5px; }
+  #s5 .rctf-D   { font-size: 15.5px; }
+  #s5 .rctf-tag { font-size: 25px; }
+  #s5 .rctf-tag b { font-size: 19px; }
+
+  /* slide 6 · rctf example */
+  #s6 .ex-label    { font-size: 12px; }
+  #s6 .ex-lazy .quote { font-size: 25px; }
+  #s6 .ex-lazy .verdict { font-size: 14px; }
+  #s6 .rctf-line .k { font-size: 13px; }
+  #s6 .rctf-line .v { font-size: 16.5px; line-height: 1.5; }
+
+  /* slide 7 · reverse prompting */
+  #s7 .rev-quote .qlabel { font-size: 12px; }
+  #s7 .rev-quote .qtext  { font-size: 46px; }
+  #s7 .rev-c .rc-h { font-size: 13px; }
+  #s7 .rev-c .rc-b { font-size: 17.5px; line-height: 1.6; }
+
+  /* slide 8 · demo resume */
+  #s9 .demo-title    { font-size: 46px; }
+  #s9 .d8-scenario .sl, #s9 .d8-build .bl { font-size: 12px; }
+  #s9 .d8-scenario .stext { font-size: 24px; }
+  #s9 .d8-step .t    { font-size: 16.5px; }
+  #s9 .d8-step .n    { font-size: 14px; }
+
+  /* slide 9 · projects */
+  #s8 .proj-intro  { font-size: 20.5px; }
+  #s8 .proj-sub    { font-size: 12px; }
+  #s8 .proj-it-h   { font-size: 17px; }
+  #s8 .proj-it-b   { font-size: 14.5px; line-height: 1.5; }
+  #s8 .ex-pill     { font-size: 17px; }
+  #s8 .pr-l        { font-size: 12px; }
+
+  /* slide 10 · voice profile */
+  #s10 .voice-intro { font-size: 20.5px; }
+  #s10 .vs-sub      { font-size: 12px; }
+  #s10 .v-step .vn  { font-size: 36px; }
+  #s10 .v-step .vh  { font-size: 17px; }
+  #s10 .v-step .vb  { font-size: 14.5px; line-height: 1.5; }
+  #s10 .rule .rt    { font-size: 16px; }
+
+  /* slide 11 · demo email */
+  #s11 .demo-title      { font-size: 40px; }
+  #s11 .d11-sub         { font-size: 16.5px; }
+  #s11 .mailcard-body p { font-size: 12.5px; line-height: 1.55; }
+  #s11 .mc-tag, #s11 .mailcard-meta div { font-size: 12.5px; }
+  #s11 .pc-num   { font-size: 11px; }
+  #s11 .pc-prompt{ font-size: 17px; }
+  #s11 .d11-note { font-size: 12.5px; }
+  /* reclaim vertical space on this dense slide (gaps, not type) */
+  #s11 .d11-sub        { margin-top: 7px; }
+  #s11 .d11-mailgrid   { margin-top: 10px; }
+  #s11 .prompts-col    { gap: 9px; }
+  #s11 .pcard          { padding: 11px 18px; }
+  #s11 .mailcard-body  { padding: 9px 18px; }
+  #s11 .mailcard-body p { margin-bottom: 4px; }
+  #s11 .takeaway       { margin-top: 8px; }
+
+  /* slide 12 · safety net */
+  #s12 .net-statement { font-size: 40px; }
+  #s12 .net-prompt .npl { font-size: 12px; }
+  #s12 .net-prompt .npt { font-size: 25px; }
+  #s12 .net-payoff      { font-size: 18.5px; }
+
+  /* slide 13 · action items */
+  #s14 .act-row { padding: 10px 4px; }
+  #s14 .act-n  { font-size: 34px; }
+  #s14 .act-t  { font-size: 20px; }
+
+  /* slide 14 · colophon */
+  #s15 .col-statement { font-size: 62px; }
+  #s15 .col-sub       { font-size: 22px; }
+  #s15 .col-foot .ft  { font-size: 14px; }
+
+  /* ═══════════════════════════════════════════════════
+     MOTION · staggered entrance reveals + ambient life
+  ═══════════════════════════════════════════════════ */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+  @keyframes meterPop { from { opacity: 0; transform: scaleX(.25); } to { opacity: 1; transform: scaleX(1); } }
+  @keyframes sparkPulse {
+    0%, 100% { box-shadow: 0 0 18px 3px rgba(226,188,75,.5); transform: scale(1); }
+    50%      { box-shadow: 0 0 30px 7px rgba(226,188,75,.85); transform: scale(1.18); }
+  }
+  @keyframes arcDrift { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* per-slide staggered reveal of content blocks when a slide becomes active */
+    .slide.active .eyebrow,
+    .slide.active .demo-badge   { animation: fadeUp .5s .06s both cubic-bezier(.4,0,.2,1); }
+    .slide.active .title,
+    .slide.active .demo-title   { animation: fadeUp .55s .14s both cubic-bezier(.4,0,.2,1); }
+    .slide.active .body         { animation: fadeUp .6s .26s both cubic-bezier(.4,0,.2,1); }
+    .slide.active .voice-intro,
+    .slide.active .d11-sub      { animation: fadeUp .55s .2s both cubic-bezier(.4,0,.2,1); }
+    .slide.active .takeaway     { animation: fadeUp .6s .42s both cubic-bezier(.34,1.3,.5,1); }
+
+    /* progress meter segments pop in one-by-one */
+    .slide.active .partmeter i  { transform-origin: left center; }
+    .slide.active .partmeter i:nth-child(1) { animation: meterPop .4s .30s both; }
+    .slide.active .partmeter i:nth-child(2) { animation: meterPop .4s .38s both; }
+    .slide.active .partmeter i:nth-child(3) { animation: meterPop .4s .46s both; }
+    .slide.active .partmeter i:nth-child(4) { animation: meterPop .4s .54s both; }
+
+    /* title-slide reveals */
+    #s1.active .t-kicker   { animation: fadeUp .6s .1s both; }
+    #s1.active .t-headline { animation: fadeUp .7s .24s both cubic-bezier(.4,0,.2,1); }
+    #s1.active .t-sub      { animation: fadeUp .6s .44s both; }
+    #s1.active .t-bot      { animation: fadeUp .6s .6s both; }
+    #s15.active .col-eyebrow  { animation: fadeUp .6s .1s both; }
+    #s15.active .col-statement{ animation: fadeUp .7s .24s both cubic-bezier(.4,0,.2,1); }
+    #s15.active .col-sub      { animation: fadeUp .6s .46s both; }
+    #s15.active .col-foot     { animation: fadeUp .6s .62s both; }
+
+    /* ambient life on closing slide */
+    #s15 .spark { animation: sparkPulse 2.6s ease-in-out infinite; }
+    #s15 .c1 { animation: arcDrift 100s linear infinite; transform-origin: center; }
+
+    /* demo badge keeps its pulse; give cards a gentle hover lift */
+    .caut-card, .proj-item, .ex-pill { transition: transform .25s ease, box-shadow .25s ease; }
+    .caut-card:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(20,33,61,.12); }
+  }
+
+  /* ════════════════════════════════════════════════
+     SLIDE 13 — JUDGMENT · THE GOLDEN RULE
+  ════════════════════════════════════════════════ */
+  #s13 { --accent: #E15B43; --accent-deep: #C44530; }  /* judgment · warm red (importance) */
+  #s13 .jdg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 44px; flex: 1; margin-top: 10px; align-items: center; }
+  #s13 .jdg-lead { font-family: 'Newsreader', serif; font-size: 27px; line-height: 1.45; color: rgba(255,255,255,.94); }
+  #s13 .jdg-lead b { color: var(--accent); font-style: italic; font-weight: 500; }
+  #s13 .jdg-never {
+    display: flex; align-items: center; gap: 16px; margin-top: 26px;
+    padding: 17px 22px; border-radius: 10px;
+    background: rgba(225,91,67,.12); border: 1px solid rgba(225,91,67,.5);
+  }
+  #s13 .jdg-never-label {
+    flex-shrink: 0; font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 13px;
+    letter-spacing: .16em; text-transform: uppercase; color: #fff;
+    background: var(--accent); padding: 6px 13px; border-radius: 5px;
+  }
+  #s13 .jdg-never-txt { font-family: 'Newsreader', serif; font-style: italic; font-size: 20px; line-height: 1.3; color: #fff; }
+  #s13 .jdg-right { border-left: 1px solid var(--line-dark); padding-left: 44px; }
+  #s13 .jdg-sub {
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 12px;
+    letter-spacing: .2em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px;
+  }
+  #s13 .jdg-step { display: flex; gap: 16px; align-items: flex-start; padding: 13px 0; }
+  #s13 .jdg-step + .jdg-step { border-top: 1px solid rgba(255,255,255,.08); }
+  #s13 .jdg-step .jn {
+    font-family: 'Newsreader', serif; font-size: 30px; line-height: .9; color: var(--accent);
+    flex-shrink: 0; width: 30px;
+  }
+  #s13 .jdg-step p { font-family: 'Poppins', sans-serif; font-size: 16px; line-height: 1.45; color: rgba(255,255,255,.86); }
+  #s13 .jdg-step p b { color: #fff; font-weight: 600; }
+
+  /* ════════════════════════════════════════════════
+     AMBIENT BACKGROUND · slow drifting accent glows
+  ════════════════════════════════════════════════ */
+  .pad { z-index: 1; }
+  .slide::before, .slide::after {
+    content: ''; position: absolute; border-radius: 50%; pointer-events: none; z-index: 0;
+    filter: blur(58px);
+  }
+  .slide::before {
+    width: 540px; height: 540px; top: -140px; right: -100px;
+    background: radial-gradient(circle, var(--accent, #E2BC4B) 0%, transparent 68%);
+  }
+  .slide::after {
+    width: 480px; height: 480px; bottom: -160px; left: -120px;
+    background: radial-gradient(circle, var(--accent-deep, #C9A43A) 0%, transparent 68%);
+  }
+  .slide.light::before { opacity: .15; }
+  .slide.light::after  { opacity: .12; }
+  .slide.dark::before  { opacity: .32; }
+  .slide.dark::after   { opacity: .24; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .slide.active::before { animation: orbA 24s ease-in-out infinite alternate; }
+    .slide.active::after  { animation: orbB 30s ease-in-out infinite alternate; }
+    /* pause off-screen slides for performance */
+    .slide:not(.active)::before, .slide:not(.active)::after { animation-play-state: paused; }
+  }
+  @keyframes orbA { from { transform: translate(0,0) scale(1); } to { transform: translate(-70px, 80px) scale(1.22); } }
+  @keyframes orbB { from { transform: translate(0,0) scale(1); } to { transform: translate(90px, -60px) scale(1.15); } }
+
+  /* ═══════════════════════════════════════════════════
+     EMAN LOGO LOCKUP (brand mark)
+  ═══════════════════════════════════════════════════ */
+  .eman-lockup { display: inline-flex; align-items: center; gap: 13px; }
+  .eman-mark { height: 30px; width: auto; flex-shrink: 0; }
+  #s1 .t-bot .eman-mark { height: 34px; }
+  .lockup-word {
+    font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 16px;
+    letter-spacing: .04em; color: currentColor;
+  }
+
+  /* ── slide 3 · make IS / ISN'T headers prominent ── */
+  #s3 .isnot-label {
+    padding-bottom: 14px; margin-bottom: 16px;
+    align-items: center; gap: 14px;
+  }
+  #s3 .isnot-label .big {
+    font-size: 40px; font-weight: 600; line-height: 1; font-style: normal;
+    letter-spacing: -.01em;
+  }
+  .is .isnot-label   { border-bottom-width: 3px; }
+  .is .isnot-label .big   { color: var(--gold-deep); }
+  .isnt .isnot-label { border-bottom-width: 3px; }
+  .isnt .isnot-label .big { color: var(--navy); }
+  /* small caption after each big word for clarity */
+  #s3 .isnot-label::after {
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 11px;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft);
+    margin-left: auto;
+  }
+  .is .isnot-label::after   { content: 'Use it for'; }
+  .isnt .isnot-label::after { content: 'Don\2019 t rely on it as'; }
+
+  /* ── slide 2 · agenda (no times, roomier rows) ── */
+  #s2 .ag-row { grid-template-columns: 60px 1fr; padding: 11px 6px; }
+  #s2 .ag-title { font-size: 20px; }
+
+  /* ── slide 4 · bigger card text, tighter whitespace ── */
+  #s4 .caution-grid { gap: 16px; }
+  #s4 .caut-card { padding: 18px 24px; gap: 18px; }
+  #s4 .caut-num  { font-size: 40px; }
+  #s4 .caut-head { font-size: 20px; margin-bottom: 7px; }
+  #s4 .caut-body { font-size: 16px; line-height: 1.5; }
+
+  /* ── demo-title italic emphasis (slide 11) ── */
+  .demo-title .em { font-style: italic; color: var(--accent, var(--gold)); }
+
+  /* ── slide 12 · context chips ── */
+  #s12 .net-contexts { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+  #s12 .ncx-l {
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 11px;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft); margin-right: 4px;
+  }
+  #s12 .ncx {
+    font-family: 'Manrope', sans-serif; font-weight: 600; font-size: 14.5px; color: var(--navy);
+    background: #fff; border: 1px solid var(--line); border-radius: 30px; padding: 8px 16px;
+  }
+  #s12 .net-statement { font-size: 42px; }
+
+  /* ── slide 14 · done rows + investment callout ── */
+  #s14 .act-row, #s25 .act-row { grid-template-columns: 50px 1fr auto; padding: 9px 4px; }
+  #s14 .act-row.done .act-t, #s25 .act-row.done .act-t { text-decoration: line-through; color: rgba(255,255,255,.4); }
+  #s14 .act-row.done .act-n, #s25 .act-row.done .act-n { color: rgba(255,255,255,.3); }
+  #s14 .act-row.done .act-t b, #s25 .act-row.done .act-t b { color: rgba(255,255,255,.4); }
+  #s14 .act-done, #s25 .act-done {
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 11px;
+    letter-spacing: .1em; text-transform: uppercase; color: #46C57E;
+  }
+  #s25 .act-n { font-size: 34px; }
+  #s25 .act-t { font-size: 20px; }
+  #s25 .closer { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line-dark);
+    font-family: 'Newsreader', serif; font-style: italic; font-size: 19px; line-height: 1.5; color: rgba(255,255,255,.82); max-width: 1040px; }
+  #s25 .closer b { color: var(--accent); font-weight: 600; font-style: normal; }
+  #s14 .invest-box {
+    margin-top: 18px; border-radius: 13px; padding: 22px 28px;
+    background: linear-gradient(135deg, rgba(226,188,75,.18) 0%, rgba(226,188,75,.06) 100%);
+    border: 1px solid rgba(226,188,75,.55); position: relative;
+  }
+  #s14 .invest-label {
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 11.5px;
+    letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 9px;
+  }
+  #s14 .invest-head {
+    font-family: 'Newsreader', serif; font-weight: 500; font-size: 30px; line-height: 1.12;
+    color: #fff; margin-bottom: 9px; letter-spacing: -.01em;
+  }
+  #s14 .invest-head .ih-em { font-style: italic; color: var(--gold); }
+  #s14 .invest-body {
+    font-family: 'Poppins', sans-serif; font-size: 16.5px; line-height: 1.5; color: rgba(255,255,255,.86);
+  }
+  #s14 .invest-body b { color: var(--gold); font-weight: 600; }
+
+  /* ═══════════════════════════════════════════════════
+     NEW PART-1 SLIDES · intro, demos, exercises
+  ═══════════════════════════════════════════════════ */
+  /* per-slide accents */
+  #s16, #s17, #s18 { --accent: #21A493; --accent-deep: #178C7D; }
+  #s19, #s20, #s21 { --accent: #D4A52E; --accent-deep: #B0892A; }
+  #s22, #s23, #s24 { --accent: #21A493; --accent-deep: #178C7D; }
+  #s25 { --accent: #8071E6; --accent-deep: #6354C8; }
+  #s26, #s27 { --accent: #E8773F; --accent-deep: #CC6230; }
+
+  /* shared scenario text */
+  .scn { font-family:'Newsreader',serif; font-size:22px; line-height:1.5; color:var(--ink-body); }
+  .scn b { color:var(--navy); font-style:italic; }
+  .dark .scn { color:rgba(255,255,255,.9); }
+  .dark .scn b { color:var(--gold); font-style:italic; }
+
+  /* hands-on badge (exercises) */
+  .hands-badge { display:inline-flex; align-items:center; gap:10px; align-self:flex-start;
+    background:#21A493; color:#fff; font-family:'Manrope',sans-serif; font-weight:800; font-size:13px;
+    letter-spacing:.18em; text-transform:uppercase; padding:9px 18px; border-radius:5px; margin-top:4px; }
+  .hands-badge .hb { width:9px;height:9px;border-radius:50%;background:#fff; animation:pulse 1.4s infinite; }
+
+  /* reusable copyable prompt card */
+  .promptbox { background:linear-gradient(135deg,#1B2C4E 0%,#14213D 100%); border-radius:12px;
+    padding:19px 24px; box-shadow:0 10px 26px rgba(20,33,61,.18); }
+  .promptbox .pb-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:11px; }
+  .promptbox .pb-label { font-family:'Manrope',sans-serif; font-weight:800; font-size:10.5px; letter-spacing:.2em;
+    text-transform:uppercase; color:var(--gold); }
+  .promptbox .pb-text { font-family:'Newsreader',serif; font-style:italic; font-size:18.5px; line-height:1.5; color:#fff; }
+  .promptbox .pb-text b { color:var(--gold); font-style:normal; font-weight:500; }
+  .promptbox .pb-attach { display:inline-flex; align-items:center; gap:8px; margin-bottom:10px;
+    font-family:'Manrope',sans-serif; font-weight:700; font-size:12px; letter-spacing:.03em; color:rgba(255,255,255,.62); }
+  .promptbox .pb-attach svg { width:14px; height:14px; }
+
+  /* what to look for */
+  .xlook { display:flex; gap:13px; align-items:flex-start; margin-top:15px; padding:13px 18px; border-radius:9px;
+    background:rgba(33,164,147,.08); border:1px solid rgba(33,164,147,.28); }
+  .xlook .xl-k { font-family:'Manrope',sans-serif; font-weight:800; font-size:10.5px; letter-spacing:.14em;
+    text-transform:uppercase; color:#178C7D; flex-shrink:0; padding-top:3px; }
+  .xlook .xl-t { font-family:'Poppins',sans-serif; font-size:15px; line-height:1.5; color:var(--ink-body); }
+  .xlook .xl-t b { color:var(--navy); font-weight:600; }
+
+  /* download button */
+  .dl-btn { display:inline-flex; align-items:center; gap:9px; text-decoration:none; cursor:pointer;
+    background:var(--gold); color:var(--navy); font-family:'Manrope',sans-serif; font-weight:800; font-size:13px;
+    letter-spacing:.04em; padding:11px 18px; border-radius:7px; border:none; transition:filter .18s, transform .12s; }
+  .dl-btn:hover { filter:brightness(1.08); transform:translateY(-1px); }
+  .dl-btn svg { width:15px; height:15px; }
+
+  /* scenario-left / prompt-right grid */
+  .xgrid { display:grid; grid-template-columns:0.92fr 1.08fr; gap:34px; flex:1; margin-top:16px; align-items:center; }
+  .xgrid .xleft { display:flex; flex-direction:column; gap:16px; }
+  .xgrid .xright { display:flex; flex-direction:column; gap:13px; }
+
+  /* s16 What is AI */
+  #s16 .ai-lead { font-family:'Newsreader',serif; font-size:26px; line-height:1.5; color:var(--ink-body); max-width:1090px; margin-top:6px; }
+  #s16 .ai-lead b { color:var(--navy); font-style:italic; font-weight:500; }
+  #s16 .ai-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:24px; }
+  #s16 .ai-card { background:#fff; border:1px solid var(--line); border-radius:11px; padding:22px 24px; }
+  #s16 .ai-ico { width:44px;height:44px;border-radius:10px; background:rgba(33,164,147,.1);
+    display:flex;align-items:center;justify-content:center; margin-bottom:14px; }
+  #s16 .ai-h { font-family:'Manrope',sans-serif; font-weight:800; font-size:16.5px; color:var(--navy); margin-bottom:6px; }
+  #s16 .ai-b { font-family:'Poppins',sans-serif; font-size:14.5px; line-height:1.5; color:var(--ink-soft); }
+
+  /* s17 comparison table */
+  #s17 .cmp { width:100%; border-collapse:collapse; margin-top:16px; }
+  #s17 .cmp th, #s17 .cmp td { text-align:left; padding:12px 16px; border-bottom:1px solid var(--line); vertical-align:middle; }
+  #s17 .cmp thead th { font-family:'Manrope',sans-serif; font-weight:800; font-size:13px; letter-spacing:.04em; color:var(--ink-soft); }
+  #s17 .cmp .rowlabel { font-family:'Manrope',sans-serif; font-weight:700; font-size:14px; color:var(--ink-soft); width:150px; }
+  #s17 .cmp td { font-family:'Poppins',sans-serif; font-size:14.5px; color:var(--ink-body); }
+  #s17 .cmp .claude-col { background:rgba(226,188,75,.10); }
+  #s17 .cmp thead th.claude-col { color:var(--gold-deep); border-bottom:2px solid var(--gold); }
+  #s17 .cmp td.claude-col { color:var(--navy); font-weight:500; }
+  #s17 .cmp .toolname { font-family:'Manrope',sans-serif; font-weight:800; font-size:15px; }
+  #s17 .cmp-note { margin-top:22px; font-family:'Newsreader',serif; font-style:italic; font-size:21px; color:var(--navy); }
+  #s17 .cmp-note b { color:var(--gold-deep); font-style:normal; font-weight:600; }
+  /* fill the slide vertically, taller rows, centered columns, brand logos */
+  #s17 .body { justify-content:center; }
+  #s17 .cmp th, #s17 .cmp td { padding:15px 14px; text-align:center; }
+  #s17 .cmp .rowlabel { text-align:left; }
+  #s17 .tool-h { display:flex; flex-direction:column; align-items:center; gap:9px; }
+  #s17 .tool-h .tn { font-family:'Manrope',sans-serif; font-weight:800; font-size:14px; color:var(--ink-soft); }
+  #s17 .cmp thead th.claude-col .tn { color:var(--gold-deep); }
+  .brand-ico { width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow:0 2px 6px rgba(20,33,61,.14); }
+  .brand-ico svg { width:19px; height:19px; }
+  .bi-chatgpt { background:#0F9D78; }
+  .bi-claude  { background:#D97757; }
+  .bi-gemini  { background:linear-gradient(135deg,#4796E3 0%,#9168C0 55%,#D96570 100%); }
+  .bi-copilot { background:#0A6CFF; }
+
+  /* s16 — fill vertically so the takeaway isn't stranded */
+  #s16 .body { justify-content:center; }
+  #s16 .ai-lead { margin-top:0; margin-bottom:30px; }
+  #s16 .ai-cards { margin-top:0; }
+  #s16 .ai-card { padding:26px 26px; }
+
+  /* s18 install */
+  #s18 .inst-grid { display:grid; grid-template-columns:1.12fr .88fr; gap:40px; flex:1; margin-top:14px; align-items:center; }
+  #s18 .inst-cta { background:var(--navy); border-radius:12px; padding:30px 30px; text-align:center; }
+  #s18 .inst-cta .ic-l { font-family:'Manrope',sans-serif; font-weight:800; font-size:11px; letter-spacing:.2em;
+    text-transform:uppercase; color:var(--gold); margin-bottom:14px; }
+  #s18 .inst-cta .ic-url { font-family:'Newsreader',serif; font-size:31px; color:#fff; margin-bottom:8px; letter-spacing:-.01em; }
+  #s18 .inst-cta .ic-url b { color:var(--gold); }
+  #s18 .inst-cta .ic-sub { font-family:'Poppins',sans-serif; font-size:14px; color:rgba(255,255,255,.62); line-height:1.5; }
+
+  /* s19 hook */
+  #s19 .hook-mid { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:26px; }
+  #s19 .hook-badge { display:inline-flex; align-items:center; gap:11px; background:var(--gold); color:var(--navy);
+    font-family:'Manrope',sans-serif; font-weight:800; font-size:14px; letter-spacing:.2em; text-transform:uppercase;
+    padding:11px 22px; border-radius:6px; }
+  #s19 .hook-badge .hb { width:10px;height:10px;border-radius:50%;background:var(--navy); animation:pulse 1.4s infinite; }
+  #s19 .hook-title { font-family:'Newsreader',serif; font-weight:500; font-size:62px; line-height:1.06;
+    letter-spacing:-.02em; color:#fff; max-width:1000px; }
+  #s19 .hook-title .em { font-style:italic; color:var(--gold); }
+  #s19 .hook-sub { font-family:'Poppins',sans-serif; font-weight:300; font-size:20px; color:rgba(255,255,255,.6); }
+
+  /* s25 part-1 action items reuse .act-* (already styled), accent violet via --accent */
+
+  /* s26 Part 2 divider */
+  #s26 .pd-mid { flex:1; display:flex; flex-direction:column; justify-content:center; }
+  #s26 .pd-kick { font-family:'Manrope',sans-serif; font-weight:800; font-size:14px; letter-spacing:.32em;
+    text-transform:uppercase; color:var(--gold); margin-bottom:22px; }
+  #s26 .pd-title { font-family:'Newsreader',serif; font-weight:500; font-size:90px; line-height:1; letter-spacing:-.02em; color:#fff; }
+  #s26 .pd-title .em { font-style:italic; color:var(--gold); }
+  #s26 .pd-sub { font-family:'Poppins',sans-serif; font-weight:300; font-size:22px; color:rgba(255,255,255,.7); margin-top:24px; max-width:860px; }
+  #s26 .pd-foot { display:flex; align-items:center; gap:14px; border-top:1px solid var(--line-dark); padding-top:20px; }
+  #s26 .pd-foot .dot { width:5px;height:5px;border-radius:50%;background:var(--gold); }
+  #s26 .pd-foot .ft { font-family:'Manrope',sans-serif; font-weight:600; font-size:13px; letter-spacing:.1em; color:rgba(255,255,255,.75); }
+
+  /* ── Part 2 new slides: recap+floor, self-audit, project demo ── */
+  #s28 { --accent:#E8773F; --accent-deep:#CC6230; }
+  #s29 { --accent:#21A493; --accent-deep:#178C7D; }
+  #s30 { --accent:#D4A52E; --accent-deep:#B0892A; }
+  #s31 { --accent:#8071E6; --accent-deep:#6354C8; }
+  /* Part 2 agenda has 6 rows — give them room to fill the slide */
+  #s27 .ag-row { padding: 18px 6px; }
+  #s27 .ag-title { font-size: 20px; }
+  #s32 { --accent:#21A493; --accent-deep:#178C7D; }
+  #s33 { --accent:#D4A52E; --accent-deep:#B0892A; }
+  #s34 { --accent:#E8773F; --accent-deep:#CC6230; }
+
+  /* s32 · bring your stuff — input grid */
+  #s32 .io-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; flex:1; margin-top:16px; align-content:center; }
+  #s32 .io-tile { background:#fff; border:1px solid var(--line); border-radius:11px; padding:18px 20px; display:flex; gap:14px; align-items:flex-start; }
+  #s32 .io-ico { width:42px;height:42px;border-radius:10px; background:rgba(33,164,147,.1); display:flex;align-items:center;justify-content:center; flex-shrink:0; }
+  #s32 .io-h { font-family:'Manrope',sans-serif; font-weight:800; font-size:15.5px; color:var(--navy); margin-bottom:3px; }
+  #s32 .io-b { font-family:'Poppins',sans-serif; font-size:13px; line-height:1.4; color:var(--ink-soft); }
+
+  /* s33 · don't stop at the first answer — steering phrases */
+  #s33 .steer-grid { display:grid; grid-template-columns:0.82fr 1.18fr; gap:38px; flex:1; margin-top:14px; align-items:center; }
+  #s33 .steer-lead { font-family:'Newsreader',serif; font-size:24px; line-height:1.5; color:var(--ink-body); }
+  #s33 .steer-lead b { color:var(--navy); font-style:italic; }
+  #s33 .steer-card { background:linear-gradient(135deg,#1B2C4E 0%,#14213D 100%); border-radius:14px; padding:26px 30px; box-shadow:0 14px 40px rgba(20,33,61,.2); }
+  #s33 .steer-label { font-family:'Manrope',sans-serif; font-weight:800; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); margin-bottom:16px; }
+  #s33 .steer-item { display:flex; gap:12px; align-items:center; padding:9px 0; }
+  #s33 .steer-item + .steer-item { border-top:1px solid rgba(255,255,255,.09); }
+  #s33 .steer-item .sq { color:var(--gold); font-family:'Newsreader',serif; font-size:20px; line-height:1; flex-shrink:0; }
+  #s33 .steer-item .st { font-family:'Newsreader',serif; font-style:italic; font-size:19px; color:#fff; line-height:1.3; }
+
+  /* s34 · show it what good looks like — reuses .xgrid/.scn/.promptbox */
+  #s34 .good-box { display:flex; gap:14px; align-items:flex-start; margin-top:16px; padding:15px 20px; border-radius:10px; background:rgba(232,119,63,.08); border:1px solid rgba(232,119,63,.28); }
+  #s34 .good-box .gk { font-family:'Manrope',sans-serif; font-weight:800; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent-deep); flex-shrink:0; padding-top:3px; }
+  #s34 .good-box .gt { font-family:'Poppins',sans-serif; font-size:15px; line-height:1.5; color:var(--ink-body); }
+  #s34 .good-box .gt b { color:var(--navy); font-weight:600; }
+
+  /* s28 recap + open floor */
+  #s28 .recap-grid { display:grid; grid-template-columns:0.95fr 1.05fr; gap:38px; flex:1; margin-top:12px; align-items:center; }
+  #s28 .recap-sub { font-family:'Manrope',sans-serif; font-weight:800; font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--accent-deep); margin-bottom:10px; }
+  #s28 .recap-item { display:flex; gap:13px; align-items:flex-start; padding:11px 0; }
+  #s28 .recap-item + .recap-item { border-top:1px solid var(--line); }
+  #s28 .recap-item .rk { flex-shrink:0; margin-top:3px; }
+  #s28 .recap-item .rt { font-family:'Poppins',sans-serif; font-size:16px; line-height:1.4; color:var(--ink-body); }
+  #s28 .recap-item .rt b { color:var(--navy); font-weight:600; }
+  #s28 .floor-card { background:linear-gradient(135deg,#1B2C4E 0%,#14213D 100%); border-radius:14px; padding:30px 34px; box-shadow:0 14px 40px rgba(20,33,61,.22); }
+  #s28 .floor-label { font-family:'Manrope',sans-serif; font-weight:800; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); margin-bottom:16px; }
+  #s28 .floor-q { font-family:'Newsreader',serif; font-weight:500; font-size:32px; line-height:1.18; color:#fff; margin-bottom:16px; letter-spacing:-.01em; }
+  #s28 .floor-q .em { font-style:italic; color:var(--gold); }
+  #s28 .floor-sub { font-family:'Poppins',sans-serif; font-size:16px; line-height:1.55; color:rgba(255,255,255,.72); }
+  #s28 .floor-sub b { color:#fff; font-weight:500; }
+
+  /* s29 self-audit reuses .rev-* ; shrink long quote + copy button spacing */
+  #s29 .rev-quote .qtext { font-size:34px; line-height:1.34; max-width:1080px; }
+  #s29 .rev-quote { padding-bottom:22px; }
+  #s29 .rev-quote .copy-btn { align-self:flex-start; margin-top:16px; }
+
+  /* s30 demo — reuses .xgrid/.d8-step/.promptbox/.dl-btn */
+  #s30 .proj-files-sub { font-family:'Manrope',sans-serif; font-weight:800; font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
+  #s30 .dl-row { display:flex; gap:12px; flex-wrap:wrap; margin-top:18px; }
+  #s30 .dl-btn { background:var(--gold); }
+  #s30 .dl-btn.outline { background:transparent; color:var(--gold); border:1px solid rgba(226,188,75,.5); }
+
+  .eman-logo-img{display:inline-block;aspect-ratio:464 / 200;background-image:url('data:image/png;base64,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');background-size:contain;background-position:left center;background-repeat:no-repeat;}
+</style>
+</head>
+<style>
+  /* ═══════════════════════════════════════
+     EMAIL GATE
+  ═══════════════════════════════════════ */
+  #gate {
+    position: fixed; inset: 0; z-index: 9999;
+    background: #0E1729;
+    display: flex; align-items: center; justify-content: center;
+    transition: opacity .55s cubic-bezier(.4,0,.2,1);
+  }
+  #gate.hiding { opacity: 0; pointer-events: none; }
+  #gate-card {
+    width: 440px; padding: 48px 52px;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(226,188,75,.28);
+    border-radius: 16px;
+    box-shadow: 0 32px 80px rgba(0,0,0,.55);
+    display: flex; flex-direction: column; align-items: center; gap: 0;
+    position: relative;
+  }
+  #gate-logo {
+    width: 160px; height: 69px;
+    background-image: var(--gate-logo-bg);
+    background-size: contain; background-repeat: no-repeat; background-position: center;
+    margin-bottom: 28px;
+  }
+  #gate-title {
+    font-family: 'Newsreader', serif; font-weight: 500; font-size: 38px;
+    line-height: 1; letter-spacing: -.02em; color: #fff; margin-bottom: 8px; text-align: center;
+  }
+  #gate-title span { font-style: italic; color: #E2BC4B; }
+  #gate-sub {
+    font-family: 'Poppins', sans-serif; font-size: 14.5px; font-weight: 300;
+    color: rgba(255,255,255,.62); text-align: center; line-height: 1.5; margin-bottom: 32px;
+  }
+  #gate-input {
+    width: 100%; padding: 14px 18px; margin-bottom: 14px;
+    background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.16);
+    border-radius: 9px; color: #fff; font-family: 'Poppins', sans-serif; font-size: 15px;
+    outline: none; box-sizing: border-box; transition: border-color .2s;
+  }
+  #gate-input::placeholder { color: rgba(255,255,255,.35); }
+  #gate-input:focus { border-color: rgba(226,188,75,.65); }
+  #gate-input.error { border-color: rgba(240,80,80,.75); }
+  #gate-err {
+    font-family: 'Poppins', sans-serif; font-size: 13px; color: rgba(240,120,100,.95);
+    text-align: center; min-height: 18px; margin-bottom: 14px; display: none;
+  }
+  #gate-btn {
+    width: 100%; padding: 14px; border: none; border-radius: 9px; cursor: pointer;
+    background: #E2BC4B; color: #14213D;
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 15px;
+    letter-spacing: .06em; text-transform: uppercase;
+    transition: filter .18s, transform .12s;
+  }
+  #gate-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+  #gate-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; filter: none; }
+  #gate-note {
+    font-family: 'Poppins', sans-serif; font-size: 12px; color: rgba(255,255,255,.3);
+    text-align: center; margin-top: 22px; line-height: 1.5;
+  }
+</style>
+<div id="gate">
+  <div id="gate-card">
+    <div id="gate-logo"></div>
+    <div id="gate-title"><span>AI</span> at Work</div>
+    <div id="gate-sub">Enter your work email to access this session.</div>
+    <input id="gate-input" type="email" placeholder="your work email" autocomplete="email" />
+    <div id="gate-err"></div>
+    <button id="gate-btn">Get Access</button>
+    <div id="gate-note">Access is limited to authorized team members.</div>
+  </div>
+</div>
+<div id="hint">← → to navigate</div>
+<div id="viewport">
+<div id="stage">
+
+  <!-- ═══ SLIDE 1 · TITLE ═══ -->
+  <section class="slide active dark" id="s1">
+    <canvas id="s1-canvas"></canvas>
+    <div class="pad">
+      <div class="t-top">
+        <span class="eman-mark eman-logo-img" role="img" aria-label="EMAN"></span>
+        <span class="head-right" style="color:rgba(255,255,255,.55)">Professional Development</span>
+      </div>
+      <div class="t-mid">
+        <div class="t-kicker">Professional Development · August 12, 2026</div>
+        <h1 class="t-headline"><span class="em">AI</span> at Work</h1>
+        <p class="t-sub">A practical, hands-on guide to getting started with Claude at EMAN</p>
+      </div>
+      <div class="t-bot">
+        <span class="eman-lockup" style="color:rgba(255,255,255,.92)">
+          <span class="eman-mark eman-logo-img" role="img" aria-label="EMAN"></span>
+          <span class="lockup-word">Education Management &amp; Networks</span>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 2 · AGENDA ═══ -->
+  <section class="slide light" id="s2">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>The Roadmap</b></span><span class="partmeter pm1"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="eyebrow" style="margin-top:24px">Part 1 of 2 · Getting Started</div>
+      <h2 class="title">What we'll cover today</h2>
+      <div class="body"><div class="agenda" style="margin-top:20px">
+        <div class="ag-row"><span class="ag-num">01</span><span class="ag-title">What AI is — and the tools out there</span></div>
+        <div class="ag-row"><span class="ag-num">02</span><span class="ag-title">Getting Claude onto your computer</span></div>
+        <div class="ag-row"><span class="ag-num">03</span><span class="ag-title">See what it can do <span class="ag-tag">Watch</span></span></div>
+        <div class="ag-row"><span class="ag-num">04</span><span class="ag-title">What Claude is great at — and what to watch for</span></div>
+        <div class="ag-row"><span class="ag-num">05</span><span class="ag-title">RCTF: the recipe for prompts that work</span></div>
+        <div class="ag-row"><span class="ag-num">06</span><span class="ag-title">Try it yourself, together <span class="ag-tag">Hands-on</span></span></div>
+        <div class="ag-row"><span class="ag-num">07</span><span class="ag-title">Using good judgment — you own the output</span></div>
+        <div class="ag-row"><span class="ag-num">08</span><span class="ag-title">Your action items before Part 2</span></div>
+      </div></div>
+      <div class="s-foot"><span class="sect">Part 1 · Roadmap</span><span>02 / 17</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 3 · IS / ISN'T ═══ -->
+  <section class="slide light" id="s3">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>Foundations</b></span><span class="partmeter pm1"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="eyebrow" style="margin-top:24px">Framing</div>
+      <h2 class="title">What Claude <span class="em">is</span>, and what it isn't</h2>
+      <div class="body"><div class="isnot-wrap">
+        <div class="isnot-grid">
+          <div class="isnot-col is">
+            <div class="isnot-label"><span class="big">Is</span></div>
+            <div class="isnot-item"><span class="mk"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="#C9A43A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="isnot-txt">A <b>thinking partner</b> for analysis, writing, and iteration</span></div>
+            <div class="isnot-item"><span class="mk"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="#C9A43A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="isnot-txt">A <b>drafting tool</b> that turns blank pages into starting points</span></div>
+            <div class="isnot-item"><span class="mk"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="#C9A43A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="isnot-txt">A <b>research assistant</b>, paired with verification</span></div>
+          </div>
+          <div class="isnot-col isnt">
+            <div class="isnot-label"><span class="big">Isn't</span></div>
+            <div class="isnot-item"><span class="mk"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="#A6ADBC" stroke-width="2.2" stroke-linecap="round"/></svg></span><span class="isnot-txt">A <b>search engine</b> — it doesn't browse the web by default</span></div>
+            <div class="isnot-item"><span class="mk"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="#A6ADBC" stroke-width="2.2" stroke-linecap="round"/></svg></span><span class="isnot-txt">An <b>oracle</b> — it can be confidently wrong</span></div>
+            <div class="isnot-item"><span class="mk"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="#A6ADBC" stroke-width="2.2" stroke-linecap="round"/></svg></span><span class="isnot-txt">A <b>vault</b> — assume nothing you paste in is private</span></div>
+          </div>
+        </div>
+        <div class="reassure">
+          <span class="ico"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.5 8-8 11-4.5-3-8-6-8-11V5l8-3z" fill="none" stroke="#E2BC4B" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
+          <p><b>You cannot break Claude.</b> Every chat is independent. If something feels off, close it and start over.</p>
+        </div>
+      </div></div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">Treat Claude as a sharp <b>drafting partner</b> — never a private or infallible oracle.</span></div>
+      <div class="s-foot"><span class="sect">Framing</span><span>09 / 17</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 4 · CAUTION ═══ -->
+  <section class="slide light" id="s4">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>Foundations</b></span><span class="partmeter pm1"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="eyebrow" style="margin-top:24px">Caution</div>
+      <h2 class="title">What to watch for</h2>
+      <div class="body"><div class="caution-grid">
+        <div class="caut-card"><div class="caut-num">1</div><div><div class="caut-head">Hallucinations</div><div class="caut-body">Claude can invent facts, citations, and regulations that sound credible. Always verify anything that matters, especially numbers, dates, and compliance details.</div></div></div>
+        <div class="caut-card"><div class="caut-num">2</div><div><div class="caut-head">Source mixing</div><div class="caut-body">Give Claude two documents and it may blend them into one answer without telling you. Be specific about what comes from where, or work one source at a time.</div></div></div>
+        <div class="caut-card"><div class="caut-num">3</div><div><div class="caut-head">Sensitive data</div><div class="caut-body">Never paste student PII, personnel records, or confidential financials. If you wouldn't email it to a vendor, don't paste it into Claude.</div></div></div>
+        <div class="caut-card"><div class="caut-num">4</div><div><div class="caut-head">Use judgment</div><div class="caut-body">Claude is a co-pilot, not autopilot. You are still responsible for what goes out the door. Treat every output as a draft, not a final answer.</div></div></div>
+      </div></div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">Every output is a <b>draft</b>. You stay responsible for what goes out the door.</span></div>
+      <div class="s-foot"><span class="sect">Caution</span><span>10 / 17</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 5 · RCTF ═══ -->
+  <section class="slide light" id="s5">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>Prompting</b></span><span class="partmeter pm2"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="eyebrow" style="margin-top:24px">Framework · Remember This One</div>
+      <h2 class="title">RCTF: the recipe for prompts that <span class="em">work</span></h2>
+      <div class="body"><div class="rctf-wrap">
+        <div class="rctf-row">
+          <div class="rctf-cell act"><div class="rctf-L">R</div><div class="rctf-W">Role</div><div class="rctf-D">Who you want Claude to be</div></div>
+          <div class="rctf-cell act"><div class="rctf-L">C</div><div class="rctf-W">Context</div><div class="rctf-D">What Claude needs to know</div></div>
+          <div class="rctf-cell act"><div class="rctf-L">T</div><div class="rctf-W">Task</div><div class="rctf-D">Exactly what you want done</div></div>
+          <div class="rctf-cell act"><div class="rctf-L">F</div><div class="rctf-W">Format</div><div class="rctf-D">How the output should look</div></div>
+        </div>
+        <div class="rctf-tag">Hit all four and your output quality jumps immediately.<br><b>Skip one and Claude has to guess.</b></div>
+      </div></div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text"><b>Role, Context, Task, Format.</b> Hit all four and output quality jumps immediately.</span></div>
+      <div class="s-foot"><span class="sect">Framework</span><span>11 / 17</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 6 · RCTF EXAMPLE ═══ -->
+  <section class="slide light" id="s6">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>Prompting</b></span><span class="partmeter pm2"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="eyebrow" style="margin-top:24px">RCTF · Example</div>
+      <h2 class="title">Lazy prompt <span class="em">vs.</span> RCTF prompt</h2>
+      <div class="body"><div class="ex-grid">
+        <div class="ex-box ex-lazy">
+          <div class="ex-label">Lazy Prompt</div>
+          <div class="quote">"Here is our updated expense policy. Write an email to our principals about it."</div>
+          <div class="verdict">Claude writes a long, formal letter nobody will read — and guesses at everything else.</div>
+        </div>
+        <div class="ex-box ex-rctf">
+          <div class="ex-label">RCTF Prompt</div>
+          <div class="rctf-lines">
+            <div class="rctf-line"><span class="k">Role</span><span class="v">You are part of the EMAN central office writing to our school principals.</span></div>
+            <div class="rctf-line"><span class="k">Context</span><span class="v">📎 [expense-policy-update.pdf attached] — We are replacing email-based approvals with the emanApprove Portal. Threshold changes from $150 to $300. Effective July 1.</span></div>
+            <div class="rctf-line"><span class="k">Task</span><span class="v">Announce this change. They need to know what's different, when it starts, and what to do on day one.</span></div>
+            <div class="rctf-line"><span class="k">Format</span><span class="v">5 sentences max. Two bullet points for the key changes. One clear action item at the end. Warm but direct. No corporate language.</span></div>
+          </div>
+        </div>
+      </div></div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text"><b>Format</b> is the most skipped line — and it's what most controls whether the output is actually usable.</span></div>
+      <div class="s-foot"><span class="sect">RCTF · Example</span><span>12 / 17</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 7 · REVERSE PROMPTING ═══ -->
+  <section class="slide light" id="s7">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>Prompting</b></span><span class="partmeter pm2"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="eyebrow" style="margin-top:24px">Technique · High Leverage</div>
+      <h2 class="title">Reverse prompting</h2>
+      <div class="body"><div class="rev-wrap">
+        <div class="rev-quote">
+          <div class="qlabel">The magic phrase — tell Claude to ask <em>you</em> questions first</div>
+          <div class="qtext"><span class="qmark">"</span>Before you answer, ask me any clarifying questions you need to make your output as useful as possible.<span class="qmark">"</span></div>
+        </div>
+        <div class="rev-cols">
+          <div class="rev-c"><div class="rc-h">Why it works</div><div class="rc-b">The output is only as good as the input. Claude is better than you at writing prompts to itself, so let it.</div></div>
+          <div class="rev-c"><div class="rc-h">When to use it</div><div class="rc-b">Any task with constraints, dependencies, or decisions. Scheduling, planning, drafting strategy, hiring criteria.</div></div>
+        </div>
+      </div></div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">Let Claude <b>interview you first</b>. It writes better prompts to itself than you do.</span></div>
+      <div class="s-foot"><span class="sect">Technique</span><span>03 / 10</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 9 · DEMO · RESUME SCREENING ═══ -->
+  <section class="slide dark" id="s9">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>In Practice</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div style="margin-top:22px"><span class="demo-badge"><span class="pulse"></span>Live Demo</span></div>
+      <h2 class="demo-title">Screening resumes for our compliance hire</h2>
+      <div class="body"><div class="d8-grid">
+        <div class="d8-scenario">
+          <div class="sl">The Scenario</div>
+          <div class="stext">We are hiring for the <b>School Compliance &amp; Board Operations Manager</b> role. I have <b>30+ resumes</b> to screen, and I want Claude to find me the <b>top 8 candidates</b> without reading every resume myself.</div>
+        </div>
+        <div class="d8-build">
+          <div class="bl">What you'll see me build</div>
+          <div class="d8-step"><span class="n">01</span><span class="t">A new Project: "Compliance Hire Screening"</span></div>
+          <div class="d8-step"><span class="n">02</span><span class="t">Custom instructions for how to think about candidates</span></div>
+          <div class="d8-step"><span class="n">03</span><span class="t">Two reference files: the JD and a one-page evaluation guide</span></div>
+          <div class="d8-step"><span class="n">04</span><span class="t">A single prompt that scores and ranks every candidate</span></div>
+        </div>
+      </div></div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">One Project plus one prompt can screen <b>30+ resumes</b> and surface your top 8 in minutes.</span></div>
+      <div class="s-foot"><span class="sect">Demo · Resume Screening</span><span>05 / 10</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 8 · PROJECTS ═══ -->
+  <section class="slide light" id="s8">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>In Practice</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="eyebrow" style="margin-top:24px">Projects</div>
+      <h2 class="title">Persistent context for recurring work</h2>
+      <div class="body"><div class="proj-grid">
+        <div class="proj-left">
+          <div class="proj-intro">A Project is a workspace where Claude already knows who you are, what you're working on, and how you write. <b>Set it up once. Reuse it forever.</b></div>
+          <div class="proj-sub">What lives in a project</div>
+          <div class="proj-item">
+            <div class="proj-ico"><svg width="20" height="20" viewBox="0 0 24 24"><circle cx="7" cy="7" r="2.4" fill="none" stroke="#14213D" stroke-width="1.6"/><circle cx="17" cy="17" r="2.4" fill="none" stroke="#14213D" stroke-width="1.6"/><path d="M9.5 7H20M4 17h10.5" stroke="#14213D" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+            <div><div class="proj-it-h">Custom instructions</div><div class="proj-it-b">How Claude should behave inside this project</div></div>
+          </div>
+          <div class="proj-item">
+            <div class="proj-ico"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z" fill="none" stroke="#14213D" stroke-width="1.6" stroke-linejoin="round"/><path d="M14 3v4h4M9 13h6M9 17h6" stroke="#14213D" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+            <div><div class="proj-it-h">Uploaded files</div><div class="proj-it-b">Reference docs Claude can use — voice profile, brand guide, regs</div></div>
+          </div>
+          <div class="proj-item">
+            <div class="proj-ico"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" fill="none" stroke="#14213D" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+            <div><div class="proj-it-h">Conversations</div><div class="proj-it-b">All chats in this project share the same context</div></div>
+          </div>
+        </div>
+        <div class="proj-right">
+          <div class="pr-l">Example projects<br>you might build</div>
+          <div class="ex-pill"><span class="pdot"></span>Email Drafting</div>
+          <div class="ex-pill"><span class="pdot"></span>Board Materials Review</div>
+          <div class="ex-pill"><span class="pdot"></span>Compliance Q&amp;A</div>
+          <div class="ex-pill"><span class="pdot"></span>Vendor Communications</div>
+        </div>
+      </div></div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">Set up a Project <b>once</b> — then reuse its context, files, and voice forever.</span></div>
+      <div class="s-foot"><span class="sect">Projects</span><span>04 / 10</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 10 · VOICE PROFILE ═══ -->
+  <section class="slide light" id="s10">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>In Practice</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div style="margin-top:18px"><span class="demo-badge"><span class="pulse"></span>Live Demo · Step 1 of 2</span></div>
+      <h2 class="title" style="margin-top:14px">Build your <span class="em">Email Project</span></h2>
+      <p class="voice-intro">We'll create one Project where Claude already knows your voice and how you write. Set it up once, and <b>every reply you draft inside it sounds like you.</b></p>
+      <div class="body"><div class="voice-grid">
+        <div>
+          <div class="vs-sub">How we build it</div>
+          <div class="v-step"><span class="vn">1</span><div><div class="vh">Create a new Project</div><div class="vb">Name it "Email Drafting." This is your reusable workspace.</div></div></div>
+          <div class="v-step"><span class="vn">2</span><div><div class="vh">Paste in the custom instructions</div><div class="vb">The voice profile below — it teaches Claude how you write.</div></div></div>
+          <div class="voice-cta">
+            <button class="copy-btn navy" onclick="openModal('voice')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>
+              View &amp; copy the voice profile template
+            </button>
+          </div>
+        </div>
+        <div class="rules-box">
+          <div class="vs-sub">Inside the instructions · Sample rules</div>
+          <div class="rule"><span class="rdot"></span><span class="rt">Never use em-dashes</span></div>
+          <div class="rule"><span class="rdot"></span><span class="rt">Never use semicolons</span></div>
+          <div class="rule"><span class="rdot"></span><span class="rt">No "I hope this email finds you well"</span></div>
+          <div class="rule"><span class="rdot"></span><span class="rt">No emojis, no ALL CAPS</span></div>
+          <div class="rule"><span class="rdot"></span><span class="rt">Sign off "Best, [Your Name]" or no sign-off</span></div>
+          <div class="rule"><span class="rdot"></span><span class="rt">Default to short. Under 4 sentences when possible</span></div>
+        </div>
+      </div></div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">Build the project <b>once</b> with your voice profile — every draft inside it already sounds like you.</span></div>
+      <div class="s-foot"><span class="sect">Demo · Build the Project</span><span>06 / 10</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 11 · DEMO · EMAIL PROJECT ═══ -->
+  <section class="slide dark" id="s11">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>In Practice</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div style="margin-top:18px"><span class="demo-badge"><span class="pulse"></span>Live Demo · Step 2 of 2 · Follow Along</span></div>
+      <h2 class="demo-title">Now let's run it — <span class="em">together</span></h2>
+      <p class="d11-sub">Same email, two ways: once in a <b>blank chat</b>, once <b>inside the project we just built</b>. Copy the email and both prompts and follow along.</p>
+      <div class="body"><div class="d11-mailgrid">
+        <div class="mailcard">
+          <div class="mailcard-bar">
+            <span class="mc-tag">The Email · Everyone Uses This</span>
+            <button class="copy-btn navy mini" onclick="copyKey('email', this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Copy
+            </button>
+          </div>
+          <div class="mailcard-meta">
+            <div><span class="lbl">From:</span> David Chen &lt;dchen@riversidecharter.org&gt;</div>
+            <div><span class="lbl">Subject:</span> Exploring management partners</div>
+          </div>
+          <div class="mailcard-body">
+            <p>Hi,</p>
+            <p>I hope this finds you well. I'm David Chen, Board Chair at Riverside Charter Academy in Ann Arbor. Marcus Reed (we serve on a foundation board together) suggested I reach out.</p>
+            <p>Our board has been having early conversations about whether our current management structure is still serving us well. We are not in any rush, but we want to start learning about partners who might be a fit if we eventually decide to make a change.</p>
+            <p>Would you have 30 minutes for a call in the next couple of weeks? Happy to work around your schedule.</p>
+            <p>Best,<br>David Chen<br>Board Chair, Riverside Charter Academy</p>
+          </div>
+        </div>
+        <div class="prompts-col">
+          <div class="pcard p1">
+            <div class="pc-head"><span class="pc-num">Round 01 · No context</span>
+              <button class="copy-btn outline-d mini" onclick="copyKey('round1', this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Copy
+              </button>
+            </div>
+            <div class="pc-prompt">"Here is an email I just received. Write a reply."</div>
+          </div>
+          <div class="pcard p2">
+            <div class="pc-head"><span class="pc-num">Round 02 · Inside your project</span>
+              <button class="copy-btn gold mini" onclick="copyKey('round2', this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Copy
+              </button>
+            </div>
+            <div class="pc-prompt">"Draft a reply to this email."</div>
+          </div>
+          <div class="d11-note">Round 2 runs inside the <b>Email Project we just built</b>. Same email, same person — the only thing that changed is the context.</div>
+        </div>
+      </div></div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">Same email, same person — only the <b>context</b> changed. That is the whole game.</span></div>
+      <div class="s-foot"><span class="sect">Demo · Email Project</span><span>07 / 10</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 12 · BOARD SAFETY NET ═══ -->
+  <section class="slide light" id="s12">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>One New Habit</b></span><span class="partmeter pm4"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="eyebrow" style="margin-top:24px">One New Habit</div>
+      <h2 class="title" style="font-size:40px">The safety-check habit</h2>
+      <div class="body"><div class="net-wrap">
+        <div class="net-statement">Before anything important leaves EMAN, <span class="em">run it through a safety check.</span></div>
+        <div class="net-contexts">
+          <span class="ncx-l">Especially before</span>
+          <span class="ncx">Mass communications</span>
+          <span class="ncx">External parties</span>
+          <span class="ncx">Authorizer submissions</span>
+          <span class="ncx">Compliance filings</span>
+          <span class="ncx">Board materials</span>
+        </div>
+        <div class="net-prompt">
+          <div class="npl">The Prompt</div>
+          <div class="npt">"Review this for grammar, typos, mistakes, weak phrasing, and anything unclear or off. Be direct."</div>
+        </div>
+        <div class="net-payoff"><b>Two minutes of effort.</b>&nbsp;&nbsp;Catches the mistakes before anyone else does.</div>
+      </div></div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">A <b>two-minute safety check</b> catches mistakes before they ever leave the building.</span></div>
+      <div class="s-foot"><span class="sect">One New Habit</span><span>08 / 10</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 13 · JUDGMENT · THE GOLDEN RULE ═══ -->
+  <section class="slide dark" id="s13">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>The Golden Rule</b></span><span class="partmeter pm4"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="eyebrow" style="margin-top:24px">Use Your Judgment</div>
+      <h2 class="title">Claude drafts. <span class="em">You decide.</span></h2>
+      <div class="body"><div class="jdg-grid">
+        <div class="jdg-left">
+          <p class="jdg-lead">Claude hands you a <b>strong first draft</b> — not a finished, final answer. It can sound completely sure and still be wrong.</p>
+          <div class="jdg-never">
+            <span class="jdg-never-label">Never</span>
+            <span class="jdg-never-txt">paste an output straight into an email and hit send.</span>
+          </div>
+        </div>
+        <div class="jdg-right">
+          <div class="jdg-sub">Before anything goes out</div>
+          <div class="jdg-step"><span class="jn">1</span><p><b>Read it critically.</b> Does the logic actually hold up?</p></div>
+          <div class="jdg-step"><span class="jn">2</span><p><b>Validate every source.</b> Can you trace each claim and number back to where it came from?</p></div>
+          <div class="jdg-step"><span class="jn">3</span><p><b>Don't forget your audience.</b> Easy to digest, and only the details they care about — the right KPIs to the right person.</p></div>
+          <div class="jdg-step"><span class="jn">4</span><p><b>Tweak it</b> until it says what you mean and sounds like you.</p></div>
+        </div>
+      </div></div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">You own every word that leaves your desk. <b>Review it, verify it, and make it yours.</b></span></div>
+      <div class="s-foot"><span class="sect">The Golden Rule</span><span>09 / 10</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 14 · ACTION ITEMS ═══ -->
+  <section class="slide dark" id="s14">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>Take Action</b></span><span class="partmeter pm4"><i></i><i></i><i></i><i></i></span></div></div>
+      <h2 class="title" style="margin-top:18px">Your action items</h2>
+      <div class="body"><div class="actions">
+        <div class="act-row done"><span class="act-n">01</span><span class="act-t">Built a <b>project</b> together today</span><span class="act-done">✓ done today</span></div>
+        <div class="act-row"><span class="act-n">02</span><span class="act-t">Set up <b>one project</b> for something you do on repeat</span></div>
+        <div class="act-row"><span class="act-n">03</span><span class="act-t">Use the <b>"audit yourself"</b> prompt on your next important draft</span></div>
+        <div class="act-row"><span class="act-n">04</span><span class="act-t">Keep a running list of the <b>prompts that work</b> for you</span></div>
+      </div>
+      <div class="invest-box">
+        <div class="invest-label">◆ &nbsp;Our investment in you</div>
+        <div class="invest-head">We're covering Claude for <span class="ih-em">anyone</span> who wants it</div>
+        <div class="invest-body">We're a small team, so this is a real investment — and we're glad to make it. If it helps you learn something new, write a little sharper, or get some time back in your day, that's a win for all of us. <b>Want a seat? It's yours. Just say the word.</b></div>
+      </div>
+      </div>
+      <div class="s-foot"><span class="sect">Action Items</span><span>10 / 10</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 15 · COLOPHON · MADE WITH CLAUDE ═══ -->
+  <section class="slide dark" id="s15">
+    <div class="arc c1"></div><div class="arc c2"></div><div class="arc c3"></div><div class="spark"></div>
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Colophon · <b>One Last Thing</b></span><span class="partmeter pm4"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="col-mid">
+        <div class="col-eyebrow">One last thing</div>
+        <h2 class="col-statement">Claude built every slide you just saw.</h2>
+        <p class="col-sub">I directed it, pushed back when it was off, and made every call — but the design, the copy, the code, the talking points, and the demo guide were all Claude. What would have taken two days took a few hours. <b>That's what working with AI actually looks like.</b> And now you know how to do it too.</p>
+        <div class="col-foot" style="margin-top:32px">
+          <span class="eman-lockup" style="color:rgba(255,255,255,.92)">
+            <span class="eman-mark eman-logo-img" role="img" aria-label="EMAN" style="height:26px"></span>
+          </span>
+          <span class="ft">Made with <b>Claude</b> &nbsp;·&nbsp; EMAN Professional Development &nbsp;·&nbsp; June 2026</span>
+        </div>
+      </div>
+      <div class="s-foot"><span class="sect">Colophon</span><span>17 / 17</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 16 · WHAT IS GENERATIVE AI ═══ -->
+  <section class="slide light" id="s16">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>The Basics</b></span><span class="partmeter pm1"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="eyebrow" style="margin-top:24px">Start Here</div>
+      <h2 class="title">So… what <span class="em">is</span> this thing?</h2>
+      <div class="body">
+        <p class="ai-lead">Tools like Claude are <b>generative AI</b> — you type a request in plain English, and it writes back. Think of it as an exceptionally well-read assistant that can draft, explain, summarize, and think through problems with you. <b>No coding, no special skills. You just talk to it.</b></p>
+        <div class="ai-cards">
+          <div class="ai-card">
+            <div class="ai-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#178C7D" stroke-width="1.8"><path d="M4 5h16v11H9l-5 4z" stroke-linejoin="round"/></svg></div>
+            <div class="ai-h">You ask in plain words</div>
+            <div class="ai-b">Type a question or request the same way you'd message a colleague.</div>
+          </div>
+          <div class="ai-card">
+            <div class="ai-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#178C7D" stroke-width="1.8"><path d="M12 2l2.4 6.8L21 11l-6.6 2.2L12 20l-2.4-6.8L3 11l6.6-2.2z" stroke-linejoin="round"/></svg></div>
+            <div class="ai-h">It writes back in seconds</div>
+            <div class="ai-b">A draft, a summary, an answer — ready for you to react to and refine.</div>
+          </div>
+          <div class="ai-card">
+            <div class="ai-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#178C7D" stroke-width="1.8"><path d="M4 9a8 8 0 0114-5l2 2M20 15a8 8 0 01-14 5l-2-2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="ai-h">You go back and forth</div>
+            <div class="ai-b">Tell it what to change. It adjusts. You stay in control the whole time.</div>
+          </div>
+        </div>
+      </div>
+      <div class="s-foot"><span class="sect">Part 1 · The Basics</span><span>03 / 19</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 17 · THE LANDSCAPE ═══ -->
+  <section class="slide light" id="s17">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>The Basics</b></span><span class="partmeter pm1"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="eyebrow" style="margin-top:24px">The Landscape</div>
+      <h2 class="title">The big names — and why we chose <span class="em">Claude</span></h2>
+      <div class="body">
+        <table class="cmp">
+          <thead>
+            <tr>
+              <th class="rowlabel"></th>
+              <th><div class="tool-h"><span class="brand-ico bi-chatgpt"><svg viewBox="0 0 24 24"><path d="M12 3l7.8 4.5v9L12 21l-7.8-4.5v-9z" fill="none" stroke="#fff" stroke-width="1.7" stroke-linejoin="round"/><circle cx="12" cy="12" r="2.2" fill="#fff"/></svg></span><span class="tn">ChatGPT</span></div></th>
+              <th class="claude-col"><div class="tool-h"><span class="brand-ico bi-claude"><svg viewBox="0 0 24 24"><g stroke="#fff" stroke-width="1.7" stroke-linecap="round"><line x1="12" y1="3.2" x2="12" y2="20.8"/><line x1="3.2" y1="12" x2="20.8" y2="12"/><line x1="5.8" y1="5.8" x2="18.2" y2="18.2"/><line x1="18.2" y1="5.8" x2="5.8" y2="18.2"/></g></svg></span><span class="tn">Claude</span></div></th>
+              <th><div class="tool-h"><span class="brand-ico bi-gemini"><svg viewBox="0 0 24 24"><path d="M12 2C12 7.5 16.5 12 22 12C16.5 12 12 16.5 12 22C12 16.5 7.5 12 2 12C7.5 12 12 7.5 12 2Z" fill="#fff"/></svg></span><span class="tn">Gemini</span></div></th>
+              <th><div class="tool-h"><span class="brand-ico bi-copilot"><svg viewBox="0 0 24 24"><path d="M5 13a6 6 0 016-6 5 5 0 015 5" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><path d="M19 11a6 6 0 01-6 6 5 5 0 01-5-5" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></span><span class="tn">Copilot</span></div></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="rowlabel">Made by</td><td>OpenAI</td><td class="claude-col toolname">Anthropic</td><td>Google</td><td>Microsoft</td></tr>
+            <tr><td class="rowlabel">Best known for</td><td>The most recognized name</td><td class="claude-col">Writing, long documents, careful reasoning</td><td>Built into Google Workspace</td><td>Built into Microsoft Office</td></tr>
+            <tr><td class="rowlabel">Free to start</td><td>Yes</td><td class="claude-col">Yes</td><td>Yes</td><td>With Microsoft 365</td></tr>
+          </tbody>
+        </table>
+        <p class="cmp-note">They're all capable. <b>We use Claude because we find it the most effective across the widest range of tasks — and the most user-friendly,</b> which matters most when you're just getting started.</p>
+      </div>
+      <div class="s-foot"><span class="sect">Part 1 · The Basics</span><span>04 / 17</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 18 · INSTALL CLAUDE ═══ -->
+  <section class="slide light" id="s18">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>Setup</b></span><span class="partmeter pm1"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="eyebrow" style="margin-top:24px">Let's All Get Set Up</div>
+      <h2 class="title">Getting Claude on your computer</h2>
+      <div class="body"><div class="inst-grid">
+        <div>
+          <div class="vs-sub" style="color:var(--accent-deep)">Four steps · about two minutes</div>
+          <div class="v-step"><span class="vn">1</span><div><div class="vh">Open your web browser</div><div class="vb">Go to the address on the right.</div></div></div>
+          <div class="v-step"><span class="vn">2</span><div><div class="vh">Download the app</div><div class="vb">Choose Mac or Windows — it picks the right one for you.</div></div></div>
+          <div class="v-step"><span class="vn">3</span><div><div class="vh">Open it and sign in</div><div class="vb">Create a free account with your work email if you don't have one.</div></div></div>
+          <div class="v-step"><span class="vn">4</span><div><div class="vh">That's it — you're in</div><div class="vb">No setup, no settings. You're ready to go.</div></div></div>
+        </div>
+        <div class="inst-cta">
+          <div class="ic-l">Go to this address</div>
+          <div class="ic-url"><b>claude.ai</b>/download</div>
+          <div class="ic-sub">Works on Mac and Windows.<br>The desktop app is the easiest way to use it day to day.</div>
+        </div>
+      </div></div>
+      <div class="s-foot"><span class="sect">Part 1 · Setup</span><span>05 / 17</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 19 · HOOK (live resume demo) ═══ -->
+  <section class="slide dark" id="s19">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>See It Live</b></span><span class="partmeter pm1"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="hook-mid">
+        <span class="hook-badge"><span class="hb"></span>Live</span>
+        <h1 class="hook-title">Finding our next <span class="em">great hire</span></h1>
+        <p class="hook-sub">30+ resumes &nbsp;→&nbsp; the strongest 8 &nbsp;→&nbsp; in a few minutes</p>
+      </div>
+      <div class="s-foot"><span class="sect">Part 1 · See It Live</span><span>06 / 17</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 20 · DEMO A · IT WRITES ═══ -->
+  <section class="slide dark" id="s20">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>Watch</b></span><span class="partmeter pm2"><i></i><i></i><i></i><i></i></span></div></div>
+      <div style="margin-top:22px"><span class="demo-badge"><span class="pulse"></span>Watch · Demo 1 of 2</span></div>
+      <h2 class="demo-title">Rough notes <span class="em">→</span> a real email</h2>
+      <div class="body"><div class="xgrid">
+        <div class="xleft">
+          <p class="scn">Some quick, messy notes jotted down about an upcoming staff training. Watch Claude turn them into something you could actually send to your principals.</p>
+          <a class="dl-btn" href="PD-Day-Rough-Notes.docx" download style="background:var(--gold)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke-linecap="round" stroke-linejoin="round"/></svg>Download the rough notes</a>
+        </div>
+        <div class="xright">
+          <div class="promptbox">
+            <div class="pb-attach"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.5l-9 9a4 4 0 01-6-6l9-9a3 3 0 014 4l-9 9" stroke-linecap="round" stroke-linejoin="round"/></svg>Attach the notes, then paste:</div>
+            <div class="pb-head"><span class="pb-label">The Prompt</span>
+              <button class="copy-btn gold mini" onclick="copyKey('pDemoA', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Copy</button>
+            </div>
+            <div class="pb-text">"Here are my <b>rough notes</b> about an upcoming staff PD day. Turn them into a warm, clear email to our principals — under 5 sentences, with the key details easy to spot."</div>
+          </div>
+        </div>
+      </div></div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">A blank page becomes a <b>finished first draft</b> in seconds.</span></div>
+      <div class="s-foot"><span class="sect">Demo · It Writes</span><span>07 / 17</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 21 · DEMO B · IT THINKS WITH YOU ═══ -->
+  <section class="slide dark" id="s21">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>Watch</b></span><span class="partmeter pm2"><i></i><i></i><i></i><i></i></span></div></div>
+      <div style="margin-top:22px"><span class="demo-badge"><span class="pulse"></span>Watch · Demo 2 of 2</span></div>
+      <h2 class="demo-title">Think through a <span class="em">tough conversation</span></h2>
+      <div class="body"><div class="xgrid">
+        <div class="xleft">
+          <p class="scn">It's not just a writing tool — it's a thinking partner. Watch it help work through a conversation every school leader dreads <b>before</b> writing a single word.</p>
+        </div>
+        <div class="xright">
+          <div class="promptbox">
+            <div class="pb-head"><span class="pb-label">The Prompt</span>
+              <button class="copy-btn gold mini" onclick="copyKey('pDemoB', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Copy</button>
+            </div>
+            <div class="pb-text">"I need to tell a parent their child is moving to a different classroom mid-year. They'll likely be upset. Before drafting anything, help me think it through: what's the parent probably worried about, what tone should I take, and what should I avoid? Then give me a short way to open the conversation."</div>
+          </div>
+        </div>
+      </div></div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">Claude is a <b>thinking partner</b>, not just a writer — use it before the hard stuff.</span></div>
+      <div class="s-foot"><span class="sect">Demo · It Thinks</span><span>08 / 17</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 22 · EXERCISE C · KNOWS YOUR WORLD ═══ -->
+  <section class="slide light" id="s22">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>Try It Together</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div style="margin-top:22px"><span class="hands-badge"><span class="hb"></span>Hands-on · Exercise 1</span></div>
+      <h2 class="title" style="margin-top:14px">Ask it about <span class="em">our world</span></h2>
+      <div class="body"><div class="xgrid">
+        <div class="xleft">
+          <p class="scn">Let's all run the same prompt and compare. This shows Claude isn't a toy — it engages with our actual field.</p>
+          <div class="xlook"><span class="xl-k">What to notice</span><span class="xl-t">It answers fluently about charter management. <b>It can also be confidently wrong</b> — so we'll sanity-check what it says. More on that later.</span></div>
+        </div>
+        <div class="xright">
+          <div class="promptbox">
+            <div class="pb-head"><span class="pb-label">Copy &amp; paste this</span>
+              <button class="copy-btn gold mini" onclick="copyKey('pExC', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Copy</button>
+            </div>
+            <div class="pb-text">"Who are the largest charter school management organizations operating in <b>Michigan</b>? Give me a short list with one sentence on each, and note which focus on K–8 versus high school."</div>
+          </div>
+        </div>
+      </div></div>
+      <div class="s-foot"><span class="sect">Exercise · Knows Your World</span><span>13 / 17</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 23 · EXERCISE D · SAVES YOU HOURS ═══ -->
+  <section class="slide light" id="s23">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>Try It Together</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div style="margin-top:22px"><span class="hands-badge"><span class="hb"></span>Hands-on · Exercise 2</span></div>
+      <h2 class="title" style="margin-top:14px">Make a long report <span class="em">short</span></h2>
+      <div class="body"><div class="xgrid">
+        <div class="xleft">
+          <p class="scn">Download the sample report, drop it into Claude, and watch three dense pages become five things you can act on.</p>
+          <a class="dl-btn" href="EMAN-Authorizer-Review-RPA-2026.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke-linecap="round" stroke-linejoin="round"/></svg>Download the sample report</a>
+          <div class="xlook"><span class="xl-k">What to notice</span><span class="xl-t">Nobody wants to read three pages of compliance findings. <b>You get the gist in seconds</b> — then decide what matters.</span></div>
+        </div>
+        <div class="xright">
+          <div class="promptbox">
+            <div class="pb-attach"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.5l-9 9a4 4 0 01-6-6l9-9a3 3 0 014 4l-9 9" stroke-linecap="round" stroke-linejoin="round"/></svg>Attach the report, then paste:</div>
+            <div class="pb-head"><span class="pb-label">Copy &amp; paste this</span>
+              <button class="copy-btn gold mini" onclick="copyKey('pExD', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Copy</button>
+            </div>
+            <div class="pb-text">"Summarize this report in <b>5 bullet points</b> a principal needs to act on. Then list every deadline mentioned, with its date."</div>
+          </div>
+        </div>
+      </div></div>
+      <div class="s-foot"><span class="sect">Exercise · Saves You Hours</span><span>14 / 17</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 24 · EXERCISE E · CATCHES MISTAKES ═══ -->
+  <section class="slide light" id="s24">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>Try It Together</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div style="margin-top:22px"><span class="hands-badge"><span class="hb"></span>Hands-on · Exercise 3</span></div>
+      <h2 class="title" style="margin-top:14px">Catch mistakes <span class="em">before</span> they go out</h2>
+      <div class="body"><div class="xgrid">
+        <div class="xleft">
+          <p class="scn">A principal dashed off a memo for the board — and it has a few problems. Let's have Claude find them before it ever gets sent.</p>
+          <a class="dl-btn" href="Oakview-Science-Fair-Summary-April2026.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke-linecap="round" stroke-linejoin="round"/></svg>Download the sample memo</a>
+          <div class="xlook"><span class="xl-k">What to notice</span><span class="xl-t">It catches the typo, the date that doesn't add up, and the vague line — <b>and explains why</b>, then hands you a clean version.</span></div>
+        </div>
+        <div class="xright">
+          <div class="promptbox">
+            <div class="pb-attach"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.5l-9 9a4 4 0 01-6-6l9-9a3 3 0 014 4l-9 9" stroke-linecap="round" stroke-linejoin="round"/></svg>Attach the memo, then paste:</div>
+            <div class="pb-head"><span class="pb-label">Copy &amp; paste this</span>
+              <button class="copy-btn gold mini" onclick="copyKey('pExE', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Copy</button>
+            </div>
+            <div class="pb-text">"This memo is going to our board. Find any typos, grammar mistakes, unclear sentences, or anything that contradicts itself. List what you'd fix and why, then give me a <b>clean rewritten version</b>."</div>
+          </div>
+        </div>
+      </div></div>
+      <div class="s-foot"><span class="sect">Exercise · Catches Mistakes</span><span>15 / 17</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 25 · PART 1 ACTION ITEMS ═══ -->
+  <section class="slide dark" id="s25">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 1 · <b>Take Action</b></span><span class="partmeter pm4"><i></i><i></i><i></i><i></i></span></div></div>
+      <h2 class="title" style="margin-top:18px">Before Part 2</h2>
+      <div class="body"><div class="actions">
+        <div class="act-row done"><span class="act-n">01</span><span class="act-t">Install Claude and <b>sign in</b></span><span class="act-done">✓ done today</span></div>
+        <div class="act-row"><span class="act-n">02</span><span class="act-t">Re-run <b>one of today's exercises</b> on your own</span></div>
+        <div class="act-row"><span class="act-n">03</span><span class="act-t">Use it once this week for something real — an email, a summary, anything</span></div>
+        <div class="act-row"><span class="act-n">04</span><span class="act-t">Bring a <b>real task or question</b> to Part 2</span></div>
+      </div>
+      <div class="closer">No homework, no pressure. Just open it once and get a feel for it. <b>In Part 2 we go deeper</b> — projects, your writing voice, and tools you'll reuse every week.</div>
+      </div>
+      <div class="s-foot"><span class="sect">Part 1 · Take Action</span><span>16 / 17</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 26 · PART 2 DIVIDER ═══ -->
+  <section class="slide dark" id="s26">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><span class="head-right" style="color:rgba(255,255,255,.55)">Professional Development</span></div>
+      <div class="pd-mid">
+        <div class="pd-kick">Part 2 of 2 · Going Deeper</div>
+        <h1 class="pd-title">Make it <span class="em">yours</span></h1>
+        <p class="pd-sub">Now that you've seen what it can do, let's go deeper — sharper techniques for better answers, and Projects you set up once and reuse every week.</p>
+        <div class="pd-foot" style="margin-top:30px"><span class="dot"></span><span class="ft">Welcome back · Part 2</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 27 · AGENDA · PART 2 ═══ -->
+  <section class="slide light" id="s27">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>The Roadmap</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="eyebrow" style="margin-top:24px">Part 2 of 2 · Going Deeper</div>
+      <h2 class="title">What we'll cover today</h2>
+      <div class="body"><div class="agenda" style="margin-top:20px">
+        <div class="ag-row"><span class="ag-num">01</span><span class="ag-title">Everything you can feed Claude</span></div>
+        <div class="ag-row"><span class="ag-num">02</span><span class="ag-title">Getting better answers — a few key techniques</span></div>
+        <div class="ag-row"><span class="ag-num">03</span><span class="ag-title">Scheduling 400 students in minutes <span class="ag-tag">Demo</span></span></div>
+        <div class="ag-row"><span class="ag-num">04</span><span class="ag-title">Projects — set Claude up once, reuse forever</span></div>
+        <div class="ag-row"><span class="ag-num">05</span><span class="ag-title">The school Announcement Drafter <span class="ag-tag">Demo</span></span></div>
+        <div class="ag-row"><span class="ag-num">06</span><span class="ag-title">Your action items</span></div>
+      </div></div>
+      <div class="s-foot"><span class="sect">Part 2 · Roadmap</span><span>02 / 10</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 28 · RECAP + OPEN FLOOR ═══ -->
+  <section class="slide light" id="s28">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>Welcome Back</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="eyebrow" style="margin-top:24px">Before We Dive In</div>
+      <h2 class="title">Welcome back — <span class="em">how'd it go?</span></h2>
+      <div class="body"><div class="recap-grid">
+        <div>
+          <div class="recap-sub">Last time, in Part 1</div>
+          <div class="recap-item"><span class="rk"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="#CC6230" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="rt">What Claude is — and the tools out there</span></div>
+          <div class="recap-item"><span class="rk"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="#CC6230" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="rt"><b>RCTF</b> — the recipe for prompts that work</span></div>
+          <div class="recap-item"><span class="rk"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="#CC6230" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="rt">Writing, summarizing, and catching mistakes</span></div>
+          <div class="recap-item"><span class="rk"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="#CC6230" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="rt">Using <b>judgment</b> — you own the output</span></div>
+        </div>
+        <div class="floor-card">
+          <div class="floor-label">◆ &nbsp;Open Floor</div>
+          <div class="floor-q">Who's used Claude <span class="em">since last time?</span></div>
+          <div class="floor-sub"><b>Share a win — or a flop.</b> What did you try? What surprised you? Where did it fall short? No wrong answers.</div>
+        </div>
+      </div></div>
+      <div class="s-foot"><span class="sect">Part 2 · Welcome Back</span><span>01 / 08</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 29 · SELF-AUDIT / ROLE PROMPTING ═══ -->
+  <section class="slide light" id="s29">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>Technique</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="eyebrow" style="margin-top:24px">Technique · Catch Your Own Mistakes</div>
+      <h2 class="title">Make Claude <span class="em">audit itself</span></h2>
+      <div class="body"><div class="rev-wrap">
+        <div class="rev-quote">
+          <div class="qlabel">Give it a role, then tell it to check its own work</div>
+          <div class="qtext"><span class="qmark">"</span>You are an expert-level detail catcher. Before you finalize, review your own draft for errors, weak spots, and anything unclear or unsupported — then fix them and tell me what you changed.<span class="qmark">"</span></div>
+          <button class="copy-btn navy" onclick="copyKey('pAudit', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Copy the prompt</button>
+        </div>
+        <div class="rev-cols">
+          <div class="rev-c"><div class="rc-h">Why it works</div><div class="rc-b">A role sharpens the lens, and a second pass catches what the first draft missed. You get a cleaner draft before you even start reading.</div></div>
+          <div class="rev-c"><div class="rc-h">When to use it</div><div class="rc-b">Anything that matters — board docs, parent letters, anything going out the door. Stack it with the safety check from Part 1.</div></div>
+        </div>
+      </div></div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">Give Claude a <b>role</b> and a <b>second pass</b>. It catches its own mistakes before you have to.</span></div>
+      <div class="s-foot"><span class="sect">Part 2 · Technique</span><span>04 / 08</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 32 · BRING YOUR STUFF ═══ -->
+  <section class="slide light" id="s32">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>Capability</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="eyebrow" style="margin-top:24px">It's Not Just a Chat Box</div>
+      <h2 class="title">Bring it your <span class="em">actual</span> work</h2>
+      <div class="body"><div class="io-grid">
+        <div class="io-tile"><div class="io-ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#178C7D" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg></div><div><div class="io-h">Type or paste text</div><div class="io-b">Notes, a rough draft, a question</div></div></div>
+        <div class="io-tile"><div class="io-ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#178C7D" stroke-width="1.8" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg></div><div><div class="io-h">Word documents</div><div class="io-b">Letters, reports, memos</div></div></div>
+        <div class="io-tile"><div class="io-ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#178C7D" stroke-width="1.8" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6z"/><path d="M9 13h6M9 17h4"/></svg></div><div><div class="io-h">PDFs</div><div class="io-b">Contracts, reports, forms</div></div></div>
+        <div class="io-tile"><div class="io-ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#178C7D" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></div><div><div class="io-h">Spreadsheets</div><div class="io-b">Data, lists, survey results</div></div></div>
+        <div class="io-tile"><div class="io-ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#178C7D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div><div><div class="io-h">Screenshots</div><div class="io-b">An error, a webpage, a chart</div></div></div>
+        <div class="io-tile"><div class="io-ico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#178C7D" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div><div><div class="io-h">Photos</div><div class="io-b">A flyer, a whiteboard, a handwritten note</div></div></div>
+      </div></div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">If it's on your <b>screen</b> or your <b>desk</b>, you can hand it to Claude.</span></div>
+      <div class="s-foot"><span class="sect">Part 2 · Capability</span><span>04 / 12</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 33 · DON'T STOP AT THE FIRST ANSWER ═══ -->
+  <section class="slide light" id="s33">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>Technique</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="eyebrow" style="margin-top:24px">Technique · Keep Going</div>
+      <h2 class="title">Don't stop at the <span class="em">first answer</span></h2>
+      <div class="body"><div class="steer-grid">
+        <div class="steer-lead">Claude's first answer is a <b>starting point</b>, not the final word. It remembers the whole conversation — so just keep steering until it's right.</div>
+        <div class="steer-card">
+          <div class="steer-label">◆ &nbsp;Just say things like…</div>
+          <div class="steer-item"><span class="sq">›</span><span class="st">"Make it shorter."</span></div>
+          <div class="steer-item"><span class="sq">›</span><span class="st">"More formal — it's going to the board."</span></div>
+          <div class="steer-item"><span class="sq">›</span><span class="st">"Give me three versions."</span></div>
+          <div class="steer-item"><span class="sq">›</span><span class="st">"You missed the deadline — add it."</span></div>
+          <div class="steer-item"><span class="sq">›</span><span class="st">"Explain it like I'm not a finance person."</span></div>
+          <div class="steer-item"><span class="sq">›</span><span class="st">"Now turn it into an email."</span></div>
+        </div>
+      </div></div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">The magic isn't the first answer — it's the <b>back-and-forth</b>.</span></div>
+      <div class="s-foot"><span class="sect">Part 2 · Technique</span><span>06 / 12</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 34 · SHOW IT WHAT GOOD LOOKS LIKE ═══ -->
+  <section class="slide light" id="s34">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>Technique</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div class="eyebrow" style="margin-top:24px">Technique · Show, Don't Tell</div>
+      <h2 class="title">Show it what <span class="em">"good"</span> looks like</h2>
+      <div class="body"><div class="xgrid">
+        <div class="xleft">
+          <p class="scn">Instead of <b>describing</b> what you want, <b>show it</b>. Paste a few examples and Claude matches the pattern — your format, your tone, your length.</p>
+          <div class="good-box"><span class="gk">Great for</span><span class="gt">Anything you write in a <b>consistent style</b> — board updates, parent emails, meeting recaps, one-pagers.</span></div>
+        </div>
+        <div class="xright">
+          <div class="promptbox">
+            <div class="pb-attach"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.5l-9 9a4 4 0 01-6-6l9-9a3 3 0 014 4l-9 9" stroke-linecap="round" stroke-linejoin="round"/></svg>Paste or attach your examples, then:</div>
+            <div class="pb-head"><span class="pb-label">The Prompt</span>
+              <button class="copy-btn gold mini" onclick="copyKey('pExamples', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Copy</button>
+            </div>
+            <div class="pb-text">"Here are <b>three board updates</b> I was happy with. Write this month's the same way — same structure, same tone, same length."</div>
+          </div>
+        </div>
+      </div></div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text"><b>Examples beat instructions.</b> Show, don't tell.</span></div>
+      <div class="s-foot"><span class="sect">Part 2 · Technique</span><span>08 / 12</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 31 · DEMO · TESTING SCHEDULE ═══ -->
+  <section class="slide dark" id="s31">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>In Practice</b></span><span class="partmeter pm3"><i></i><i></i><i></i><i></i></span></div></div>
+      <div style="margin-top:22px"><span class="demo-badge"><span class="pulse"></span>Live Demo · From Survey to Schedule</span></div>
+      <h2 class="demo-title">400 students. 100 seats. <span class="em">One week.</span></h2>
+      <div class="body"><div class="xgrid">
+        <div class="xleft">
+          <p class="scn">Our testing center seats <b>50</b>, with two 3-hour sessions a day, Monday to Friday. We need to test <b>~400 students</b> — and they travel from across the state, so many can only come on certain days. So we sent a survey.</p>
+          <a class="dl-btn" href="EMAN-Testing-Availability-Survey.xlsx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke-linecap="round" stroke-linejoin="round"/></svg>Download the survey · 400 responses</a>
+        </div>
+        <div class="xright">
+          <div class="promptbox">
+            <div class="pb-attach"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.5l-9 9a4 4 0 01-6-6l9-9a3 3 0 014 4l-9 9" stroke-linecap="round" stroke-linejoin="round"/></svg>Attach the survey, then paste:</div>
+            <div class="pb-head"><span class="pb-label">The Prompt</span>
+              <button class="copy-btn gold mini" onclick="copyKey('pDemoSchedule', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Copy</button>
+            </div>
+            <div class="pb-text">"Build a testing schedule from this survey. Center seats <b>50 per session</b>, two 3-hour sessions a day, Mon–Fri. <b>First, ask me any clarifying questions.</b> Then seat everyone on days they're available, never over 50 a session, flag anyone who can't fit, and give me a <b>visual week-at-a-glance grid</b> — days across the top, morning/afternoon down the side, with the headcount in each block."</div>
+          </div>
+          <div class="d11-note">It asks a couple of questions first, then reads all 400 rows, respects every constraint at once, and lays out the whole week as a grid — every session, with the headcount in each block.</div>
+        </div>
+      </div></div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">A week of scheduling Tetris, <b>solved in the time it takes to read the prompt</b>.</span></div>
+      <div class="s-foot"><span class="sect">Demo · Testing Schedule</span><span>06 / 09</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 30 · DEMO · ANNOUNCEMENT DRAFTER PROJECT ═══ -->
+  <section class="slide dark" id="s30">
+    <div class="pad">
+      <div class="s-head"><span class="wordmark">EMAN</span><div class="part"><span class="part-name">Part 2 · <b>In Practice</b></span><span class="partmeter pm4"><i></i><i></i><i></i><i></i></span></div></div>
+      <div style="margin-top:22px"><span class="demo-badge"><span class="pulse"></span>Live Demo · Build Once, Reuse Forever</span></div>
+      <h2 class="demo-title">The school <span class="em">Announcement Drafter</span></h2>
+      <div class="body"><div class="xgrid">
+        <div class="xleft">
+          <div class="proj-files-sub">What lives in this project</div>
+          <div class="d8-step"><span class="n">01</span><span class="t">The <b style="color:#fff">EMAN letterhead template</b></span></div>
+          <div class="d8-step"><span class="n">02</span><span class="t">All three school logos — Oakland, Caniff, New Dawn</span></div>
+          <div class="d8-step"><span class="n">03</span><span class="t">Instructions: confirm the <b style="color:#fff">school, audience &amp; signer</b> → use that school's logo → sign it</span></div>
+          <div class="dl-row">
+            <a class="dl-btn" href="EMAN-Letterhead-Template.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke-linecap="round" stroke-linejoin="round"/></svg>Template</a>
+            <a class="dl-btn outline" href="EMAN-Announcement-Project-Instructions.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke-linecap="round" stroke-linejoin="round"/></svg>Instructions</a>
+          </div>
+        </div>
+        <div class="xright">
+          <div class="promptbox">
+            <div class="pb-head"><span class="pb-label">Try it</span>
+              <button class="copy-btn gold mini" onclick="copyKey('pDemoAnnounce', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>Copy</button>
+            </div>
+            <div class="pb-text">"Draft a <b>parent announcement for Oakland</b> about a 2-hour delayed start this Thursday for snow. Sign it from the principal."</div>
+          </div>
+          <div class="d11-note">It confirms the school, audience, and signer — then hands back a finished <b>PDF on that school's letterhead</b>, logo and signature included.</div>
+        </div>
+      </div></div>
+      <div class="takeaway"><span class="tk-key">◆</span><span class="tk-label">Takeaway</span><span class="tk-text">Set the project up <b>once</b>. Every announcement after is one sentence away from a branded PDF.</span></div>
+      <div class="s-foot"><span class="sect">Demo · Announcement Drafter</span><span>06 / 08</span></div>
+    </div>
+  </section>
+
+</div><!-- /#stage -->
+</div><!-- /#viewport -->
+
+<div id="toast"><span class="tc"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span id="toast-msg">Copied to clipboard</span></div>
+
+<div id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-card">
+    <div class="modal-head">
+      <div>
+        <div class="modal-eyebrow" id="modal-eyebrow">Template</div>
+        <div class="modal-title" id="modal-title"></div>
+      </div>
+      <div class="modal-x" onclick="closeModal()">&times;</div>
+    </div>
+    <div class="modal-body"><pre class="modal-pre" id="modal-pre"></pre></div>
+    <div class="modal-foot">
+      <button class="copy-btn navy" id="modal-copy">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>
+        Copy to clipboard
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="nav">
+  <button class="nb" id="prev" disabled onclick="nav(-1)">&#8592;</button>
+  <div id="dots"></div>
+  <span id="counter">1 / 15</span>
+  <button class="nb" id="next" onclick="nav(1)">&#8594;</button>
+</div>
+
+<script>
+  /* Presentation order — decouples sequence from element IDs so existing slides
+     keep their IDs (and CSS) while new slides slot in anywhere. */
+  const ORDER = ['s1','s2','s16','s17','s18','s19','s20','s21','s3','s4','s5','s6','s22','s23','s24','s13','s12','s25','s15',
+                 's26','s28','s27','s32','s7','s33','s29','s34','s31','s8','s30','s14'];
+  const PART2_START = ORDER.indexOf('s26');   // index where Part 2 begins (the divider)
+  const sid = n => ORDER[n-1];
+  const TOTAL = ORDER.length; let cur = 1;
+  const stage = document.getElementById('stage');
+
+  /* ─── Template store ─── */
+  const EMAIL =
+`From: David Chen <dchen@riversidecharter.org>
+Subject: Exploring management partners
+
+Hi,
+
+I hope this finds you well. I'm David Chen, Board Chair at Riverside Charter Academy in Ann Arbor. Marcus Reed (we serve on a foundation board together) suggested I reach out.
+
+Our board has been having early conversations about whether our current management structure is still serving us well. We are not in any rush, but we want to start learning about partners who might be a fit if we eventually decide to make a change.
+
+Would you have 30 minutes for a call in the next couple of weeks? Happy to work around your schedule.
+
+Best,
+David Chen
+Board Chair, Riverside Charter Academy`;
+
+  const VOICE =
+`CUSTOM INSTRUCTIONS
+
+You are helping me draft email replies.
+
+About me:
+- I am [Your Name], [Your Role] at EMAN (Education Management & Networks)
+- [Describe what you do at EMAN — your team and main focus areas]
+- EMAN is a charter school management organization based in Southeast Michigan
+- We support multiple public charter schools with compliance, board operations, finance, HR, and corporate services
+- I write to school boards, school leaders, vendors, partners, and prospective contacts
+
+How I write:
+- Short and direct. Warm but not flowery.
+- Never use em-dashes or semicolons.
+- Never open with "I hope this email finds you well." Use "Hope you are doing well" or skip the warm-up entirely.
+- Default to 4 sentences or fewer when possible.
+- Sign off "Best, [Your Name]" or use no sign-off for short internal replies.
+- No emojis. No ALL CAPS for emphasis.
+
+When drafting replies:
+- Answer first. Context second. Ask last.
+- If I am proposing a meeting, suggest specific times.
+- Match the warmth of the incoming email, but keep my voice.
+- If declining or pushing back, lead with appreciation, then the no, then an alternative.`;
+
+  const TEMPLATES = {
+    email:  { text: EMAIL,  title: 'The inbound email', eyebrow: 'Template · Paste into Claude' },
+    round1: { text: 'Here is an email I just received. Write a reply.\n\n' + EMAIL, title: 'Round 1 · No context', eyebrow: 'Template · Fresh chat' },
+    round2: { text: 'Draft a reply to this email.\n\n' + EMAIL, title: 'Round 2 · Inside your project', eyebrow: 'Template · Use with voice profile' },
+    voice:  { text: VOICE,  title: 'Your voice profile', eyebrow: 'Template · Project custom instructions' },
+    pDemoA: { title: 'Demo 1 · It Writes', eyebrow: 'Demo · Paste into Claude',
+      text: 'Here are my rough notes about an upcoming staff PD day. Turn them into a warm, clear email to our principals — under 5 sentences, with the key details easy to spot.' },
+    pDemoB: { title: 'Demo 2 · It Thinks With You', eyebrow: 'Demo · Paste into Claude',
+      text: 'I need to tell a parent that their child is being moved to a different classroom mid-year. They are likely to be upset and push back. Before drafting anything, help me think it through: what is the parent probably worried about, what tone should I take, and what should I avoid saying? Then give me a short, warm way to open the conversation.' },
+    pExC: { title: 'Exercise 1 · Knows Your World', eyebrow: 'Exercise · Paste into Claude',
+      text: 'Who are the largest charter school management organizations (EMOs and CMOs) operating in Michigan? Give me a short list with one sentence on each, and note which ones focus on K-8 versus high school.' },
+    pExD: { title: 'Exercise 2 · Saves You Hours', eyebrow: 'Exercise · Attach the report first',
+      text: 'Summarize this report in 5 bullet points a principal needs to act on. Then list every deadline mentioned, with its date.' },
+    pExE: { title: 'Exercise 3 · Catches Mistakes', eyebrow: 'Exercise · Attach the memo first',
+      text: 'This memo is going to our board. Review it for typos, grammar mistakes, unclear sentences, and anything that contradicts itself. List what you would fix and why, then give me a clean rewritten version.' },
+    pAudit: { title: 'Make Claude audit itself', eyebrow: 'Technique · Paste after a draft',
+      text: 'You are an expert-level detail catcher. Before you finalize, review your own draft for errors, weak or unclear spots, missing information, and anything you cannot back up. Fix what you find, then tell me what you changed and why.' },
+    pDemoAnnounce: { title: 'Announcement Drafter · Try it', eyebrow: 'Demo · Use inside the project',
+      text: 'Draft a parent announcement for Oakland International Academy about a 2-hour delayed start this Thursday due to expected snow. Sign it from the principal.' },
+    pExamples: { title: 'Show it what good looks like', eyebrow: 'Technique · Paste your examples first',
+      text: 'Here are three board updates I was happy with. Write this month’s update the same way — same structure, same tone, same length.' },
+    pDemoSchedule: { title: 'Testing Schedule · Try it', eyebrow: 'Demo · Attach the survey first',
+      text: 'Attached is our testing availability survey — about 400 students, each with the region they travel from and the days that week they can come. Our center seats 50 per session, with two 3-hour sessions per day (morning and afternoon), Monday to Friday.\n\nBefore you build anything, ask me any clarifying questions you need.\n\nThen build a schedule that gives every student a seat, without exceeding 50 per session and only on days they are available. Balance the sessions and flag anyone who cannot be placed.\n\nFinish with a visual, week-at-a-glance schedule I can actually use to prep the rooms: a grid with the five weekdays across the top and the two sessions (morning and afternoon) down the side, and the number of students booked into each block shown in every cell. Make it clean and easy to read at a glance, and total up each day.' }
+  };
+
+  /* ─── Clipboard ─── */
+  function writeClip(text){
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(text);
+    }
+    return new Promise((res, rej) => {
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.focus(); ta.select();
+      try { document.execCommand('copy'); res(); } catch(e){ rej(e); }
+      document.body.removeChild(ta);
+    });
+  }
+  let toastTimer;
+  function toast(msg){
+    const t = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 1900);
+  }
+  function copyKey(key, btn){
+    const tpl = TEMPLATES[key]; if(!tpl) return;
+    writeClip(tpl.text).then(() => {
+      toast('Copied — ' + tpl.title);
+      if (btn){ const orig = btn.innerHTML; btn.innerHTML = '✓ Copied'; setTimeout(()=>btn.innerHTML = orig, 1500); }
+    }).catch(()=>toast('Press Ctrl/Cmd + C to copy'));
+  }
+  window.copyKey = copyKey;
+
+  /* ─── Modal ─── */
+  let modalKey = null;
+  function openModal(key){
+    const tpl = TEMPLATES[key]; if(!tpl) return; modalKey = key;
+    document.getElementById('modal-eyebrow').textContent = tpl.eyebrow;
+    document.getElementById('modal-title').textContent = tpl.title;
+    document.getElementById('modal-pre').textContent = tpl.text;
+    document.getElementById('modal').classList.add('show');
+  }
+  function closeModal(){ document.getElementById('modal').classList.remove('show'); modalKey = null; }
+  window.openModal = openModal; window.closeModal = closeModal;
+  document.getElementById('modal-copy').onclick = (e) => { if(modalKey) copyKey(modalKey, e.currentTarget); };
+  function modalOpen(){ return document.getElementById('modal').classList.contains('show'); }
+
+  function fit(){
+    const m = 0.95;
+    const s = Math.min(window.innerWidth/1280, window.innerHeight/720) * m;
+    stage.style.transform = 'translateZ(0) scale(' + s + ')';
+  }
+  window.addEventListener('resize', fit); fit();
+
+  const dotsEl = document.getElementById('dots');
+  for(let i=1;i<=TOTAL;i++){
+    const d=document.createElement('div'); d.className='dot'+(i===1?' active':'');
+    d.onclick=()=>go(i); dotsEl.appendChild(d);
+  }
+  /* Auto-number on-slide footers, part-relative, from ORDER. Reordering slides
+     never breaks page numbers again. Cover + Part-2 divider have no footer → skipped. */
+  (function(){
+    const p1total = PART2_START, p2total = ORDER.length - PART2_START;
+    ORDER.forEach((id, i) => {
+      const sl = document.getElementById(id); if(!sl) return;
+      const numSpan = sl.querySelector('.s-foot span:last-child'); if(!numSpan) return;
+      const inP1 = i < PART2_START;
+      const page = inP1 ? (i+1) : (i - PART2_START + 1);
+      const total = inP1 ? p1total : p2total;
+      numSpan.textContent = String(page).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
+    });
+  })();
+  function go(n){
+    if(n<1||n>TOTAL||n===cur) return;
+    const dir = n>cur?1:-1;
+    const a=document.getElementById(sid(cur)), b=document.getElementById(sid(n));
+    a.classList.remove('active'); a.classList.add(dir>0?'exit-left':'exit-right');
+    b.style.transform = dir>0?'translateX(40px)':'translateX(-40px)'; b.style.opacity='0';
+    requestAnimationFrame(()=>{ b.classList.add('active'); b.style.transform=''; b.style.opacity=''; });
+    setTimeout(()=>a.classList.remove('exit-left','exit-right'),520);
+    cur=n; upd();
+  }
+  function nav(d){ go(cur+d); }
+  window.nav = nav; window.go = go;
+  function upd(){
+    document.getElementById('counter').textContent = cur+' / '+TOTAL;
+    document.getElementById('prev').disabled = cur===1;
+    document.getElementById('next').disabled = cur===TOTAL;
+    document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i+1===cur));
+  }
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){ closeModal(); return; }
+    if(modalOpen()) return;
+    if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' ') {nav(1); e.preventDefault();}
+    if(e.key==='ArrowLeft'||e.key==='ArrowUp') nav(-1);
+  });
+  let tx=0;
+  document.addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+  document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx; if(Math.abs(dx)>50 && !modalOpen()) nav(dx<0?1:-1);});
+
+  /* ═══════════════════════════════════════
+     EMAIL GATE LOGIC
+  ═══════════════════════════════════════ */
+  (function(){
+    const ALLOWED = ['emanschools.net','emaninc.com','harborstreetcapital.com'];
+    const ENDPOINT = 'https://formspree.io/f/xrednwwr';
+    const KEY = 'eman-deck-access';
+    const DAYS = 30;
+
+    // Wire gate logo to the same base64 as the rest of the deck
+    const logoEl = document.getElementById('gate-logo');
+    const deckLogo = document.querySelector('.eman-logo-img');
+    if(logoEl && deckLogo){
+      const bg = getComputedStyle(deckLogo).backgroundImage;
+      logoEl.style.backgroundImage = bg;
+    }
+
+    function hasValidSession(){
+      try{
+        const s = JSON.parse(localStorage.getItem(KEY)||'null');
+        if(!s||!s.email||!s.ts) return false;
+        return (Date.now()-s.ts) < DAYS*864e5;
+      }catch(e){ return false; }
+    }
+
+    function getDomain(email){ return (email.split('@')[1]||'').toLowerCase().trim(); }
+    function isAllowed(email){ return ALLOWED.includes(getDomain(email)); }
+
+    function dismissGate(){
+      const g = document.getElementById('gate');
+      g.classList.add('hiding');
+      setTimeout(()=>{ g.style.display='none'; }, 600);
+    }
+
+    // Skip gate if already authenticated
+    if(hasValidSession()){ dismissGate(); return; }
+
+    const inp = document.getElementById('gate-input');
+    const btn = document.getElementById('gate-btn');
+    const err = document.getElementById('gate-err');
+
+    function showError(msg){
+      err.textContent = msg; err.style.display='block';
+      inp.classList.add('error');
+    }
+    function clearError(){
+      err.style.display='none'; inp.classList.remove('error');
+    }
+
+    async function submit(){
+      clearError();
+      const email = inp.value.trim().toLowerCase();
+      if(!email){ showError('Please enter your email address.'); return; }
+      if(!email.includes('@')){ showError('Please enter a valid email address.'); return; }
+      if(!isAllowed(email)){
+        showError('Please enter a valid work email address.');
+        return;
+      }
+      btn.disabled = true; btn.textContent = 'Granting access…';
+      // Log to Formspree (fire and forget — never block the user on this)
+      fetch(ENDPOINT, {
+        method:'POST',
+        headers:{'Content-Type':'application/json','Accept':'application/json'},
+        body: JSON.stringify({ email, deck:'AI at Work – June 2026', accessed: new Date().toISOString() })
+      }).catch(()=>{});
+      // Store session
+      localStorage.setItem(KEY, JSON.stringify({ email, ts: Date.now() }));
+      dismissGate();
+    }
+
+    btn.addEventListener('click', submit);
+    inp.addEventListener('keydown', e=>{ if(e.key==='Enter') submit(); });
+    inp.addEventListener('input', clearError);
+  })();
+
+  /* ═══════════════════════════════════════
+     COVER CANVAS ANIMATION — AI / Neural Network
+     Dot grid · connected nodes · data pulses · scan line
+  ═══════════════════════════════════════ */
+  (function(){
+    const canvas = document.getElementById('s1-canvas');
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const W = 1280, H = 720;
+    canvas.width = W; canvas.height = H;
+
+    /* ── Nodes ── */
+    const NUM_NODES = 28;
+    const nodes = Array.from({length: NUM_NODES}, () => ({
+      x:  55 + Math.random() * (W - 110),
+      y:  30 + Math.random() * (H - 60),
+      vx: (Math.random() - 0.5) * 0.07,
+      vy: (Math.random() - 0.5) * 0.07,
+      r:  1.6 + Math.random() * 2,
+      bright: 0,
+      gold: Math.random() > 0.52,
+    }));
+
+    /* ── Edges (recomputed periodically as nodes drift) ── */
+    const MAX_CONN = 195;
+    let edges = [];
+    let lastEdgeFrame = -999;
+    function buildEdges(){
+      edges = [];
+      for(let i = 0; i < nodes.length; i++)
+        for(let j = i+1; j < nodes.length; j++){
+          const dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
+          if(dx*dx + dy*dy < MAX_CONN*MAX_CONN) edges.push([i,j]);
+        }
+    }
+    buildEdges();
+
+    /* ── Pulses traveling along edges ── */
+    const pulses = [];
+    function spawnPulse(){
+      if(!edges.length) return;
+      const e = edges[Math.floor(Math.random()*edges.length)];
+      const rev = Math.random() > 0.5;
+      pulses.push({ ai: rev?e[1]:e[0], bi: rev?e[0]:e[1], t:0,
+        speed: 0.003 + Math.random()*0.005, gold: Math.random() > 0.4 });
+    }
+
+    /* ── Scan line ── */
+    let scanY = -30;
+
+    let frame = 0, raf;
+    function draw(){
+      ctx.clearRect(0, 0, W, H);
+      frame++;
+
+      /* Recompute edges occasionally */
+      if(frame - lastEdgeFrame > 150){ buildEdges(); lastEdgeFrame = frame; }
+
+      /* Spawn pulse every ~20 frames */
+      if(frame % 20 === 0) spawnPulse();
+
+      /* ── Dot grid ── */
+      const GSPC = 50;
+      ctx.fillStyle = 'rgba(255,255,255,0.045)';
+      for(let gx = GSPC/2; gx < W; gx += GSPC)
+        for(let gy = GSPC/2; gy < H; gy += GSPC){
+          ctx.beginPath(); ctx.arc(gx, gy, 0.85, 0, Math.PI*2); ctx.fill();
+        }
+
+      /* ── Edges ── */
+      edges.forEach(([ai,bi]) => {
+        const a = nodes[ai], b = nodes[bi];
+        const d = Math.sqrt((b.x-a.x)**2 + (b.y-a.y)**2);
+        const alpha = Math.max(0, 0.13 * (1 - d/MAX_CONN));
+        ctx.strokeStyle = `rgba(255,255,255,${alpha.toFixed(3)})`;
+        ctx.lineWidth = 0.65;
+        ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+      });
+
+      /* ── Pulses ── */
+      for(let i = pulses.length-1; i >= 0; i--){
+        const p = pulses[i];
+        p.t += p.speed;
+        if(p.t >= 1){ nodes[p.bi].bright = 1; pulses.splice(i,1); continue; }
+        const a = nodes[p.ai], b = nodes[p.bi];
+        const px = a.x + (b.x-a.x)*p.t, py = a.y + (b.y-a.y)*p.t;
+        const c = p.gold ? '226,188,75' : '72,210,255';
+        const g = ctx.createRadialGradient(px,py,0,px,py,10);
+        g.addColorStop(0,   `rgba(${c},0.95)`);
+        g.addColorStop(0.35,`rgba(${c},0.45)`);
+        g.addColorStop(1,   `rgba(${c},0)`);
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.arc(px,py,10,0,Math.PI*2); ctx.fill();
+      }
+
+      /* ── Nodes ── */
+      nodes.forEach(n => {
+        n.x += n.vx; n.y += n.vy;
+        if(n.x < 12 || n.x > W-12) n.vx *= -1;
+        if(n.y < 12 || n.y > H-12) n.vy *= -1;
+        n.bright = Math.max(0, n.bright - 0.016);
+        const c = n.gold ? '226,188,75' : '130,205,255';
+        const baseA = n.gold ? 0.62 : 0.30;
+        const a = Math.min(1, baseA + n.bright * 0.65);
+        /* glow on activation */
+        if(n.bright > 0.05){
+          const gn = ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r*7);
+          gn.addColorStop(0, `rgba(${c},${(a*0.5).toFixed(2)})`);
+          gn.addColorStop(1, `rgba(${c},0)`);
+          ctx.fillStyle = gn;
+          ctx.beginPath(); ctx.arc(n.x,n.y,n.r*7,0,Math.PI*2); ctx.fill();
+        }
+        /* core dot */
+        ctx.fillStyle = `rgba(${c},${a.toFixed(2)})`;
+        ctx.beginPath(); ctx.arc(n.x,n.y,n.r + n.bright*2,0,Math.PI*2); ctx.fill();
+      });
+
+      /* ── Scan line ── */
+      scanY += 0.6;
+      if(scanY > H+30) scanY = -30;
+      const sg = ctx.createLinearGradient(0,scanY-6,0,scanY+6);
+      sg.addColorStop(0,   'rgba(72,210,255,0)');
+      sg.addColorStop(0.5, 'rgba(72,210,255,0.07)');
+      sg.addColorStop(1,   'rgba(72,210,255,0)');
+      ctx.fillStyle = sg;
+      ctx.fillRect(0, scanY-6, W, 12);
+
+      raf = requestAnimationFrame(draw);
+    }
+
+    /* Pause when not on the cover slide */
+    const s1 = document.getElementById('s1');
+    const obs = new MutationObserver(() => {
+      if(s1.classList.contains('active')){ if(!raf) draw(); }
+      else { cancelAnimationFrame(raf); raf = null; }
+    });
+    obs.observe(s1, {attributes:true, attributeFilter:['class']});
+    draw();
+  })();
+</script>
+</body>
+</html>
